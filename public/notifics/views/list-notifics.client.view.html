@@ -1,0 +1,9 @@
+<section data-ng-controller="NotificsController" data-ng-init="find()">
+    <h2>Notifications</h2>
+    <ul>
+        <li data-ng-repeat="notific in notifics">
+            <a data-ng-href="#!/notifics/{{notific._id}}" data-ng-bind="notific.theEvent.dateEvtAsString">
+            </a> <br>
+        </li>
+    </ul>
+</section>

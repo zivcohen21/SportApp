@@ -1,0 +1,17 @@
+<section data-ng-controller="SportTypesController" data-ng-init="findOne()">
+    <h1>Edit SportType</h1>
+    <form data-ng-submit="update()" novalidate>
+        <div>
+            <label for="title">Title</label>
+            <div>
+                <input type="text" data-ng-model="sportType.title" id="title">
+            </div>
+        <div>
+            <input type="submit" value="Update">
+        </div>
+        <div data-ng-show="error">
+            <strong data-ng-bind="error"></strong>
+        </div>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,159 @@
+<section ng-controller="HomeController" data-ng-init="getMyNextSportEvts()">
+    <ul class="home-menu">
+        <li class="na-li-home" ng-click="homeSelection(1)" ng-class="{'selection_groups_menu': theHomeSelection==1}">NEXT EVENTS</li>
+<!--        <li class="na-li-home" ng-click="homeSelection(2)" ng-class="{'selection_groups_menu': theHomeSelection==2}">TODAY'S EVENTS</li>
+        <li class="na-li-home" ng-click="homeSelection(3)" ng-class="{'selection_groups_menu': theHomeSelection==3}">TOMORROW'S EVENTS</li>-->
+        <li class="na-li-home" ng-click="homeSelection(4)" ng-class="{'selection_groups_menu': theHomeSelection==4}">SEARCH EVENT</li>
+        <li class="na-li-home" ng-click="homeSelection(6)" ng-class="{'selection_groups_menu': theHomeSelection==6}">SEARCH USER</li>
+        <li class="na-li-home" ng-click="homeSelection(5)" ng-class="{'selection_groups_menu': theHomeSelection==5}">SUGGESTIONS</li>
+    </ul>
+    <div class="nextEvents" ng-if="myNextSportEvts && myNextSportEvts.length >= 1 && theHomeSelection != 4 && theHomeSelection != 5 && theHomeSelection != 6">
+        <table class="rwd-table" ng-if="windWidth >= 800">
+            <tr>
+                <th>Sport</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Court</th>
+                <th>Participants</th>
+            </tr>
+            <tr ng-repeat="sportEvt in myNextSportEvts" ng-click="openEvent(sportEvt)">
+                <td data-th="Sport">{{sportEvt.sportType.title}}</td>
+                <td data-th="Date">{{sportEvt.dateEvtAsString}}</td>
+                <td data-th="Time">{{sportEvt.startTimeAsString}}</td>
+                <td data-th="Court">{{sportEvt.court.title}}</td>
+                <td data-th="Participants">{{sportEvt.allParticipantsAndNotific.length}}</td>
+            </tr>
+        </table>
+        <div class="small-table" ng-if="windWidth < 799">
+            <div class="sportEvt-header" ng-repeat="sportEvt in myNextSportEvts" ng-click="openEvent(sportEvt)">
+                <div class="left-side-event">
+                    <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                    <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+                </div>
+                <div class="center-side-event">
+                    <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                    <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+                </div>
+                <div class="right-side">
+                    <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                    <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nextEvents" ng-if="(!myNextSportEvts || myNextSportEvts.length < 1) && theHomeSelection != 4">
+        <h3>No Events</h3>
+      <!--  <i class="fa fa-spinner" aria-hidden="true"></i>-->
+    </div>
+
+    <div ng-if="theHomeSelection == 5">
+        <div class="sportEvt-header" ng-repeat="suggestion in allsuggestions">
+           <span data-ng-bind="suggestion.user"></span>
+           <span data-ng-bind="suggestion.event"></span>
+        </div>
+    </div>
+
+    <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 4">
+        <fieldset>
+
+            <div ng-include="'home/views/search-form-events.client.view.html'"></div>
+            <!--<div class="pure-u-1 pure-u-md-1">
+                <label for="searchType">Look For:</label>
+                <select name="searchType" id="searchType" ng-model="searchType" class="pure-u-7-24">
+                    <option>Events</option>
+                    <option>Users</option>
+                    <option>Groups</option>
+                    <option>Courts</option>
+                </select>
+            </div>
+
+            <div  ng-if="searchType == 'Events'" ng-include="'home/views/search-form-events.client.view.html'"></div>
+            <div  ng-if="searchType == 'Users'" ng-include="'home/views/search-form-users.client.view.html'"></div>
+            <div  ng-if="searchType == 'Groups'" ng-include="'home/views/search-form-groups.client.view.html'"></div>
+            <div  ng-if="searchType == 'Courts'" ng-include="'home/views/search-form-courts.client.view.html'"></div>
+-->
+
+            <div class="center-button">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <form data-ng-submit="searchAll('Users')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 6">
+        <fieldset>
+
+            <div ng-include="'home/views/search-form-users.client.view.html'"></div>
+            <!--<div class="pure-u-1 pure-u-md-1">
+                <label for="searchType">Look For:</label>
+                <select name="searchType" id="searchType" ng-model="searchType" class="pure-u-7-24">
+                    <option>Events</option>
+                    <option>Users</option>
+                    <option>Groups</option>
+                    <option>Courts</option>
+                </select>
+            </div>
+
+            <div  ng-if="searchType == 'Events'" ng-include="'home/views/search-form-events.client.view.html'"></div>
+            <div  ng-if="searchType == 'Users'" ng-include="'home/views/search-form-users.client.view.html'"></div>
+            <div  ng-if="searchType == 'Groups'" ng-include="'home/views/search-form-groups.client.view.html'"></div>
+            <div  ng-if="searchType == 'Courts'" ng-include="'home/views/search-form-courts.client.view.html'"></div>
+-->
+
+            <div class="center-button">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <div ng-if="isSearched && relevantEvents && relevantEvents.length > 0" ng-include="'home/views/list-relevant-items.client.view.html'"></div>
+    <div ng-if="isSearched && (!relevantEvents || relevantEvents.length == 0)">
+        <h3>No Events</h3>
+    </div>
+</section>
+<!--
+<section ng-controller="HomeController" data-ng-init="getMyNextSportEvts()">
+
+    <ul class="events-menu">
+        <li class="na-li" ng-click="homeSelection(1)" ng-class="{'selection_groups_menu': theHomeSelection==1}">NEXT EVENT</li>
+        <li class="na-li" ng-click="homeSelection(2)" ng-class="{'selection_groups_menu': theHomeSelection==2}">TODAY'S EVENTS</li>
+        <li class="na-li" ng-click="homeSelection(3)" ng-class="{'selection_groups_menu': theHomeSelection==3}">TOMORROW'S EVENTS</li>
+    </ul>
+    <div class="nextEvents" ng-if="myNextSportEvts && myNextSportEvts.length >= 1">
+        <table class="rwd-table" ng-if="windWidth >= 800">
+            <tr>
+                <th>Sport</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Court</th>
+                <th>Participants</th>
+            </tr>
+            <tr ng-repeat="sportEvt in myNextSportEvts" ng-click="openEvent(sportEvt)">
+                <td data-th="Sport">{{sportEvt.sportType.title}}</td>
+                <td data-th="Date">{{sportEvt.dateEvtAsString}}</td>
+                <td data-th="Time">{{sportEvt.startTimeAsString}}</td>
+                <td data-th="Court">{{sportEvt.court.title}}</td>
+                <td data-th="Participants">{{sportEvt.allParticipantsAndNotific.length}}</td>
+            </tr>
+        </table>
+        <div class="small-table" ng-if="windWidth < 799">
+            <div class="sportEvt-header" ng-repeat="sportEvt in myNextSportEvts" ng-click="openEvent(sportEvt)">
+                <div class="left-side-event">
+                    <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                    <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+                </div>
+                <div class="center-side-event">
+                    <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                    <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+                </div>
+                <div class="right-side">
+                    <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                    <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nextEvents" ng-if="!myNextSportEvts || myNextSportEvts.length < 1">
+        <h3>No Events</h3>
+    </div>
+
+</section>-->

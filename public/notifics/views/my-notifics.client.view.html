@@ -1,0 +1,69 @@
+<section data-ng-controller="NotificsController" data-ng-init="getMyNotifics()">
+        <article class="notific-block" data-ng-repeat="notific in myNotifics">
+            <header ng-click="replyToggle(notific)" class="notific-block__header" ng-class="{
+                'notific-block__header_selected': isOpen==notific._id,
+                'notSeen-header': notific.isSeen==false} ">
+                <div class="header-center">
+                    <div class="header-left-color" ng-class="{
+                        'noAnswer-border_main': notific.status=='No Answer',
+                        'in-border_main': notific.status=='In',
+                        'out-border_main': notific.status=='Out',
+                        'maybe-border_main': notific.status=='Maybe',
+                        'setTime-border_main': notific.status=='Propose Another Time'}" ></div>
+                    <div ng-if="notific.notificType == 'inviteToEvent'">
+                        <h3 class="notific-block__title">
+                            <div ng-if="notific.theEvent.creator._id != authentication.user._id">
+                                "<span data-ng-bind="notific.theEvent.creator.username">invited you to a</span>"
+                            </div>
+                            <span ng-if="notific.theEvent.creator._id == authentication.user._id">you invited to a</span>
+                            <span data-ng-bind="notific.theEvent.sportType.title"></span>
+                            event on
+                            <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,
+                            <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>
+                        </h3>
+                        <div class="my-status">
+                            <span data-ng-bind="notific.status" class="important-details"></span>
+                        </div>
+                    </div>
+                    <div ng-if="notific.notificType == 'eventSuggestion'">
+                       <h3 class="notific-block__title">
+                           Event Suggestion for:
+                           <span data-ng-bind="notific.theEvent.sportType.title"></span>
+                           event on
+                           <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,
+                           <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>
+                       </h3>
+                       <div class="my-status">
+                           <span data-ng-bind="notific.suggestionStatus" class="important-details"></span>
+                       </div>
+                    </div>
+
+                   <!--<span data-ng-show="isOpen!=notific._id" class="links reply-back-link" ng-click="replyToggle(notific)">More Info & Reply</span>-->
+                   <!--<span data-ng-show="isOpen==notific._id && isStatusSelected==false" class="links reply-back-link" ng-click="replyToggle(notific)">Close</span>-->
+                   <!-- <span data-ng-show="isOpen==notific._id && isStatusSelected==true" class="links reply-back-link-down" ng-click="replyToggle(notific)">Close</span>-->
+
+                </div>
+                <span class="delete-btn" data-ng-click="delete(notific._id)">
+                    <i aria-hidden="true" class="fa fa-trash w3-large w3-text-black w3-hover-opacity" ></i>
+                </span>
+            </header>
+            <div ng-show="notific.notificType == 'inviteToEvent' && isOpen == notific._id" class="notific-block__info"
+                 ng-class="{
+                'noAnswer-border_info': notific.status=='No Answer',
+                'in-border_info': notific.status=='In',
+                'out-border_info': notific.status=='Out',
+                'maybe-border_info': notific.status=='Maybe',
+                'setTime-border_info': notific.status=='Propose Another Time'}">
+                <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
+            </div>
+
+            <div ng-show="notific.notificType == 'eventSuggestion' && isOpen == notific._id" class="notific-block__info"
+                 ng-class="{
+                'noAnswer-border_info': notific.suggestionStatus=='No Answer',
+                'in-border_info': notific.suggestionStatus=='Accept',
+                'out-border_info': notific.suggestionStatus=='Reject',}">
+                <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
+            </div>
+
+        </article>
+</section>

@@ -1,0 +1,220 @@
+<section data-ng-controller="SportEvtsController" data-ng-init="findOne(1)">
+    <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
+    <div class="event-status center_align" ng-if="sportEvt.isStarted==false">The event has not started yet</div>
+    <div class="event-status center_align" ng-if="sportEvt.isStarted==true && sportEvt.isEnded==false">The event is in progress</div>
+    <div class="event-status center_align" ng-if="sportEvt.isStarted==true && sportEvt.isEnded==true">The event is over</div>
+
+
+    <div class="eventPage" ng-if="windWidth >= 800">
+        <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
+        <div class="eventPage-creator">
+            Created On: <span data-ng-bind="sportEvt.created | date:'mediumDate'"></span>
+            <br>
+            By: <span data-ng-bind="sportEvt.creator.fullName" class="links" ng-click="goToPage('users/', sportEvt.creator.id)"></span>
+        </div>
+        <div class="eventPage-main-part">
+            <div class="eventPage-right">
+                <div class="eventPage-details">
+                    <div>Sport: <span data-ng-bind="sportEvt.sportType.title"></span></div>
+                    <div>Court: <span data-ng-bind="sportEvt.court.title" class="links" ng-click="goToPage('courts/', sportEvt.court._id)"></span></div>
+                    <div>Groups: <span data-ng-repeat="group in sportEvt.groups" data-ng-bind="group.title" class="links" ng-click="goToPage('groups/allGroups/', sportEvt.group._id)"></span></div>
+                    <div>Date: <span data-ng-bind="sportEvt.dateEvtAsString" class="eventPage-numbers"></span></div>
+                    <div>Time: <span data-ng-bind="sportEvt.startTimeAsString" class="eventPage-numbers"></span> For <span data-ng-bind="sportEvt.duration" class="eventPage-numbers"></span>
+                        <span class="eventPage-numbers" ng-if="sportEvt.duration <= 1"> hour.</span>
+                        <span class="eventPage-numbers" ng-if="sportEvt.duration > 1"> hours.</span>
+                    </div>
+                    Number Of Participants Required: <span data-ng-bind="sportEvt.minNumOfMembers" class="eventPage-numbers"></span> -
+                    <span data-ng-bind="sportEvt.maxNumOfMembers" class="eventPage-numbers"></span>.
+                    Optimal: <span data-ng-bind="sportEvt.optNumOfMembers" class="eventPage-numbers"></span>
+                    <div ng-if="!sportEvt.openForIndividuals">
+                        <i style="font-size:25px; color: red" class="fa fa-close"></i> Open To Add Participants.
+                    </div>
+                    <div ng-if="sportEvt.openForIndividuals">
+                        <i style="font-size:25px; color: green" class="fa fa-check"></i> Open To Add Participants.
+                    </div>
+                    <div ng-if="!sportEvt.openForGroups">
+                        <i style="font-size:25px; color: red" class="fa fa-close"></i> Open To Add Groups.
+                    </div>
+                    <div ng-if="sportEvt.openForGroups">
+                        <i style="font-size:25px; color: green" class="fa fa-check"></i> Open To Add Groups.
+                    </div>
+                </div>
+                <button class="changeStatus-button" ng-if="changingStatusOpen==null && myNotific!=null" ng-click="openMyStatus(sportEvt)">Change My Status</button>
+                <div class="eventPage-changeStatus">
+                    <div class="changeStatus-allButton">
+                        <div class="all-btns" ng-if="changingStatusOpen!=null">
+
+                            <button class="status-button noAnswer-btn" ng-click="setStatus(sportEvt, myNotific, 'No Answer')" ng-class="{'button-selected': myNotific.status=='No Answer'}">No Answer</button>
+                            <br>
+                            <button class="status-button in-btn" ng-click="setStatus(sportEvt, myNotific, 'In')" ng-class="{'button-selected': myNotific.status=='In'}">In</button>
+                            <button class="status-button maybe-btn" ng-click="setStatus(sportEvt, myNotific, 'Maybe')" ng-class="{'button-selected': myNotific.status=='Maybe'}">Maybe</button>
+                            <button class="status-button out-btn" ng-click="setStatus(sportEvt, myNotific, 'Out')" ng-class="{'button-selected': myNotific.status=='Out'}">Out</button>
+                            <br>
+                            <button class="status-button setTime-btn" ng-click="setStatus(sportEvt, myNotific, 'Propose Another Time')" ng-class="{'button-selected': myNotific.status=='Propose Another Time'}">Propose Another Time</button>
+
+                        </div>
+                        <div data-ng-show="myNotific.status=='Propose Another Time' && changingStatusOpen!=null" class="checkbox_block">
+                            <il ng-repeat="time in myNotific.arrTimes">
+                                <button class="times-button" ng-click="checkboxSet(sportEvt, myNotific, time)" ng-class="{'button_selected_times': time.isIn}">{{time.timeAsString}}</button>
+                            </il>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="eventPage-participants_list">
+                <div class="participants-status-total">
+                    <div class="participants-status-total_header center_align">Current Status:</div>
+                    <div class="center_align"><span class="eventPage-numbers">{{listLength}}</span> Participants</div>
+                    <br>
+                    In: <span data-ng-bind="inCounter" class="eventPage-numbers"></span>
+                    (min: <span class="eventPage-numbers">{{minPercent | number:0}}</span>%
+                    max: <span class="eventPage-numbers">{{maxPercent | number:0}}</span>%)
+                    <br>
+                    Out: <span data-ng-bind="outCounter" class="eventPage-numbers"></span>
+                    <br>
+                    Maybe: <span data-ng-bind="maybeCounter" class="eventPage-numbers"></span>
+                    <!-- <br>
+                     No Answer: <span data-ng-bind="noAnswerCounter" class="eventPage-numbers"></span>
+                     <br>
+                     Propose Another Time: <span data-ng-bind="proposeAnotherTimeCounter" class="eventPage-numbers"></span>-->
+                </div>
+                <div>
+                    <input type="text" class="participants_form-control-events" placeholder="Search" ng-model="searchKeyword"/>
+                </div>
+                <table class="participants-table">
+                    <tr>
+                        <th>User</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr data-ng-repeat="member in sportEvt.allParticipantsAndNotific | filter: searchKeyword" ng-click="goToPage('users/', member.theUser.id)">
+                        <td data-th="User">
+                            <div ng-if="member.theUser.id!=authentication.user.id">
+                                {{member.theUser.fullName}}
+                            </div>
+                            <div ng-if="member.theUser.id==authentication.user.id" style="font-weight: 900">
+                                You
+                            </div>
+                        </td>
+                        <td data-th="Status">
+                            <div ng-if="member.theUser.id!=authentication.user.id">
+                                {{member.notific.status}}
+                            </div>
+                            <div ng-if="member.theUser.id==authentication.user.id" style="font-weight: 900">
+                                {{member.notific.status}}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!--         <div data-ng-repeat="member in sportEvt.allParticipantsAndNotific">
+                             <span class="links " data-ng-href="#!/users/{{member.theUser.id}}" data-ng-bind="member.theUser.fullName"></span>
+                             <span data-ng-bind="member.notific.status"></span>
+                         </div>-->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="eventPage" ng-if="windWidth < 799">
+        <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
+        <div class="eventPage-first">
+            <div class="eventPage-details">
+                <div>Sport: <span data-ng-bind="sportEvt.sportType.title"></span></div>
+                <div>Court: <span data-ng-bind="sportEvt.court.title" class="links" ng-click="goToPage('courts/', sportEvt.court._id)"></span></div>
+                <div>Groups: <span data-ng-repeat="group in sportEvt.groups" data-ng-bind="group.title" class="links" ng-click="goToPage('groups/allGroups/', sportEvt.group._id)"></span></div>
+                <div>Date: <span data-ng-bind="sportEvt.dateEvtAsString" class="eventPage-numbers"></span></div>
+                <div>Time: <span data-ng-bind="sportEvt.startTimeAsString" class="eventPage-numbers"></span> For <span data-ng-bind="sportEvt.duration" class="eventPage-numbers"></span>
+                    <span class="eventPage-numbers" ng-if="sportEvt.duration <= 1"> hour.</span>
+                    <span class="eventPage-numbers" ng-if="sportEvt.duration > 1"> hours.</span>
+                </div>
+            </div>
+            <button class="changeStatus-button" ng-if="myNotific!=null" ng-click="openMyStatus(sportEvt)">Change My Status</button>
+        </div>
+        <div class="eventPage-changeStatus" ng-if="changingStatusOpen!=null">
+            <div class="changeStatus-allButton">
+                <button class="status-button noAnswer-btn" ng-click="setStatus(sportEvt, myNotific, 'No Answer')" ng-class="{'button-selected': myNotific.status=='No Answer'}">No Answer</button>
+                <br>
+                <button class="status-button in-btn" ng-click="setStatus(sportEvt, myNotific, 'In')" ng-class="{'button-selected': myNotific.status=='In'}">In</button>
+                <button class="status-button maybe-btn" ng-click="setStatus(sportEvt, myNotific, 'Maybe')" ng-class="{'button-selected': myNotific.status=='Maybe'}">Maybe</button>
+                <button class="status-button out-btn" ng-click="setStatus(sportEvt, myNotific, 'Out')" ng-class="{'button-selected': myNotific.status=='Out'}">Out</button>
+                <br>
+                <button class="status-button setTime-btn" ng-click="setStatus(sportEvt, myNotific, 'Propose Another Time')" ng-class="{'button-selected': myNotific.status=='Propose Another Time'}">Propose Another Time</button>
+            </div>
+            <div data-ng-show="myNotific.status=='Propose Another Time' && changingStatusOpen!=null" class="checkbox_block">
+                <il ng-repeat="time in myNotific.arrTimes">
+                    <button class="times-button" ng-click="checkboxSet(sportEvt, myNotific, time)" ng-class="{'button_selected_times': time.isIn}">{{time.timeAsString}}</button>
+                </il>
+            </div>
+        </div>
+        <div class="eventPage-participants_list">
+            <div class="participants-status-total">
+                <div><span class="eventPage-numbers">{{listLength}}</span> Participants</div>
+                In: <span data-ng-bind="inCounter" class="eventPage-numbers"></span>
+                (min: <span class="eventPage-numbers">{{minPercent | number:0}}</span>%
+                max: <span class="eventPage-numbers">{{maxPercent | number:0}}</span>%)
+                <br>
+                Out: <span data-ng-bind="outCounter" class="eventPage-numbers"></span>
+                <br>
+                Maybe: <span data-ng-bind="maybeCounter" class="eventPage-numbers"></span>
+                <!-- <br>
+                 No Answer: <span data-ng-bind="noAnswerCounter" class="eventPage-numbers"></span>
+                 <br>
+                 Propose Another Time: <span data-ng-bind="proposeAnotherTimeCounter" class="eventPage-numbers"></span>-->
+            </div>
+            <div>
+                <span class="col-md-3">
+                    <input type="text" class="participants_form-control-events" placeholder="Search" ng-model="searchKeyword"/>
+                </span>
+            </div>
+            <table class="participants-table">
+                <tr>
+                    <th>User</th>
+                    <th>Status</th>
+                </tr>
+                <tr data-ng-repeat="member in sportEvt.allParticipantsAndNotific | filter: searchKeyword" ng-click="goToPage('users/', member.theUser.id)">
+                    <td data-th="User">
+                        <div ng-if="member.theUser.id!=authentication.user.id">
+                            {{member.theUser.fullName}}
+                        </div>
+                        <div ng-if="member.theUser.id==authentication.user.id" style="font-weight: 900">
+                            You
+                        </div>
+                    </td>
+                    <td data-th="Status">
+                        <div ng-if="member.theUser.id!=authentication.user.id">
+                            {{member.notific.status}}
+                        </div>
+                        <div ng-if="member.theUser.id==authentication.user.id" style="font-weight: 900">
+                            {{member.notific.status}}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="eventPage-moreInfo">
+            Created On: <span data-ng-bind="sportEvt.created | date:'mediumDate'"></span>
+            <br>
+            By: <span data-ng-bind="sportEvt.creator.fullName" class="links" ng-click="goToPage('users/', sportEvt.creator.id)"></span>
+            <br>
+            Number Of Participants Required: <span data-ng-bind="sportEvt.minNumOfMembers" class="eventPage-numbers"></span> -
+            <span data-ng-bind="sportEvt.maxNumOfMembers" class="eventPage-numbers"></span>.
+            Optimal: <span data-ng-bind="sportEvt.optNumOfMembers" class="eventPage-numbers"></span>
+
+            <div ng-if="!sportEvt.openForIndividuals">
+                <span style="font-size:15px; color: red" class="fa fa-close openToAdd"></span> Open To Add Participants.
+            </div>
+            <div ng-if="sportEvt.openForIndividuals">
+                <span style="font-size:15px; color: green" class="fa fa-check openToAdd"></span> Open To Add Participants.
+            </div>
+            <div ng-if="!sportEvt.openForGroups">
+                <span style="font-size:15px; color: red" class="fa fa-close openToAdd"></span> Open To Add Groups.
+            </div>
+            <div ng-if="sportEvt.openForGroups" class="openToAdd">
+                <span style="font-size:15px; color: green" class="fa fa-check openToAdd"></span> Open To Add Groups.
+            </div>
+        </div>
+
+    </div>
+
+</section>

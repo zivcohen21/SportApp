@@ -1,0 +1,164 @@
+<section data-ng-controller="SportEvtsController" data-ng-init="allUsersAndGroupsNotInEvent()">
+    <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
+    <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
+
+    <div class="add-userAndGroups">
+        <div class="add-users-side-with-admin-section">
+
+            <div class="groups-top">
+                <div class="manage-users-title center_align">Add Users</div>
+                <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeywordUsers"/>
+                <div class="usersList-to-add" ng-if="usersToAdd.length && usersToAdd.length > 0 && windWidth >= 800">
+                    <il data-ng-repeat="user in usersToAdd">
+                        <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                        <i ng-click="addUsersList(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
+                  border-left: 1px solid transparent;
+                  border-right: 1px solid black;
+                  border-bottom: 1px solid black;
+                  border-top: 1px solid black;"
+                           class="fa fa-times" aria-hidden="true "></i>
+                    </il>
+                </div>
+
+                <div class="usersList-to-add" ng-if="usersToAdd.length && usersToAdd.length > 0 && windWidth < 700">
+                    <il data-ng-repeat="user in usersToAdd">
+                        <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                        <i ng-click="addUsersList(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
+                 border-bottom-right-radius: 10px;
+                 border-top-right-radius: 10px;
+                 border-left: 1px solid transparent;
+                 border-right: 1px solid black;
+                 border-bottom: 1px solid black;
+                 border-top: 1px solid black;"
+                           class="fa fa-times" aria-hidden="true "></i>
+                    </il>
+                </div>
+            </div>
+            <table class="rwd-table-users" ng-if="windWidth >= 800">
+                <tr>
+                    <th></th>
+                    <th>UserName</th>
+                    <th>City</th>
+                </tr>
+                <tr ng-repeat="user in usersNotInEvent | filter: searchKeywordUsers" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
+                    <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
+                    <td data-th="Full Name">{{user.fullName}}</td>
+                    <td data-th="City">{{user.city}}</td>
+                </tr>
+            </table>
+
+            <div class="small-table-users" ng-if="windWidth < 799">
+                <div class="user-header" ng-repeat="user in usersNotInEvent | filter: searchKeywordUsers" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
+                    <div class="left-side-user">
+                        <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
+                        <!--<span data-ng-bind="group.image"></span>-->
+                    </div>
+                    <div class="center-side-user">
+                        <span class= "name-part" data-ng-bind="user.fullName"></span>
+                        <span class= "court-part" data-ng-bind="user.city"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-groups-side-with-admin-section">
+            <div class="groups-top">
+                <div class="manage-users-title center_align">Add Groups</div>
+                <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeywordGroups"/>
+                <div class="usersList-to-add" ng-if="groupsToAdd.length && groupsToAdd.length > 0 && windWidth >= 800">
+                    <il data-ng-repeat="group in groupsToAdd">
+                        <button type="button" ng-bind="group.title" class="user-to-add" ng-click="addGroupsList(group)"></button>
+                        <i ng-click="addGroupsList(group)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
+                  border-left: 1px solid transparent;
+                  border-right: 1px solid black;
+                  border-bottom: 1px solid black;
+                  border-top: 1px solid black;"
+                           class="fa fa-times" aria-hidden="true "></i>
+                    </il>
+                </div>
+
+                <div class="usersList-to-add" ng-if="groupsToAdd.length && groupsToAdd.length > 0 && windWidth < 700">
+                    <il data-ng-repeat="group in groupsToAdd">
+                        <button type="button" ng-bind="group.title" class="user-to-add" ng-click="addGroupsList(group)"></button>
+                        <i ng-click="addGroupsList(group)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
+                 border-bottom-right-radius: 10px;
+                 border-top-right-radius: 10px;
+                 border-left: 1px solid transparent;
+                 border-right: 1px solid black;
+                 border-bottom: 1px solid black;
+                 border-top: 1px solid black;"
+                           class="fa fa-times" aria-hidden="true "></i>
+                    </il>
+                </div>
+            </div>
+            <table class="rwd-table-users" ng-if="windWidth >= 800">
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Sport</th>
+                    <th>Court</th>
+                </tr>
+                <tr ng-repeat="group in groupsNotInEvent | filter: searchKeywordGroups" ng-click="addGroupsList(group)" ng-class="{'selected_user': groupsToAdd.indexOf(group) != -1 }">
+                    <td data-th="Picture" style="text-align: center;">{{group.image}}<i style="font-size:40px; text-align: center; width: 70%; margin: auto" class="fa fa-users" aria-hidden="true"></i></td>
+                    <td data-th="Name">{{group.title}}</td>
+                    <td data-th="Sport">{{group.theSportType.title}}</td>
+                    <td data-th="Court">{{group.defaultCourt.title}}</td>
+                </tr>
+            </table>
+
+            <div class="small-table-users" ng-if="windWidth < 799">
+                <div class="user-header" ng-repeat="group in groupsNotInEvent | filter: searchKeywordGroups" ng-click="addGroupsList(group)" ng-class="{'selected_user': groupsToAdd.indexOf(group) != -1 }">
+                    <div class="left-side-add-group">
+                        <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>
+                        <!--<span data-ng-bind="group.image"></span>-->
+                    </div>
+                    <div class="center-side-add-group">
+                        <span class= "title-part" data-ng-bind="group.title"></span>
+                        <span class= "defaultCourt-part" data-ng-bind="group.defaultCourt.title"></span>
+                        <span class= "sport-part" data-ng-bind="group.theSportType.title"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="center-button">
+        <button type="submit" class="pure-button pure-button-primary" ng-click="addUsersAndGroupsToEvent()">Add</button>
+    </div>
+
+
+
+
+
+    <!-- <form data-ng-submit="addUsersAndGroupsToEvent()" class="pure-form pure-form-stacked" novalidate>
+         <fieldset>
+             <div class="pure-g">
+                 <div class="pure-u-1-2 pure-u-md-1-2">
+                     <label for="requests" >Join Requests</label>
+                     <select id="requests" multiple="true" ng-model="requestsToAdd" ng-options="option.username for option in usersAskedToJoin" class="pure-u-23-24">
+                     </select>
+                 </div>
+                 <div class="pure-u-1-2 pure-u-md-1-2">
+                     <label for="users" >Add Users</label>
+                     <select id="users" multiple="true" ng-model="usersToAdd" ng-options="option.username for option in usersNotInEvent" class="pure-u-23-24">
+                     </select>
+                 </div>
+                 <div class="pure-u-1-2 pure-u-md-1-2">
+                     <label for="groups" >Add Groups</label>
+                     <select id="groups" multiple="true" ng-model="groupsToAdd" ng-options="option.title for option in groupsNotInEvent" class="pure-u-23-24">
+                     </select>
+                 </div>
+             </div>
+             <div class="center-button">
+                 <button type="submit" class="pure-button pure-button-primary">Add</button>
+             </div>
+
+         </fieldset>
+
+     </form>-->
+</section>

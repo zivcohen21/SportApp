@@ -1,0 +1,163 @@
+<section data-ng-controller="GroupsController" data-ng-init="findOne(1)">
+    <div ng-include="'groups/views/group-main.client.view.html'"></div>
+    <div class="group-title center_align">{{group.title}}</div>
+
+    <div class="groupPage" ng-if="windWidth >= 800">
+        <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
+        
+        <div class="groupPage-creator">
+            Created On: <span data-ng-bind="group.created | date:'mediumDate'"></span>
+            <br>
+            By: <span data-ng-bind="group.creator.fullName" class="links" ng-click="goToPage('users/', group.creator.id)"></span>
+        </div>
+        <div class="groupPage-main-part">
+            <div class="groupPage-details">
+                <div>Court: <span data-ng-bind="group.defaultCourt.title" class="links" ng-click="goToPage('courts/', group.defaultCourt._id)"></span></div>
+                <div>Sport: <span data-ng-bind="group.theSportType.title"></span></div>
+            </div>
+
+            <div class="groupPage-participants_list">
+                <div class="participants_list">
+                    <div class="participants_list_header">Participants List</div>
+                    <div><span class="groupPage-numbers">{{group.members.length}}</span> Participants</div>
+                </div>
+                <div>
+                <span class="col-md-3">
+                    <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+                </span>
+                </div>
+                <table class="participants-table-groupPage">
+                    <tr>
+                        <th>User</th>
+                        <th>City</th>
+                    </tr>
+                    <tr data-ng-repeat="member in group.members | filter: searchKeyword" ng-click="goToPage('users/', member.id)">
+                        <td data-th="User">
+                            <div ng-if="member.id!=authentication.user.id">
+                                {{member.fullName}}
+                            </div>
+                            <div ng-if="member.id==authentication.user.id" style="font-weight: 900">
+                                You
+                            </div>
+                        </td>
+                        <td data-th="City">
+                            <div ng-if="member.id!=authentication.user.id">
+                                {{member.city}}
+                            </div>
+                            <div ng-if="member.id==authentication.user.id" style="font-weight: 900">
+                                {{member.city}}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button ng-if="isInGroup" class="eventList-button" ng-click="openEventList(group)">Events List</button>
+            <div ng-if="isInGroup && eventListOpen!=null" class="groupPage-eventList">
+
+                <div class="sportEvts-top">
+                    <div class="mobile-app-toggle-groupPage">
+                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+                    </div>
+                    <div>
+                        <span class="col-md-3">
+                            <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+                        </span>
+                    </div>
+                </div>
+                <table class="participants-table-groupPage">
+                    <tr>
+                        <th>Sport</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Court</th>
+                        <th>Participants</th>
+                    </tr>
+                    <tr ng-repeat="sportEvt in sportEvtOfGroup | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+                        <td data-th="Sport" ng-if="checkIfShow(sportEvt)">{{sportEvt.sportType.title}}</td>
+                        <td data-th="Date" ng-if="checkIfShow(sportEvt)">{{sportEvt.dateEvtAsString}}</td>
+                        <td data-th="Time" ng-if="checkIfShow(sportEvt)">{{sportEvt.startTimeAsString}}</td>
+                        <td data-th="Court" ng-if="checkIfShow(sportEvt)">{{sportEvt.court.title}}</td>
+                        <td data-th="Participants" ng-if="checkIfShow(sportEvt)">{{sportEvt.allParticipantsAndNotific.length}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="groupPage" ng-if="windWidth < 799">
+        <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
+        <div class="groupPage-main-part">
+            <div class="groupPage-details">
+                <div>Court: <span data-ng-bind="group.defaultCourt.title" class="links" ng-click="goToPage('courts/', group.defaultCourt._id)"></span></div>
+                <div>Sport: <span data-ng-bind="group.theSportType.title"></span></div>
+            </div>
+
+            <div class="groupPage-participants_list">
+                <div class="participants_list">
+                    <div><span class="groupPage-numbers">{{group.members.length}}</span> Participants</div>
+                </div>
+                <div>
+                    <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+                </div>
+                <table class="participants-table-groupPage">
+                    <tr>
+                        <th>User</th>
+                        <th>City</th>
+                    </tr>
+                    <tr data-ng-repeat="member in group.members | filter: searchKeyword" ng-click="goToPage('users/', member.id)">
+                        <td data-th="User">
+                            <div ng-if="member.id!=authentication.user.id">
+                                {{member.fullName}}
+                            </div>
+                            <div ng-if="member.id==authentication.user.id" style="font-weight: 900">
+                                You
+                            </div>
+                        </td>
+                        <td data-th="City">
+                            <div ng-if="member.id!=authentication.user.id">
+                                {{member.city}}
+                            </div>
+                            <div ng-if="member.id==authentication.user.id" style="font-weight: 900">
+                                {{member.city}}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button ng-if="isInGroup" class="eventList-button" ng-click="openEventList(group)">Events List</button>
+            <div ng-if="isInGroup && eventListOpen!=null" class="groupPage-eventList">
+
+                <div class="groups-top">
+                    <div class="mobile-app-toggle-groupPage">
+                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+                    </div>
+                    <div>
+                        <span class="col-md-3">
+                            <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="small-table">
+                    <div class="sportEvt-header" ng-repeat="sportEvt in sportEvtOfGroup | filter: searchKeyword" ng-click="openEvent(sportEvt)" ng-if="checkIfShow(sportEvt)">
+                        <div class="left-side-event">
+                            <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                            <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+                        </div>
+                        <div class="center-side-event">
+                            <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                            <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+                        </div>
+                        <div class="right-side-event">
+                            <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                            <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

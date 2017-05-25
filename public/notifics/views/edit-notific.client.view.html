@@ -1,0 +1,39 @@
+<section data-ng-controller="CourtsController" data-ng-init="findOne()">
+    <h1>Edit Court</h1>
+    <form data-ng-submit="update()" novalidate>
+        <div>
+            <label for="title">Title</label>
+            <div>
+                <input type="text" data-ng-model="title" id="title" value="{{court.title}}">
+            </div>
+            <label for="country">Country</label>
+            <div>
+                <input type="text" data-ng-model="country" id="country" value="{{court.country}}" required>
+            </div>
+            <label for="city">City</label>
+            <div>
+                <input type="text" data-ng-model="city" id="city" value="{{court.city}}" required>
+            </div>
+            <label for="street">Street</label>
+            <div>
+                <input type="text" data-ng-model="street" id="street" value="{{court.street}}">
+            </div>
+            <label for="number">Number</label>
+            <div>
+                <input type="text" data-ng-model="number" id="number" value="{{court.number}}">
+            </div>
+        </div>
+        <div>
+            <label for="comments">Comments</label>
+            <div>
+                <textarea data-ng-model="comments" id="comments" cols="30" rows="10" value="{{court.comments}}"></textarea>
+            </div>
+        </div>
+        <div>
+            <input type="submit" value="Update">
+        </div>
+        <div data-ng-show="error">
+            <strong data-ng-bind="error"></strong>
+        </div>
+    </form>
+</section>

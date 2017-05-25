@@ -1,0 +1,31 @@
+<section data-ng-controller="CourtsController" data-ng-init="find()">
+    <div ng-include="'courts/views/court-main.client.view.html'"></div>
+
+    <div class="groups-top">
+
+        <span class="col-md-3">
+            <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
+        </span>
+    </div>
+
+    <table class="rwd-table" ng-if="windWidth > 800">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Sports</th>
+        </tr>
+        <tr ng-repeat="court in courts | filter: searchKeyword" ng-click="openCourt(court)">
+            <td data-th="Name">{{court.title}}</td>
+            <td data-th="Address">{{court.courtAddress}}</td>
+            <td data-th="Sport">{{court.subCourts.sportType}}</td>
+        </tr>
+    </table>
+
+    <div class="small-table" ng-if="windWidth < 799">
+        <div class="court-header" ng-repeat="court in courts | filter: searchKeyword" ng-click="openCourt(court)">
+            <span data-ng-bind="court.title"></span>
+            <span data-ng-bind="court.courtAddress"></span>
+            <span data-ng-bind="court.subCourts.sportType"></span>
+        </div>
+    </div>
+</section>

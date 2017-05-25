@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" class="container">
+    <head>
+        <script type="text/javascript"> window.user = <%- user || 'null' %>; </script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/lib/angular/angular.js"></script>
+        <script type="text/javascript" src="/lib/angular-route/angular-route.js"></script>
+        <script type="text/javascript" src="/lib/angular-resource/angular-resource.js"></script>
+        <script type="text/javascript" src="/groups/groups.client.module.js"></script>
+        <script type="text/javascript" src="/groups/controllers/groups.client.controller.js"></script>
+        <script type="text/javascript" src="/groups/services/groups.client.service.js"></script>
+        <script type="text/javascript" src="/groups/config/groups.client.routes.js"></script>
+
+        <script type="text/javascript" src="/courts/courts.client.module.js"></script>
+        <script type="text/javascript" src="/courts/controllers/courts.client.controller.js"></script>
+        <script type="text/javascript" src="/courts/services/courts.client.service.js"></script>
+        <script type="text/javascript" src="/courts/config/courts.client.routes.js"></script>
+
+        <script type="text/javascript" src="/sportEvts/sportEvts.client.module.js"></script>
+        <script type="text/javascript" src="/sportEvts/controllers/sportEvts.client.controller.js"></script>
+        <script type="text/javascript" src="/sportEvts/services/sportEvts.client.service.js"></script>
+        <script type="text/javascript" src="/sportEvts/config/sportEvts.client.routes.js"></script>
+
+        <script type="text/javascript" src="/sportTypes/sportTypes.client.module.js"></script>
+        <script type="text/javascript" src="/sportTypes/controllers/sportTypes.client.controller.js"></script>
+        <script type="text/javascript" src="/sportTypes/services/sportTypes.client.service.js"></script>
+        <script type="text/javascript" src="/sportTypes/config/sportTypes.client.routes.js"></script>
+
+        <script type="text/javascript" src="/notifics/notifics.client.module.js"></script>
+        <script type="text/javascript" src="/notifics/controllers/notifics.client.controller.js"></script>
+        <script type="text/javascript" src="/notifics/services/notifics.client.service.js"></script>
+        <script type="text/javascript" src="/notifics/config/notifics.client.routes.js"></script>
+
+        <script type="text/javascript" src="/home/home.client.module.js"></script>
+        <script type="text/javascript" src="/home/controllers/home.client.controller.js"></script>
+        <script type="text/javascript" src="/home/services/home.client.service.js"></script>
+        <script type="text/javascript" src="/home/config/home.client.routes.js"></script>
+
+        <script type="text/javascript" src="/users/users.client.module.js"></script>
+        <script type="text/javascript" src="/users/services/authentication.client.service.js"></script>
+        <script type="text/javascript" src="/users/controllers/users.client.controller.js"></script>
+        <script type="text/javascript" src="/users/config/users.client.routes.js"></script>
+
+        <script type="text/javascript" src="/chat/chat.client.module.js"></script>
+        <script type="text/javascript" src="/chat/services/socket.client.service.js"></script>
+        <script type="text/javascript" src="/chat/controllers/chat.client.controller.js"></script>
+        <script type="text/javascript" src="/chat/config/chat.client.routes.js"></script>
+
+        <script type="text/javascript" src="/application.js"></script>
+        <script type="text/javascript" src="/home/controllers/mod.custom.js"></script>
+
+        <title><%= title %></title>
+        <link href="../css/home.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/component.css" />
+        <link rel="stylesheet" type="text/css" href="../css/notifications.css" />
+        <link rel="stylesheet" type="text/css" href="../css/sportEvts.css" />
+        <link rel="stylesheet" type="text/css" href="../css/groups.css" />
+        <link rel="stylesheet" type="text/css" href="../css/users.css" />
+
+        <link rel="stylesheet" type="text/css" href="../css/w3schools.css" />
+        <link rel="stylesheet" type="text/css" href="../css/font-awesome.css" />
+        <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+        <link rel="stylesheet" type="text/css" href="../css/base-min.css" />
+        <link rel="stylesheet" type="text/css" href="../css/grids-min.css" />
+        <link rel="stylesheet" type="text/css" href="../css/grids-responsive-min.css" />
+
+       <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/base-min.css">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-min.css">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">-->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <% if (user) { %>
+            <div ng-include="'home/views/top.client.view.html'"></div>
+        <% } %>
+    </head>
+    <body>
+
+        <% if (!user) { %>
+       <!--  <div data-ng-show="!authentication.user">-->
+            <div class="hgroup">
+                <h2>SportApp</h2>
+            </div>
+
+            <form class="signup-form" action="/signup">
+                <button type="submit" class="button buttonBlue">New User?
+                    <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+                </button>
+            </form>
+
+            <form class="signup-form" action="/signin" method="post">
+                <h2>Login</h2>
+                <div class="signup-group">
+                    <input class="signup-input" type="text" name="username" placeholder="Username"><span class="highlight"></span><span class="bar"></span>
+                </div>
+                <div class="signup-group">
+                    <input class="signup-input" type="password" name="password" placeholder="Password"><span class="highlight"></span><span class="bar"></span>
+                </div>
+                <button type="submit" class="button buttonBlue">Sign in
+                    <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+                </button>
+                <br><br><br>
+                <a class="btn-auth btn-facebook large" href="/oauth/facebook">
+                    Sign in with <b>Facebook</b>
+                </a>
+                <a class="btn-auth btn-google large" href="/oauth/google">
+                    Sign in with <b>Google</b>
+                </a>
+            </form>
+        <% } else { %>
+        <!--</div>-->
+            <section ng-view class="mainPage"></section>
+        <% } %>
+    </body>
+</html>

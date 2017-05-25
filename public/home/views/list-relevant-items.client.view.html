@@ -1,0 +1,32 @@
+<table class="rwd-table" ng-if="windWidth >= 800">
+    <tr>
+        <th>Sport</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Court</th>
+        <th>Participants</th>
+    </tr>
+    <tr ng-repeat="sportEvt in relevantEvents | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+        <td data-th="Sport">{{sportEvt.sportType.title}}</td>
+        <td data-th="Date">{{sportEvt.dateEvtAsString}}</td>
+        <td data-th="Time">{{sportEvt.startTimeAsString}}</td>
+        <td data-th="Court">{{sportEvt.court.title}}</td>
+        <td data-th="Participants">{{sportEvt.allParticipantsAndNotific.length}}</td>
+    </tr>
+</table>
+<div class="small-table" ng-if="windWidth < 799">
+    <div class="sportEvt-header" ng-repeat="sportEvt in relevantEvents | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+        <div class="left-side-event">
+            <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+            <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+        </div>
+        <div class="center-side-event">
+            <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+            <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+        </div>
+        <div class="right-side-event">
+            <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+            <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+        </div>
+    </div>
+</div>

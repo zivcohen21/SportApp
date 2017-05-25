@@ -1,0 +1,42 @@
+<!--
+<section data-ng-controller="NotificsController" data-ng-init="findOne()">
+    <h1 data-ng-bind="notific.theEvent.dateEvtAsString"></h1>
+    <h1 data-ng-bind="notific.theEvent.startTimeAsString"></h1>
+    <div>&lt;!&ndash;<div data-ng-show="authentication.user._id == notific.creator._id">&ndash;&gt;
+    </div>
+    <small>
+        <em>Posted on</em>
+        <em data-ng-bind="notific.created | date:'mediumDate'"></em>
+        <em>by</em>
+        <em data-ng-bind="notific.theEvent.creator.fullName"></em>
+    </small>
+    <div>
+        <a data-ng-href="#!/sportEvts/{{notific.theEvent._id}}"> Event Page </a>
+    </div>
+    <form data-ng-submit="saveStatusAndTimes()" novalidate>
+        <div>
+            <label for="status"> Select Status: </label><br>
+            <select name="status" id="status" ng-model="data.status">
+                <option value="in">IN</option>
+                <option value="out">OUT</option>
+                <option value="maybe">MAYBE</option>
+                <option value="setTimes">SET OTHER TIMES</option>
+            </select><br>
+            <div data-ng-show="data.status == 'setTimes'">
+                <label ng-repeat="time in allTimes">
+                    <div ng-if="time.index % 12 == 0">
+                        <br>
+                    </div>
+                    <input type="checkbox" data-ng-model="inTimes[time.index]" ng-init="inTimes[time.index] = false" id="time.index"> {{time.timeAsString}}
+                </label>
+            </div>
+        </div>
+        <div>
+            <br>
+            <input type="submit">
+        </div>
+        <div data-ng-show="error">
+            <strong data-ng-bind="error"></strong>
+        </div>
+    </form>
+</section>-->

@@ -1,0 +1,51 @@
+<section data-ng-controller="SportEvtsController" data-ng-init="getMySportEvts()">
+    <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
+
+<!-- <div data-ng-init="getMySportEvts()" ng-show="eventSelected==null">-->
+    <div class="sportEvts-top">
+        <div class="mobile-app-toggle">
+            <button class="upcomingOrOld-button" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+            <button class="upcomingOrOld-button" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+        </div>
+        <input type="text" class="form-control" placeholder="Search" ng-model="searchKeyword"/>
+
+    </div>
+    <table class="rwd-table" ng-if="windWidth >= 800">
+        <tr>
+            <th>Sport</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Court</th>
+            <th>Participants</th>
+        </tr>
+        <tr ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+            <td data-th="Sport" ng-if="checkIfShow(sportEvt)">{{sportEvt.sportType.title}}</td>
+            <td data-th="Date" ng-if="checkIfShow(sportEvt)">{{sportEvt.dateEvtAsString}}</td>
+            <td data-th="Time" ng-if="checkIfShow(sportEvt)">{{sportEvt.startTimeAsString}}</td>
+            <td data-th="Court" ng-if="checkIfShow(sportEvt)">{{sportEvt.court.title}}</td>
+            <td data-th="Participants" ng-if="checkIfShow(sportEvt)">{{sportEvt.allParticipantsAndNotific.length}}</td>
+        </tr>
+    </table>
+    <div class="small-table" ng-if="windWidth < 799">
+        <div class="sportEvt-header" ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)" ng-if="checkIfShow(sportEvt)">
+            <div class="left-side-event">
+                <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+            </div>
+            <div class="center-side-event">
+                <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+            </div>
+            <div class="right-side">
+                <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+
+<!--
+    <div ng-show="eventSelected!=null">
+        <div ng-include="'sportEvts/views/view-sportEvt.client.view.html'"></div>
+    </div>-->
+</section>

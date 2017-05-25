@@ -1,0 +1,39 @@
+<section data-ng-controller="NotificsController">
+    <h1>New Notific</h1>
+    <form data-ng-submit="create()" novalidate>
+        <div>
+            <label for="title">Title</label>
+            <div>
+                <input type="text" data-ng-model="title" id="title" placeholder="Title">
+            </div>
+            <label for="country">Country</label>
+            <div>
+                <input type="text" data-ng-model="country" id="country" placeholder="country" required>
+            </div>
+            <label for="city">City</label>
+            <div>
+                <input type="text" data-ng-model="city" id="city" placeholder="city" required>
+            </div>
+            <label for="street">Street</label>
+            <div>
+                <input type="text" data-ng-model="street" id="street" placeholder="street">
+            </div>
+            <label for="number">Number</label>
+            <div>
+                <input type="text" data-ng-model="number" id="number" placeholder="number">
+            </div>
+        </div>
+        <div>
+            <label for="comments">Comments</label>
+            <div>
+                <textarea data-ng-model="comments" id="comments" cols="30" rows="10" placeholder="comments"></textarea>
+            </div>
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+        <div data-ng-show="error">
+            <strong data-ng-bind="error"></strong>
+        </div>
+    </form>
+</section>

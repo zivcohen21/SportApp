@@ -1,0 +1,125 @@
+<section data-ng-controller="UsersController" data-ng-init="findOne()">
+    <div class="user-title center_align" data-ng-bind="user.fullName"></div>
+    <div class="userPage">
+        <div ng-include="'users/views/admin-menu.client.view.html'"></div>
+
+        <div class="userPage-main-part">
+            <div class="userPage-details">
+                <div>Year of Birth: <span data-ng-bind="user.yearOfBirth"></span></div>
+                <div>Username: <span data-ng-bind="user.username"></span></div>
+                <div>E-mail: <span data-ng-bind="user.email"></span></div>
+                <div>Facebook: <span data-ng-bind="user.facebookLink"></span></div>
+                <div>Address: <span data-ng-bind="user.userAddress"></span></div>
+                <div>Sports: <span data-ng-bind="user.sportTypes.title"></span></div>
+            </div>
+            <div class="buttons-userPage">
+                <button ng-if="authentication.user._id == user._id" class="groupList-button" ng-click="openGroupList(user)" ng-class="{'selection_events_groups': eventGroupSelection==1}">Groups List</button>
+                <button ng-if="authentication.user._id == user._id" class="eventList-button-user" ng-click="openEventList(user)" ng-class="{'selection_events_groups': eventGroupSelection==2}">Events List</button>
+            </div>
+            <div ng-if="authentication.user._id == user._id && groupListOpen!=null" class="userPage-group_list">
+                <div>
+                    <span class="col-md-3">
+                        <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+                    </span>
+                </div>
+                <table class="participants-table-groupPage" ng-if="windWidth >= 800">
+                    <tr>
+                        <th>Picture</th>
+                        <th>Name</th>
+                        <th>Sport</th>
+                        <th>Court</th>
+                        <th>Participants</th>
+                    </tr>
+                    <tr ng-repeat="group in myGroupsList | filter: searchKeyword" ng-click="openGroup(group)">
+                        <td data-th="Picture">{{group.image}}<i style="font-size:40px; text-align: center; width: 70%; margin: auto" class="fa fa-users" aria-hidden="true"></i></td>
+                        <td data-th="Name">{{group.title}}</td>
+                        <td data-th="Sport">{{group.theSportType.title}}</td>
+                        <td data-th="Court">{{group.defaultCourt.title}}</td>
+                        <td data-th="Participants">{{group.members.length}}</td>
+                    </tr>
+                </table>
+
+                <div class="small-table-userPage" ng-if="windWidth < 799">
+                    <div class="group-header" ng-repeat="group in myGroupsList | filter: searchKeyword" ng-click="openGroup(group)">
+                        <div class="left-side-group">
+                            <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>
+                            <!--<span data-ng-bind="group.image"></span>-->
+                        </div>
+                        <div class="center-side-group">
+                            <span class= "name-part" data-ng-bind="group.title"></span>
+                            <span class= "court-part" data-ng-bind="group.defaultCourt.title"></span>
+                        </div>
+                        <div class="right-side-group">
+                            <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                            <span class= "participants-part" data-ng-bind="group.members.length"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div ng-if="authentication.user._id == user._id && eventListOpen!=null" class="userPage-eventList">
+                <div ng-if="windWidth >= 800">
+                    <div class="sportEvts-top">
+                        <div class="mobile-app-toggle-userPage">
+                            <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                            <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+                        </div>
+                        <div>
+                        <span class="col-md-3">
+                            <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+                        </span>
+                        </div>
+                    </div>
+                    <table class="participants-table-groupPage">
+                        <tr>
+                            <th>Sport</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Court</th>
+                            <th>Participants</th>
+                        </tr>
+                        <tr ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+                            <td data-th="Sport" ng-if="checkIfShow(sportEvt)">{{sportEvt.sportType.title}}</td>
+                            <td data-th="Date" ng-if="checkIfShow(sportEvt)">{{sportEvt.dateEvtAsString}}</td>
+                            <td data-th="Time" ng-if="checkIfShow(sportEvt)">{{sportEvt.startTimeAsString}}</td>
+                            <td data-th="Court" ng-if="checkIfShow(sportEvt)">{{sportEvt.court.title}}</td>
+                            <td data-th="Participants" ng-if="checkIfShow(sportEvt)">{{sportEvt.allParticipantsAndNotific.length}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div ng-if="windWidth < 799">
+                    <div class="events-top-usersPage">
+                        <div class="mobile-app-toggle-groupPage">
+                            <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                            <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+                        </div>
+                        <div>
+                        <span class="col-md-3">
+                            <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="small-table-userPage">
+                        <div class="sportEvt-header" ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)" ng-if="checkIfShow(sportEvt)">
+                            <div class="left-side-event">
+                                <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                                <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+                            </div>
+                            <div class="center-side-event">
+                                <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                                <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+                            </div>
+                            <div class="right-side-event">
+                                <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                                <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
