@@ -10,7 +10,8 @@ var mongoose = require('./config/mongoose'),
 var db = mongoose();
 var app = express(db);
 var passport = passport();
-
-app.listen(8080);
+var port = process.env.PORT || 8080;
+app.listen(port);
+/*app.listen(3000);*/
 module.exports = app;
 console.log('Server running at http://quiet-anchorage-91080.herokuapp.com/');
