@@ -33,6 +33,9 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 femaleEvent : true,
                 maleEvent : true
             };
+
+
+
             $scope.create = function()
             {
                 $scope.eventSelected = null;
@@ -74,8 +77,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                         maxAge: document.getElementById("maxAgeEvent").value,
                         forFemale: $scope.checkboxModel.femaleEvent,
                         forMale: $scope.checkboxModel.maleEvent,
-                        openForIndividuals: $scope.openForIndividuals,
-                        openForGroups: $scope.openForGroups,
+                        openForIndividuals: document.getElementById("openForIndividuals").value,
+                        openForGroups: document.getElementById("openForGroups").value,
                         sportType:  document.getElementById("sportType").value,
                         court:  document.getElementById("court").value,
                         groups: allGroups,
@@ -107,9 +110,9 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                     $scope.adminSelection = index;
                    // console.info("response: " + JSON.stringify(response));
                     $scope.sportEvt = response;
-                    $scope.theSportType = response.sportType;
-                    $scope.theCourt = response.court;
-                    currentCounterAndFindMyNotific(response);
+                    $scope.theSportType = $scope.sportEvt.sportType;
+                    $scope.theCourt = $scope.sportEvt.court;
+                    currentCounterAndFindMyNotific($scope.sportEvt);
                     checkIfInEvent($scope.sportEvt);
                 });
 
@@ -166,6 +169,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 $scope.groupList = getGroupsCanBeAdded();
                 $scope.allUsersList = getAllUsers();
                 $scope.sportTypeList = getAllSportTypes();
+                var todayDate = new Date();
+                $scope.minDate = todayDate.toISOString().split('T')[0];
             };
             var getGroupsCanBeAdded = function () {
                return GetGroupsCanBeAdded.query();
@@ -192,7 +197,6 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 else{
                     return callback([]);
                 }
-
             };
 
             $scope.getMySportEvts = function()
@@ -482,22 +486,24 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                     $scope.error = errorResponse.data.message;
                 });
 
-
             };
-
 
             $scope.usersAndGroupsInEvent = function () {
                 $scope.inEventPage = false;
+                $scope.usersListInEvent = [];
                 SportEvts.get({
                     sportEvtId: $routeParams.sportEvtId
                 }).$promise.then(function (response) {
                     $scope.sportEvt = response;
-                    $scope.usersListInEvent = response.allParticipantsAndNotific;
-                    $scope.groupsListInEvent = response.groups;
                     checkIfInEvent($scope.sportEvt);
+                    for(var i = 0; i < $scope.sportEvt.allParticipantsAndNotific.length; i++)
+                    {
+                        if($scope.sportEvt.allParticipantsAndNotific[i].theUser.id != $scope.authentication.user._id)
+                        $scope.usersListInEvent.push($scope.sportEvt.allParticipantsAndNotific[i]);
+                    }
+                    $scope.groupsListInEvent =  $scope.sportEvt.groups;
                 });
             };
-
 
             $scope.removeUsersAndGroupsFromGroup = function () {
 

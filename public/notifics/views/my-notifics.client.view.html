@@ -12,10 +12,9 @@
                         'setTime-border_main': notific.status=='Propose Another Time'}" ></div>
                     <div ng-if="notific.notificType == 'inviteToEvent'">
                         <h3 class="notific-block__title">
-                            <div ng-if="notific.theEvent.creator._id != authentication.user._id">
-                                "<span data-ng-bind="notific.theEvent.creator.username">invited you to a</span>"
-                            </div>
-                            <span ng-if="notific.theEvent.creator._id == authentication.user._id">you invited to a</span>
+
+                            <span ng-if="notific.theEvent.creator._id != authentication.user._id">"{{notific.theEvent.creator.username}}" invited you to a</span>
+                            <span ng-if="notific.theEvent.creator._id == authentication.user._id">You invited to a</span>
                             <span data-ng-bind="notific.theEvent.sportType.title"></span>
                             event on
                             <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,

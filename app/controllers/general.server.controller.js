@@ -109,9 +109,23 @@ var getTomorrowDate = function (currTime) {
     return tomorrowDate;
 };
 
+var setTimezoneOffset = function (timezoneOffset, theTime) {
+    var timeInMin = theTime.timeInMin - timezoneOffset;
+    if(timeInMin < 0)
+    {
+        timeInMin = 1440 + timeInMin; //1440 minutes in a day.
+    }
+    else if(timeInMin >= 1440)
+    {
+        timeInMin = timeInMin-1440;
+    }
+    return timeInMin;
+};
+
 var checkIfUserIsRelevant = function (user, todayDay, tomorrowDay) {
 
     var relevantTimes = [];
+    var timezoneOffset = user.localTimeZoneOffsetInMIn;
     //console.info("user.favoriteTimes[0]: " + JSON.stringify(user.favoriteTimes[0]));
 
     for(var hoursIndex = 0; hoursIndex < user.favoriteTimes[0].favoriteHours.length; hoursIndex++)
@@ -119,19 +133,21 @@ var checkIfUserIsRelevant = function (user, todayDay, tomorrowDay) {
         var theTime = user.favoriteTimes[todayDay].favoriteHours[hoursIndex];
         if(theTime.isIn)
         {
+            var timeInMin = setTimezoneOffset(timezoneOffset, theTime);
             relevantTimes.push({
                 "user": user,
                 "day": todayDay,
-                "time": theTime.timeAsString
+                "timeInMin": timeInMin
             })
         }
         theTime = user.favoriteTimes[tomorrowDay].favoriteHours[hoursIndex];
         if(theTime.isIn)
         {
+            timeInMin = setTimezoneOffset(timezoneOffset, theTime);
             relevantTimes.push({
                 "user": user,
                 "day": tomorrowDay,
-                "time": theTime.timeAsString
+                "timeInMin": timeInMin
             })
         }
     }
@@ -152,9 +168,11 @@ var getArrTimeOfEventsAndUsers = function (callback) {
     var todayDate = getTodayDate(currTime);
     var tomorrowDate = getTomorrowDate(currTime);
 
-
     var numberOfDays = 2;
     var sizeForDay = 48;
+    var flexRange = 60;
+    var eventsRange = 1440 / sizeForDay / 2;
+
     var arrTimesTwoDays = matchingArrTimes(numberOfDays, sizeForDay, todayDate, tomorrowDate, todayDay, tomorrowDay);
     //console.info("arrTimesTwoDays: " + JSON.stringify(arrTimesTwoDays));
     SportEvt.find({$and: [{$or: [{dateEvtAsString: todayDate}, {dateEvtAsString: tomorrowDate}]}, {openForIndividuals: true}]},
@@ -170,12 +188,11 @@ var getArrTimeOfEventsAndUsers = function (callback) {
 
                 if(sportEvtTodayAndTomorrow[eventIndex].maxNumOfMembers == null || currCounter.in < sportEvtTodayAndTomorrow[eventIndex].maxNumOfMembers)
                 {
-
-                    var eventStartTimeAsString = sportEvtTodayAndTomorrow[eventIndex].startTimeAsString;
+                    var eventStartTimeInMin = sportEvtTodayAndTomorrow[eventIndex].startTimeInMin;
                     var eventDateAsString = sportEvtTodayAndTomorrow[eventIndex].dateEvtAsString;
                     for(var timeIndex = 0; timeIndex < arrTimesTwoDays.length; timeIndex++)
                     {
-                        if(eventDateAsString == arrTimesTwoDays[timeIndex].theDate && eventStartTimeAsString == arrTimesTwoDays[timeIndex].timeAsString)
+                        if(eventDateAsString == arrTimesTwoDays[timeIndex].theDate && Math.abs(eventStartTimeInMin - arrTimesTwoDays[timeIndex].timeInMin) <= eventsRange)
                         {
                             arrTimesTwoDays[timeIndex].relevantEvents.push(sportEvtTodayAndTomorrow[eventIndex])
                         }
@@ -193,11 +210,11 @@ var getArrTimeOfEventsAndUsers = function (callback) {
                         var relevantTimesPerUser = checkIfUserIsRelevant(usersTodayAndTomorrow[userIndex] ,todayDay ,tomorrowDay);
                         for (var itemIndex = 0; itemIndex < relevantTimesPerUser.length; itemIndex++)
                         {
-                            var userTime = relevantTimesPerUser[itemIndex].time;
+                            var userTime = relevantTimesPerUser[itemIndex].timeInMin;
                             var userDay = relevantTimesPerUser[itemIndex].day;
                             for (var timeIndex = 0; timeIndex < arrTimesTwoDays.length; timeIndex++)
                             {
-                                if(userTime == arrTimesTwoDays[timeIndex].timeAsString && userDay == arrTimesTwoDays[timeIndex].theDay)
+                                if(Math.abs(userTime - arrTimesTwoDays[timeIndex].timeInMin) <= flexRange && userDay == arrTimesTwoDays[timeIndex].theDay)
                                 {
 
                                     arrTimesTwoDays[timeIndex].relevantUsers.push(relevantTimesPerUser[itemIndex])

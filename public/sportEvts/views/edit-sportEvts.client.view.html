@@ -9,14 +9,14 @@
             <div class="pure-g"  ng-if="windWidth >= 800">
                 <div class="pure-u-1 pure-u-md-1-4">
                     <label for="sportType">Sport*</label>
-                    <select name="sportType" id="sportType" ng-model="theSportType._id" class="pure-u-20-24" required>
+                    <select name="sportType" id="sportType" data-ng-model="theSportType._id" class="pure-u-20-24" required>
                         <option ng-repeat="item in sportTypeList" value="{{item._id}}">{{item.title}}</option>
                     </select>
                 </div>
 
                 <div class="pure-u-1 pure-u-md-1-4">
                     <label for="court">Court*</label>
-                    <select name="court" id="court" ng-model="theCourt._id" class="pure-u-20-24" required>
+                    <select name="court" id="court" data-ng-model="theCourt._id" class="pure-u-20-24" required>
                         <option ng-repeat="item in courtList" value="{{item._id}}">{{item.title}}</option>
                     </select>
                 </div>
@@ -25,7 +25,7 @@
                     <!-- <label class="pure-u-1 pure-u-md-1 header-label">Date & Time:</label>-->
                     <div class="pure-u-2-5 pure-u-md-2-5">
                         <label for="dateEvt">Date*</label>
-                        <input type="date" data-ng-model="sportEvt.dateEvtAsString" id="dateEvt" placeholder="date" class="pure-u-23-24" required>
+                        <input type="date" data-ng-model="sportEvt.dateEvtAsString" id="dateEvt" placeholder="date" class="pure-u-23-24" min="{{minDate | date:'yyyy-MM-dd'}}" required>
                     </div>
 
                     <div class="pure-u-1-4 pure-u-md-1-4">
@@ -33,8 +33,8 @@
                         <input type="time" data-ng-model="sportEvt.startTimeAsString" id="startTimeAsString" placeholder="Start Time" class="pure-u-23-24" required>
                     </div>
                     <div class="pure-u-1-4 pure-u-md-1-4">
-                        <label for="duration">Duration</label>
-                        <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-16-24">
+                        <label for="duration">Duration (Hours)</label>
+                        <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-16-24" min="0">
                     </div>
                 </div>
                 <label class="pure-u-1 pure-u-md-1-2 header-label">Number Of Members: </label>
@@ -42,26 +42,26 @@
                 <label class="pure-u-1-4 pure-u-md-1-4 header-label">Gender: </label>
                 <div class="pure-u-1-4 pure-u-md-1-6">
                     <label for="minNumOfMembers">Minimum</label>
-                    <input type="number" ng-model="sportEvt.minNumOfMembers" id="minNumOfMembers" class="pure-u-18-24">
+                    <input type="number" ng-model="sportEvt.minNumOfMembers" id="minNumOfMembers" class="pure-u-18-24" min="1">
                 </div>
 
                 <div class="pure-u-1-4 pure-u-md-1-6">
                     <label for="maxNumOfMembers">Maximum</label>
-                    <input type="number" ng-model="sportEvt.maxNumOfMembers" id="maxNumOfMembers" class="pure-u-18-24">
+                    <input type="number" ng-model="sportEvt.maxNumOfMembers" id="maxNumOfMembers" class="pure-u-18-24" min="{{sportEvt.minNumOfMembers}}">
                 </div>
 
                 <div class="pure-u-1-4 pure-u-md-1-6">
                     <label for="optNumOfMembers">Optimum</label>
-                    <input type="number" ng-model="sportEvt.optNumOfMembers" id="optNumOfMembers" class="pure-u-18-24">
+                    <input type="number" ng-model="sportEvt.optNumOfMembers" id="optNumOfMembers" class="pure-u-18-24" min="{{sportEvt.minNumOfMembers}}" max="{{sportEvt.maxNumOfMembers}}">
                 </div>
                 <div class="pure-u-1 pure-u-md-1-4">
                     <div class="pure-u-1-4 pure-u-md-1-3">
                         <label for="minAgeEvent">From</label>
-                        <input type="number" ng-model="sportEvt.minAge" id="minAgeEvent" class="pure-u-15-24">
+                        <input type="number" ng-model="sportEvt.minAge" id="minAgeEvent" class="pure-u-15-24" min="0">
                     </div>
                     <div class="pure-u-1-4 pure-u-md-1-3">
                         <label for="maxAgeEvent">To</label>
-                        <input type="number" ng-model="sportEvt.maxAge" id="maxAgeEvent" class="pure-u-15-24">
+                        <input type="number" ng-model="sportEvt.maxAge" id="maxAgeEvent" class="pure-u-15-24" min="{{sportEvt.minAge}}">
                     </div>
                 </div>
                 <div class="pure-u-1 pure-u-md-1-4">
@@ -95,11 +95,7 @@
             </div>
 
 
-
-
-
-<!--
-            <div class="pure-g">
+            <div class="pure-g" ng-if="windWidth < 799">
                 <div class="pure-u-1 pure-u-md-1-2">
                     <label for="sportType">Sport*</label>
                     <select name="sportType" id="sportType" ng-model="theSportType._id" class="pure-u-20-24" required>
@@ -117,7 +113,7 @@
                 <label class="pure-u-1 pure-u-md-1 header-label">Date & Time:</label>
                 <div class="pure-u-2-5 pure-u-md-2-5">
                     <label for="date">Date*</label>
-                    <input type="date" data-ng-model="sportEvt.dateEvtAsString" id="date" placeholder="date" class="pure-u-23-24" required>
+                    <input type="date" data-ng-model="sportEvt.dateEvtAsString" id="date" placeholder="date" class="pure-u-23-24" min="{{minDate | date:'yyyy-MM-dd'}}" required>
                 </div>
 
                 <div class="pure-u-1-4 pure-u-md-1-4">
@@ -125,26 +121,51 @@
                     <input type="time" data-ng-model="sportEvt.startTimeAsString" id="startTime" placeholder="Start Time" class="pure-u-23-24" value="{{sportEvt.startTimeAsString}}" required>
                 </div>
                 <div class="pure-u-1-4 pure-u-md-1-4">
-                    <label for="duration">Duration</label>
-                    <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-16-24" value="{{sportEvt.duration}}">
+                    <label for="duration">Duration (Hours)</label>
+                    <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-16-24" value="{{sportEvt.duration}}" min="0">
                 </div>
 
                 <label class="pure-u-1 pure-u-md-1 header-label">Number Of Members: </label>
                 <div class="pure-u-1-4 pure-u-md-1-4">
                     <label for="minNumOfMembers">Minimum</label>
-                    <input type="number" data-ng-model="sportEvt.minNumOfMembers" id="minNumOfMembers" class="pure-u-18-24" value="{{sportEvt.minNumOfMembers}}">
+                    <input type="number" data-ng-model="sportEvt.minNumOfMembers" id="minNumOfMembers" class="pure-u-18-24" value="{{sportEvt.minNumOfMembers}}" min="1">
                 </div>
 
                 <div class="pure-u-1-4 pure-u-md-1-4">
                     <label for="maxNumOfMembers">Maximum</label>
-                    <input type="number" data-ng-model="sportEvt.maxNumOfMembers" id="maxNumOfMembers" class="pure-u-18-24" value="{{sportEvt.maxNumOfMembers}}">
+                    <input type="number" data-ng-model="sportEvt.maxNumOfMembers" id="maxNumOfMembers" class="pure-u-18-24" value="{{sportEvt.maxNumOfMembers}}" min="{{minNumOfMembers}}">
                 </div>
 
                 <div class="pure-u-1-4 pure-u-md-1-4">
                     <label for="optNumOfMembers">Optimum</label>
-                    <input type="number" data-ng-model="sportEvt.optNumOfMembers" id="optNumOfMembers" class="pure-u-18-24" value="{{sportEvt.optNumOfMembers}}">
+                    <input type="number" data-ng-model="sportEvt.optNumOfMembers" id="optNumOfMembers" class="pure-u-18-24" value="{{sportEvt.optNumOfMembers}}" min="{{minNumOfMembers}}" max="{{maxNumOfMembers}}">
                 </div>
-
+                <label class="pure-u-1-2 pure-u-md-1-4 header-label">Age: </label>
+                <label class="pure-u-1-2 pure-u-md-1-4 header-label">Gender: </label>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <div class="pure-u-2-5 pure-u-md-1-3">
+                        <label for="minAgeEvent">From</label>
+                        <input type="number" ng-model="sportEvt.minAge" id="minAgeEvent" class="pure-u-20-24" min="0">
+                    </div>
+                    <div class="pure-u-2-5 pure-u-md-1-3">
+                        <label for="maxAgeEvent">To</label>
+                        <input type="number" ng-model="sportEvt.maxAge" id="maxAgeEvent" class="pure-u-20-24" min="{{minAge}}">
+                    </div>
+                </div>
+                <div class="pure-u-1-2 pure-u-md-1-4">
+                    <div class="checkBox-label">
+                        <label for="femaleEvent">
+                            <input type="checkbox" ng-model="checkboxModel.femaleEvent" id="femaleEvent" >
+                            Female
+                        </label>
+                    </div>
+                    <div class="checkBox-label">
+                        <label for="maleEvent">
+                            <input type="checkbox" ng-model="checkboxModel.maleEvent" id="maleEvent">
+                            Male
+                        </label>
+                    </div>
+                </div>
                 <div class="pure-u-1 pure-u-md-1-2">
                     <div class="checkBox-label">
                         <label for="openForIndividuals">
@@ -159,7 +180,7 @@
                         </label>
                     </div>
                 </div>
-            </div>-->
+            </div>
             <div class="center-button">
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
             </div>

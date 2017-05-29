@@ -1,9 +1,8 @@
 <section data-ng-controller="SportEvtsController" data-ng-init="findOne(1)">
     <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
     <div class="event-status center_align" ng-if="sportEvt.isStarted==false">The event has not started yet</div>
-    <div class="event-status center_align" ng-if="sportEvt.isStarted==true && sportEvt.isEnded==false">The event is in progress</div>
+    <div class="event-status center_align" ng-if="sportEvt.isStarted==true && sportEvt.isEnded==false">The event is in progress or over</div>
     <div class="event-status center_align" ng-if="sportEvt.isStarted==true && sportEvt.isEnded==true">The event is over</div>
-
 
     <div class="eventPage" ng-if="windWidth >= 800">
         <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>

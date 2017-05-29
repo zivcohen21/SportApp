@@ -160,7 +160,8 @@ angular.module('users').controller('UsersController',
 
                 var favoriteTimes = [];
                 var favoriteHours = [];
-
+                var offset = new Date().getTimezoneOffset();
+                console.info("offset: " + offset);
                 for (var i = 0; i < $scope.user.favoriteTimes.length; i++)
                 {
                     if($scope.user.favoriteTimes[i].day == day)
@@ -189,8 +190,6 @@ angular.module('users').controller('UsersController',
                     }
                 }
 
-                //$scope.user.favoriteTimes = favoriteTimes;
-                console.info("$scope.user.favoriteTimes: " + JSON.stringify(favoriteTimes));
 
             };
 

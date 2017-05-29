@@ -27,7 +27,7 @@ module.exports = function(db)
         app.use(compress());
     }
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit: '500mb'}));
     app.use(methodOverride());
     var mongoStore = new MongoStore({ db: db.connection.db });
     app.use(session({ saveUninitialized: true, resave: true, secret: config.sessionSecret, store: mongoStore }));

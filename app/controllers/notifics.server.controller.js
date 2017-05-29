@@ -255,6 +255,94 @@ exports.createAndSendNotifics = function (req, res, sportEvt) {
     });
 };
 
+exports.createAndSendNotificsForNewParticipants = function (req, res, sportEvt, allMembers, singleParticipants) {
+
+    var allNotifics = [];
+    for (var i = 0; i < allMembers.length; i++) {
+
+        allNotifics[i] = new Notific();
+        allNotifics[i].notificType = 'inviteToEvent';
+        allNotifics[i].theEvent = sportEvt._id;
+        allNotifics[i].user = allMembers[i];
+        allNotifics[i].status = 'No Answer';
+        if(singleParticipants.length > 0)
+        {
+            allNotifics[i].isPartOfGroup = !general.contains(singleParticipants, allMembers[i]);
+            SportEvt.update({_id: sportEvt._id}, {$push: {'singleParticipants': singleParticipants}}).exec(function(err)
+            {
+                if (err) {
+                    return res.status(405).send({message: getErrorMessage(err)});
+                }
+            });
+        }
+        else
+        {
+            allNotifics[i].isPartOfGroup = false;
+        }
+        allNotifics[i].isSeen = false;
+        allNotifics[i].arrTimes = general.setTimesArr(sportEvt.arrTimesSize);
+        var notificId = allNotifics[i].id;
+        allNotifics[i].save(function(err)
+        {
+            if (err)
+            {
+                return res.status(403).send({ message: getErrorMessage(err) });
+            }
+
+        });
+        User.update({_id: allMembers[i]}, {$push: {notific: notificId}}).exec(function(err)
+        {
+            if (err) {
+                return res.status(404).send({message: getErrorMessage(err)});
+            }
+        });
+        User.update({_id: allMembers[i]}, {$push: {mySportEvts: sportEvt._id}}).exec(function(err)
+        {
+            if (err) {
+                return res.status(404).send({message: getErrorMessage(err)});
+            }
+        });
+
+        var participantAndNotific =
+        {
+            "theUser": allMembers[i],
+            "notific": allNotifics[i]
+        };
+
+        SportEvt.update({_id: sportEvt._id}, {$push: {'allParticipantsAndNotific': participantAndNotific}}).exec(function(err)
+        {
+            if (err) {
+                return res.status(405).send({message: getErrorMessage(err)});
+            }
+        });
+        User.findById(allMembers[i]).exec(function(err, user) {
+            if (err) {
+                return res.status(403).send({message: getErrorMessage(err)});
+            }
+            else {
+                var text = sportEvt.creator.fullName + " invited you to a " + sportEvt.sportType.title + " event on " + sportEvt.dateEvtAsString + ", " + sportEvt.startTimeAsString;
+                console.info("text: " + text);
+                console.info("user: " + user);
+                console.info("user.email: " + user.email);
+                var mailOptions = {
+                    from: '"SportApp" <sportApp.ziv@gmail.com>', // sender address
+                    to: user.email, // list of receivers
+                    subject: 'Invitation To an Event', // Subject line
+                    text: text // plain text body
+                };
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
+            }
+        });
+    }
+};
+
+
 
 exports.createEventSuggestionNotific = function (sportEvt, user) {
 

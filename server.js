@@ -15,3 +15,4 @@ app.listen(port);
 /*app.listen(3000);*/
 module.exports = app;
 console.log('Server running at http://quiet-anchorage-91080.herokuapp.com/');
+//console.log('Server running at http://localhost:3000/');

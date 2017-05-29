@@ -45,7 +45,7 @@ exports.create = function(req, res)
 };
 exports.list = function(req, res)
 {
-    Court.find().sort('-created').populate('creator subCourts.sportType', 'firstName lastName fullName title').exec(function(err, courts)
+    Court.find().sort('-created').populate('creator subCourts.sportType ', 'firstName lastName fullName title').exec(function(err, courts)
     {
         if (err)
         {
@@ -125,9 +125,11 @@ var enterLatLngToCourt = function (req, res, court) {
     {
         address = court.city + " " + court.country;
     }
-    googleMaps.getLatLng(address, function(gpsLocationInfo) {
-        console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));
-        Court.update({_id: court.id}, {gpsLocation: gpsLocationInfo}).exec(function(err)
+    googleMaps.getLatLng(address, function(gpsLocationInfo, totalOffset) {
+      /*  console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));
+        console.info("totalOffset: " + totalOffset);*/
+        var localTimeZoneOffsetInMIn = totalOffset / 60;
+        Court.update({_id: court.id}, {gpsLocation: gpsLocationInfo, localTimeZoneOffsetInMIn: localTimeZoneOffsetInMIn}).exec(function(err)
         {
             if (err)
             {

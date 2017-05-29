@@ -344,10 +344,10 @@ var enterLatLngToUser = function (req, res, user) {
     {
         address = user.city + " " + user.country;
     }
-    googleMaps.getLatLng(address, function(gpsLocationInfo) {
-        console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));
-
-        User.update({_id: user.id}, {gpsLocation: gpsLocationInfo}).exec(function(err)
+    googleMaps.getLatLng(address, function(gpsLocationInfo, totalOffset) {
+/*        console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));*/
+        var localTimeZoneOffsetInMIn = totalOffset / 60;
+        User.update({_id: user.id}, {gpsLocation: gpsLocationInfo, localTimeZoneOffsetInMIn: localTimeZoneOffsetInMIn}).exec(function(err)
         {
             if (err){
                 return res.status(400).send({ message: getErrorMessage(err) });

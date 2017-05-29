@@ -32,29 +32,48 @@ exports.create = function(req, res)
     sportEvt.startTimeInMin += (new Date(sportEvt.dateEvtAsString).getTime() / 60000);
     var allParticipantsAndNotific = sportEvt.allParticipantsAndNotific;
 
-    sportEvt.save(function(err)
-    {
+    Court.find({_id: sportEvt.court}, 'localTimeZoneOffsetInMIn').exec(function(err, court) {
         if (err) {
-            return res.status(410).send({ message: getErrorMessage(err) });
+            return res.status(400).send({message: getErrorMessage(err)});
         }
         else {
-            User.update({_id: sportEvt.creator}, {$push: {mySportEvtsAdmin: sportEvt._id}}).exec(function(err) {
+            if(court[0].localTimeZoneOffsetInMIn)
+            {
+                console.info("sportEvt.startTimeInMin: " +  sportEvt.startTimeInMin);
+                sportEvt.startTimeInMin -= court[0].localTimeZoneOffsetInMIn;
+                console.info("sportEvt.startTimeInMin: " +  sportEvt.startTimeInMin);
+            }
+
+            console.info("sportEvt: " + JSON.stringify(sportEvt));
+            sportEvt.save(function(err)
+            {
                 if (err) {
-                    return res.status(401).send({message: getErrorMessage(err)});
+                    return res.status(410).send({ message: getErrorMessage(err) });
+                }
+                else {
+                    User.update({_id: sportEvt.creator}, {$push: {mySportEvtsAdmin: sportEvt._id}}).exec(function(err) {
+                        if (err) {
+                            return res.status(401).send({message: getErrorMessage(err)});
+                        }
+                    });
+
+                    for (var i = 0; i < allParticipantsAndNotific.length; i++)
+                    {
+                        User.update({_id: allParticipantsAndNotific[i].theUser}, {$push: {mySportEvts: sportEvt._id}}).exec(function(err) {
+                            if (err) {
+                                return res.status(402).send({message: getErrorMessage(err)});
+                            }
+                        });
+                    }
+                    notifics.createAndSendNotifics(req, res, sportEvt);
                 }
             });
-
-            for (var i = 0; i < allParticipantsAndNotific.length; i++)
-            {
-                User.update({_id: allParticipantsAndNotific[i].theUser}, {$push: {mySportEvts: sportEvt._id}}).exec(function(err) {
-                    if (err) {
-                        return res.status(402).send({message: getErrorMessage(err)});
-                    }
-                });
-            }
-            notifics.createAndSendNotifics(req, res, sportEvt);
         }
     });
+
+
+
+
 };
 exports.list = function(req, res)
 {
@@ -79,31 +98,47 @@ exports.read = function(req, res) {
 exports.update = function(req, res)
 {
     var sportEvt = req.sportEvt;
+    console.info("sportEvt: " + sportEvt);
     sportEvt.dateEvt = req.body.dateEvtAsString;
     sportEvt.dateEvtAsString = req.body.dateEvtAsString;
     sportEvt.startTimeAsString = req.body.startTimeAsString;
     sportEvt.startTimeInMin = (Number(sportEvt.startTimeAsString.split(":")[0])*60
     + Number(sportEvt.startTimeAsString.split(":")[1]));
     sportEvt.startTimeInMin += (new Date(sportEvt.dateEvtAsString).getTime() / 60000);
-    sportEvt.duration = req.body.duration;
-    sportEvt.minNumOfMembers = req.body.minNumOfMembers;
-    sportEvt.maxNumOfMembers = req.body.maxNumOfMembers;
-    sportEvt.optNumOfMembers = req.body.optNumOfMembers;
-    sportEvt.openForIndividuals = req.body.openForIndividuals;
-    sportEvt.openForGroups = req.body.openForGroups;
     sportEvt.court = req.body.court;
-    sportEvt.minAge = req.body.minAge;
-    sportEvt.maxAge = req.body.maxAge;
-    sportEvt.forFemale = req.body.forFemale;
-    sportEvt.forMale = req.body.forMale;
-    sportEvt.sportType = req.body.sportType;
 
-    sportEvt.save(function(err)
-    {
+    Court.find({_id: sportEvt.court}, 'localTimeZoneOffsetInMIn').exec(function(err, court) {
         if (err) {
-            return res.status(400).send({ message: getErrorMessage(err) });
-        } else { res.json(sportEvt); }
+            return res.status(400).send({message: getErrorMessage(err)});
+        }
+        else {
+            if (court[0].localTimeZoneOffsetInMIn) {
+                console.info("sportEvt.startTimeInMin: " + sportEvt.startTimeInMin);
+                sportEvt.startTimeInMin -= court[0].localTimeZoneOffsetInMIn;
+                console.info("sportEvt.startTimeInMin: " + sportEvt.startTimeInMin);
+            }
+            sportEvt.duration = req.body.duration;
+            sportEvt.minNumOfMembers = req.body.minNumOfMembers;
+            sportEvt.maxNumOfMembers = req.body.maxNumOfMembers;
+            sportEvt.optNumOfMembers = req.body.optNumOfMembers;
+            sportEvt.openForIndividuals = req.body.openForIndividuals;
+            sportEvt.openForGroups = req.body.openForGroups;
+            sportEvt.minAge = req.body.minAge;
+            sportEvt.maxAge = req.body.maxAge;
+            sportEvt.forFemale = req.body.forFemale;
+            sportEvt.forMale = req.body.forMale;
+            sportEvt.sportType = req.body.sportType;
+            console.info("sportEvt: " + sportEvt);
+            sportEvt.save(function(err)
+            {
+                if (err) {
+
+                    return res.status(400).send({ message: getErrorMessage(err) });
+                } else { res.json(sportEvt); }
+            });
+        }
     });
+
 };
 exports.delete = function(req, res)
 {
@@ -235,10 +270,8 @@ var updateIsStarted = function (req, res, callback) {
 var getCurrTimeInMIn = function () {
 
     var currTime = new Date();
-    var currTimeInMIn = currTime.getTime()/60000;
-    var timezoneOffset = currTime.getTimezoneOffset();
-    currTimeInMIn = currTimeInMIn - timezoneOffset;
-    return currTimeInMIn;
+    console.info("currTime.getTime()/60000: " + currTime.getTime()/60000);
+    return currTime.getTime()/60000;
 };
 
 exports.getSportEvtsOfGroup = function(req, res)
@@ -470,7 +503,7 @@ exports.addUsersToEvent = function (req, res)
                     }
                 });
             }
-            createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
+            notifics.createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
 
             res.json(sportEvt);
         }
@@ -502,7 +535,7 @@ exports.addUserRequestsToEvent = function (req, res)
                 }
             });
         }
-        createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
+        notifics.createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
 
         res.json(sportEvt);
     });
@@ -522,140 +555,68 @@ exports.removeUsersFromEvent = function (req, res)
         {
             return res.status(400).send({ message: getErrorMessage(err) });
         }
-        else {
-            for (var groupIndex = 0; groupIndex < groupsToRemove.length; groupIndex++)
-            {
-                Group.find({_id: groupsToRemove[groupIndex]}, '_id members').exec(function(err, members) {
+        else
+        {
+            if(groupsToRemove.length > 0) {
+                for (var groupIndex = 0; groupIndex < groupsToRemove.length; groupIndex++) {
+                    Group.find({_id: groupsToRemove[groupIndex]}, '_id members').exec(function (err, members) {
 
-                    if (err) {
-                        return res.status(400).send({message: getErrorMessage(err)});
-                    }
-                    else {
-                        console.info("members: " + members);
-                        for (var memberIndex = 0; memberIndex < members[0].members.length; memberIndex++) {
-                            if (!general.contains(usersToRemove, members[0].members[memberIndex]) && members[0].members[memberIndex] != req.user.id) {
-                                usersToRemove.push(members[0].members[memberIndex]);
-                            }
+                        if (err) {
+                            return res.status(400).send({message: getErrorMessage(err)});
                         }
+                        else {
+                            console.info("members: " + members);
+                            for (var memberIndex = 0; memberIndex < members[0].members.length; memberIndex++) {
+                                if (!general.contains(usersToRemove, members[0].members[memberIndex]) && members[0].members[memberIndex] != req.user.id) {
+                                    usersToRemove.push(members[0].members[memberIndex]);
+                                }
+                            }
 
-                        SportEvt.update({_id: sportEvtId}, {$pull: {groups:members[0]._id}}).exec(function(err) {
+                            SportEvt.update({_id: sportEvtId}, {$pull: {groups: members[0]._id}}).exec(function (err) {
+                                if (err) {
+                                    return res.status(400).send({message: getErrorMessage(err)});
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+            for (var i = 0; i < usersToRemove.length; i++)
+            {
+                for(var j = 0; j < sportEvt.allParticipantsAndNotific.length; j++)
+                {
+                    userId = sportEvt.allParticipantsAndNotific[j].theUser;
+                    if(sportEvt.allParticipantsAndNotific[j]._id == usersToRemove[i])
+                    {
+                        SportEvt.update({_id: sportEvtId}, {$pull: {allParticipantsAndNotific: {_id: usersToRemove[i]}}}).exec(function(err) {
                             if (err) {
                                 return res.status(400).send({message: getErrorMessage(err)});
                             }
                         });
-                        for (var i = 0; i < usersToRemove.length; i++)
-                        {
-                            for(var j = 0; j < sportEvt.allParticipantsAndNotific.length; j++)
-                            {
-
-                                if(sportEvt.allParticipantsAndNotific[j]._id == usersToRemove[i])
-                                {
-                                    userId = sportEvt.allParticipantsAndNotific[j].theUser;
-                                    SportEvt.update({_id: sportEvtId}, {$pull: {allParticipantsAndNotific: {_id: usersToRemove[i]}}}).exec(function(err) {
-                                        if (err) {
-                                            return res.status(400).send({message: getErrorMessage(err)});
-                                        }
-                                    });
-                                    User.update({_id: userId}, {$pull: {mySportEvts: sportEvt._id}}).exec(function(err) {
-                                        if (err) {
-                                            return res.status(400).send({message: getErrorMessage(err)});
-                                        }
-                                    });
-                                }
-
-                                else if(sportEvt.allParticipantsAndNotific[j].theUser.id == usersToRemove[i].id)
-                                {
-
-                                    userId = sportEvt.allParticipantsAndNotific[j].theUser;
-                                    SportEvt.update({_id: sportEvtId}, {$pull: {allParticipantsAndNotific: {theUser: usersToRemove[i]}}}).exec(function(err) {
-                                        if (err) {
-                                            return res.status(400).send({message: getErrorMessage(err)});
-                                        }
-                                    });
-                                    User.update({_id: userId}, {$pull: {mySportEvts: sportEvt._id}}).exec(function(err) {
-                                        if (err) {
-                                            return res.status(400).send({message: getErrorMessage(err)});
-                                        }
-                                    });
-                                }
-                            }
-                        }
-
-                        res.json(sportEvt);
-
                     }
-                });
 
+                    else if(sportEvt.allParticipantsAndNotific[j].theUser.id == usersToRemove[i].id)
+                    {
+                        SportEvt.update({_id: sportEvtId}, {$pull: {allParticipantsAndNotific: {theUser: usersToRemove[i]}}}).exec(function(err) {
+                            if (err) {
+                                return res.status(400).send({message: getErrorMessage(err)});
+                            }
+                        });
+                    }
+
+                    User.update({_id: userId}, {$pull: {mySportEvts: sportEvt._id}}).exec(function(err) {
+                        if (err) {
+                            return res.status(400).send({message: getErrorMessage(err)});
+                        }
+                    });
+                }
             }
+            res.json(sportEvt);
         }
-
-
-
     });
 };
 
-var createAndSendNotificsForNewParticipants = function (req, res, sportEvt, allMembers, singleParticipants) {
 
-    var allNotifics = [];
-    for (var i = 0; i < allMembers.length; i++) {
-
-        allNotifics[i] = new Notific();
-        allNotifics[i].notificType = 'inviteToEvent';
-        allNotifics[i].theEvent = sportEvt._id;
-        allNotifics[i].user = allMembers[i];
-        allNotifics[i].status = 'No Answer';
-        if(singleParticipants.length > 0)
-        {
-            allNotifics[i].isPartOfGroup = !general.contains(singleParticipants, allMembers[i]);
-            SportEvt.update({_id: sportEvt._id}, {$push: {'singleParticipants': singleParticipants}}).exec(function(err)
-            {
-                if (err) {
-                    return res.status(405).send({message: getErrorMessage(err)});
-                }
-            });
-        }
-        else
-        {
-            allNotifics[i].isPartOfGroup = false;
-        }
-        allNotifics[i].isSeen = false;
-        allNotifics[i].arrTimes = general.setTimesArr(sportEvt.arrTimesSize);
-        var notificId = allNotifics[i].id;
-        allNotifics[i].save(function(err)
-        {
-            if (err)
-            {
-                return res.status(403).send({ message: getErrorMessage(err) });
-            }
-
-        });
-        User.update({_id: allMembers[i]}, {$push: {notific: notificId}}).exec(function(err)
-        {
-            if (err) {
-                return res.status(404).send({message: getErrorMessage(err)});
-            }
-        });
-        User.update({_id: allMembers[i]}, {$push: {mySportEvts: sportEvt._id}}).exec(function(err)
-        {
-            if (err) {
-                return res.status(404).send({message: getErrorMessage(err)});
-            }
-        });
-
-        var participantAndNotific =
-        {
-            "theUser": allMembers[i],
-            "notific": allNotifics[i]
-        };
-
-        SportEvt.update({_id: sportEvt._id}, {$push: {'allParticipantsAndNotific': participantAndNotific}}).exec(function(err)
-        {
-            if (err) {
-                return res.status(405).send({message: getErrorMessage(err)});
-            }
-        });
-    }
-};
 
 exports.joinToEvent = function (req, res)
 {

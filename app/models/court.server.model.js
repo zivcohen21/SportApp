@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var CourtSchema = new Schema({
     created: {type: Date, default: Date.now},
+    localTimeZoneOffsetInMIn: Number,
     title: String,
     country: String,
     city: String,

@@ -16,6 +16,7 @@ var UserSchema = new Schema({
     city: String,
     street: String,
     number: Number,
+    localTimeZoneOffsetInMIn: Number,
     gpsLocation: {
         lat: Number,
         lng: Number

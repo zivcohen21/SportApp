@@ -18,10 +18,9 @@ angular.module('courts').controller('CourtsController', ['$scope', '$http', '$ro
                 street: this.street,
                 number: this.number,
                 GPSLocation: this.GPSLocation,
-                sportTypesNumCourts: this.sportTypesNumCourts,
-                rate: this.rate,
-                comments: this.comments,
-                whoThere: this.whoThere
+                sportTypesNumCourts: this.sportTypesNumCourts
+                
+
             });
             court.$save(function(response)
             {
