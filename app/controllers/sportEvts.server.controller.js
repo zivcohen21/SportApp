@@ -314,7 +314,7 @@ exports.getRelevantEvents = function(req, res)
     var funcArr = [];
     var paramArr = [];
     var finalArr = [];
-    var arrTorReturn = [];
+    var arrToReturn = [];
 
     User.find({_id: userId}).exec(function(err, user)
     {
@@ -327,11 +327,12 @@ exports.getRelevantEvents = function(req, res)
             //googleMaps.getDistanceBetweenToAddresses(user[0].gpsLocation[0], user[0].gpsLocation[0]);
             SportEvt.find({$and: [{sportType: sportType}, {dateEvtAsString: dateEvtAsString}]}).sort('startTimeInMin').deepPopulate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific sportEvt.court', 'firstName lastName fullName title city country gpsLocation')
              .exec(function(err, relevantEvents)
-             {
+             {console.info("relevantEvent.length: " + relevantEvents.length);
                  if (err)
                  {
                     return res.status(400).send({ message: getErrorMessage(err) });
                  }
+
                  else if(relevantEvents.length > 0)
                  {
                      var numOfEvents = relevantEvents.length;
@@ -339,7 +340,7 @@ exports.getRelevantEvents = function(req, res)
                      console.info("relevantEvent.length: " + relevantEvents.length);
                      if (city)
                      {
-                         funcArr.push(general.searchByCity);
+                         funcArr.push(general.searchByCityOfEvent);
                          paramArr.push(city);
                      }
                      if(minMembers)
@@ -421,7 +422,7 @@ exports.getRelevantEvents = function(req, res)
                                      console.info("distance1: " + distance);
                                      console.info("radius1: " + radius);
                                      console.info("eventCheckedCounter1: " + eventCheckedCounter);
-                                     arrTorReturn.push(finalArr[eventCheckedCounter]);
+                                     arrToReturn.push(finalArr[eventCheckedCounter]);
                                  }
                                  else {
                                      console.info("eventCheckedCounter2: " + eventCheckedCounter);
@@ -430,17 +431,21 @@ exports.getRelevantEvents = function(req, res)
                                  }
                                  eventCheckedCounter++;
                                  if (eventCheckedCounter >= numOfElements) {
-                                     console.info("finalArr.length: " + arrTorReturn.length);
-                                     res.json(arrTorReturn);
+                                     console.info("finalArr.length: " + arrToReturn.length);
+                                     res.json(arrToReturn);
                                  }
                              });
                          }
                      }
                      else {
-                         arrTorReturn = finalArr;
-                         console.info("arrTorReturn.length: " + arrTorReturn.length);
-                         res.json(arrTorReturn);
+                         arrToReturn = finalArr;
+                         console.info("arrToReturn.length: " + arrToReturn.length);
+                         res.json(arrToReturn);
                      }
+                 }
+                 else {
+                 console.info("relevantEvent: " + relevantEvents);
+                    res.json(relevantEvents);
                  }
              });
         }

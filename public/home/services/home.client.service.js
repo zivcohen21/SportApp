@@ -12,7 +12,12 @@ angular.module('home')
         function($resource) {
             return $resource('api/sportEvts/getRelevantEvents',
                 {},
-                { search: { method: 'GET', isArray: true } }); }])
+                { searchEvents: { method: 'GET', isArray: true } }); }])
+    .factory('GetRelevantUsers', ['$resource',
+        function($resource) {
+            return $resource('api/getRelevantUsers',
+                {},
+                { searchUsers: { method: 'GET', isArray: true } }); }])
     .factory('MatchingUsersAndEvents', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/matchingUsersAndEvents'); }])

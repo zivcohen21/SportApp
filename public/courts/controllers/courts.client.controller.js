@@ -6,11 +6,12 @@ angular.module('courts').controller('CourtsController', ['$scope', '$http', '$ro
     {
         $scope.authentication = Authentication;
         $scope.searchKeyword = "";
-
+        $scope.isSubmited = false;
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
         $scope.create = function()
         {
+            $scope.isSubmited = true;
             var court = new Courts({
                 title: this.title,
                 country: this.country,
@@ -45,6 +46,7 @@ angular.module('courts').controller('CourtsController', ['$scope', '$http', '$ro
         };
         $scope.update = function()
         {
+            $scope.isSubmited = true;
             $scope.court.$update(function()
             {
                 $location.path('courts/' + $scope.court._id);

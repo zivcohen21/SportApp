@@ -46,32 +46,28 @@
       <!--  <i class="fa fa-spinner" aria-hidden="true"></i>-->
     </div>
 
-    <div ng-if="theHomeSelection == 5">
-        <div class="sportEvt-header" ng-repeat="suggestion in allsuggestions">
-           <span data-ng-bind="suggestion.user"></span>
-           <span data-ng-bind="suggestion.event"></span>
+    <div ng-if="theHomeSelection == 5 && allSuggestions.length > 0">
+        <div class="sportEvt-header" ng-repeat="suggestion in allSuggestions">
+            <span data-ng-bind="suggestion.user.username"></span>
+            <span data-ng-bind="suggestion.event.dateEvtAsString"></span>
+            <span data-ng-bind="suggestion.event.startTimeAsString"></span>
+            <span data-ng-bind="suggestion.event.sportType.title"></span>
+            <span data-ng-bind="suggestion.event.court.title"></span>
+            <span data-ng-bind="suggestion.event._id"></span>
         </div>
     </div>
+    <div ng-if="allSuggestions.length <= 0">
+        <h2>No Matches</h2>
+    </div>
 
-    <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 4">
+    <div class="center-button" ng-if="theHomeSelection == 4 || theHomeSelection == 6">
+        <button type="submit" class="pure-button pure-button-primary" ng-if="isSearched" ng-click="openForm()">Search Again</button>
+    </div>
+
+    <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 4 && !isSearched">
         <fieldset>
 
             <div ng-include="'home/views/search-form-events.client.view.html'"></div>
-            <!--<div class="pure-u-1 pure-u-md-1">
-                <label for="searchType">Look For:</label>
-                <select name="searchType" id="searchType" ng-model="searchType" class="pure-u-7-24">
-                    <option>Events</option>
-                    <option>Users</option>
-                    <option>Groups</option>
-                    <option>Courts</option>
-                </select>
-            </div>
-
-            <div  ng-if="searchType == 'Events'" ng-include="'home/views/search-form-events.client.view.html'"></div>
-            <div  ng-if="searchType == 'Users'" ng-include="'home/views/search-form-users.client.view.html'"></div>
-            <div  ng-if="searchType == 'Groups'" ng-include="'home/views/search-form-groups.client.view.html'"></div>
-            <div  ng-if="searchType == 'Courts'" ng-include="'home/views/search-form-courts.client.view.html'"></div>
--->
 
             <div class="center-button">
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
@@ -79,25 +75,10 @@
         </fieldset>
     </form>
 
-    <form data-ng-submit="searchAll('Users')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 6">
+    <form data-ng-submit="searchAll('Users')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 6 && !isSearched">
         <fieldset>
 
             <div ng-include="'home/views/search-form-users.client.view.html'"></div>
-            <!--<div class="pure-u-1 pure-u-md-1">
-                <label for="searchType">Look For:</label>
-                <select name="searchType" id="searchType" ng-model="searchType" class="pure-u-7-24">
-                    <option>Events</option>
-                    <option>Users</option>
-                    <option>Groups</option>
-                    <option>Courts</option>
-                </select>
-            </div>
-
-            <div  ng-if="searchType == 'Events'" ng-include="'home/views/search-form-events.client.view.html'"></div>
-            <div  ng-if="searchType == 'Users'" ng-include="'home/views/search-form-users.client.view.html'"></div>
-            <div  ng-if="searchType == 'Groups'" ng-include="'home/views/search-form-groups.client.view.html'"></div>
-            <div  ng-if="searchType == 'Courts'" ng-include="'home/views/search-form-courts.client.view.html'"></div>
--->
 
             <div class="center-button">
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
@@ -105,9 +86,13 @@
         </fieldset>
     </form>
 
-    <div ng-if="isSearched && relevantEvents && relevantEvents.length > 0" ng-include="'home/views/list-relevant-items.client.view.html'"></div>
-    <div ng-if="isSearched && (!relevantEvents || relevantEvents.length == 0)">
-        <h3>No Events</h3>
+    <div ng-if="theHomeSelection == 4 && isSearched && relevantEvents && relevantEvents.length > 0" ng-include="'home/views/list-relevant-sportEvts.client.view.html'"></div>
+    <div ng-if="theHomeSelection == 4 && isSearched && (!relevantEvents || relevantEvents.length == 0)">
+        <h2>No Events</h2>
+    </div>
+    <div ng-if="theHomeSelection == 6 && isSearched && relevantUsers && relevantUsers.length > 0" ng-include="'home/views/list-relevant-users.client.view.html'"></div>
+    <div ng-if="theHomeSelection == 6 && isSearched && (!relevantUsers || relevantUsers.length == 0)">
+        <h2>No Users</h2>
     </div>
 </section>
 <!--

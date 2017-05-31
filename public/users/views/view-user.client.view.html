@@ -8,9 +8,15 @@
                 <div>Year of Birth: <span data-ng-bind="user.yearOfBirth"></span></div>
                 <div>Username: <span data-ng-bind="user.username"></span></div>
                 <div>E-mail: <span data-ng-bind="user.email"></span></div>
-                <div>Facebook: <span data-ng-bind="user.facebookLink"></span></div>
                 <div>Address: <span data-ng-bind="user.userAddress"></span></div>
-                <div>Sports: <span data-ng-bind="user.sportTypes.title"></span></div>
+                <div>Sports:
+                    <il data-ng-repeat="sportType in user.sportTypes">
+                        <button type="button" ng-bind="sportType.title" class="user-to-add" ng-click="goToPage('sportTypes/', sportType._id)"></button>
+                    </il>
+                </div>
+<!--
+                <div>Sports: <span data-ng-repeat="sportType in user.sportTypes" data-ng-bind="sportType.title" class="links" ng-click="goToPage('/sportTypes/', sportType._id)"></span></div>
+-->
             </div>
             <div class="buttons-userPage">
                 <button ng-if="authentication.user._id == user._id" class="groupList-button" ng-click="openGroupList(user)" ng-class="{'selection_events_groups': eventGroupSelection==1}">Groups List</button>

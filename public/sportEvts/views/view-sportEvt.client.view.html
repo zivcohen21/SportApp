@@ -16,7 +16,7 @@
                 <div class="eventPage-details">
                     <div>Sport: <span data-ng-bind="sportEvt.sportType.title"></span></div>
                     <div>Court: <span data-ng-bind="sportEvt.court.title" class="links" ng-click="goToPage('courts/', sportEvt.court._id)"></span></div>
-                    <div>Groups: <span data-ng-repeat="group in sportEvt.groups" data-ng-bind="group.title" class="links" ng-click="goToPage('groups/allGroups/', sportEvt.group._id)"></span></div>
+                    <div>Groups: <span data-ng-repeat="group in sportEvt.groups" data-ng-bind="group.title" class="links" ng-click="goToPage('groups/allGroups/', group._id)"></span></div>
                     <div>Date: <span data-ng-bind="sportEvt.dateEvtAsString" class="eventPage-numbers"></span></div>
                     <div>Time: <span data-ng-bind="sportEvt.startTimeAsString" class="eventPage-numbers"></span> For <span data-ng-bind="sportEvt.duration" class="eventPage-numbers"></span>
                         <span class="eventPage-numbers" ng-if="sportEvt.duration <= 1"> hour.</span>

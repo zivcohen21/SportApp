@@ -366,6 +366,7 @@ exports.createEventSuggestionNotific = function (sportEvt, user) {
 
     var text = "Event Suggestion for " + sportEvt.sportType.title + " event on " + sportEvt.dateEvtAsString + ", " + sportEvt.startTimeAsString;
     console.info("text: " + text);
+    console.info("user.email: " + user.email);
     var mailOptions = {
         from: '"SportApp" <sportApp.ziv@gmail.com>', // sender address
         to: user.email, // list of receivers

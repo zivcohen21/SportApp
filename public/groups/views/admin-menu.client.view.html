@@ -1,4 +1,4 @@
-<div class="admin-section_groups" ng-if="authentication.user._id == group.creator._id || !isInGroup">
+<div class="admin-section_groups" ng-if="authentication.user._id == group.creator._id">
     <span ng-if="windWidth < 799 && inGroupPage" style="font-size:25px; " class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <span ng-if="windWidth < 799 && !inGroupPage" style="font-size:25px; color: white" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content-groups">
@@ -9,7 +9,8 @@
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(5, 'groups/allGroups/' + group._id + '/joinRequests');" ng-class="{'admin-selection-btn': adminSelection==5}">Join Requests</button>
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(6, 'groups/allGroups/' + group._id + '/removeMembers');" ng-class="{'admin-selection-btn': adminSelection==6}">Remove Participants</button>
         <button ng-if="!isInGroup && !isInWaitingList" class="admin-button" ng-click="askToJoinToGroup()">Ask To Join</button>
-        <button ng-if="isInWaitingList" class="admin-button">Waiting For Answer</button>
+        <button ng-if="!isInGroup && isInWaitingList" class="admin-button">Waiting For Answer</button>
+        <button ng-if="isInGroup" class="admin-button" ng-click="adminSelect(7, 'sportEvts/create/' + group._id);">Create Group Event</button>
     </div>
 </div>
 

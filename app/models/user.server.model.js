@@ -22,7 +22,7 @@ var UserSchema = new Schema({
         lng: Number
     },
     notific: [{ type: Schema.ObjectId, ref: 'Notific' }],
-    phoneNumber: String,
+    phoneNumber: {type: String, default: ""},
     sportTypes: [{ type: Schema.ObjectId, ref: 'SportType' }],
     yearOfBirth: Number,
     favoriteTimes: [{

@@ -11,6 +11,7 @@ angular.module('users').controller('UsersController',
             $scope.groupListOpen = null;
             $scope.eventGroupSelection = 0;
             $scope.editFavoriteTimes = false;
+            $scope.sportsToAdd = [];
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
             $scope.find = function()
@@ -28,14 +29,25 @@ angular.module('users').controller('UsersController',
                     $scope.user = response;
                     GetAllSportTypes.query().$promise.then(function (response) {
                         $scope.sportTypeList = response;
-
+                        for(var i = 0; i < $scope.sportTypeList.length; i++)
+                        {
+                            for(var j = 0; j < $scope.user.sportTypes.length; j++)
+                            {
+                                if($scope.sportTypeList[i]._id == $scope.user.sportTypes[j]._id)
+                                {
+                                    $scope.addSportsList($scope.sportTypeList[i]);
+                                }
+                            }
+                        }
                     });
+
                    /* $scope.theSportType = response.sportType;
                     $scope.theCourt = response.court;*/
                 });
             };
             $scope.update = function()
             {
+                $scope.user.sportTypes = getMultiSelection($scope.sportsToAdd);
                 $scope.user.$update(function()
                 {
                     $location.path('users/' + $scope.user._id);
@@ -192,6 +204,34 @@ angular.module('users').controller('UsersController',
 
 
             };
+
+            $scope.showSports = function () {
+                $scope.isShowSports = !$scope.isShowSports;
+            };
+            $scope.addSportsList = function (sport)
+            {
+                $scope.index = $scope.sportsToAdd.indexOf(sport);
+                console.info("index: " + $scope.index);
+                if($scope.index !== -1){
+                    $scope.sportsToAdd.splice($scope.index, 1);
+                }
+                else if($scope.index == -1) {
+                    $scope.sportsToAdd.push(sport);
+                }
+            };
+
+            var getMultiSelection = function (listOfUsers) {
+                var allIds = [];
+                for(var i in listOfUsers)
+                {
+                    allIds[i] = listOfUsers[i]._id;
+                }
+                return allIds;
+            };
+            $scope.goToPage = function (string, id) {
+                $location.path(string + id);
+            };
+
 
         }
     ]);

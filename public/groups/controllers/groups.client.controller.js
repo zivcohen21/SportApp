@@ -20,9 +20,11 @@ angular.module('groups').controller('GroupsController',
             $scope.searchKeyword = "";
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             $scope.inGroupPage = true;
+            $scope.isSubmited = false;
 
             $scope.create = function()
             {
+                $scope.isSubmited = true;
                 var allIds = getMultiSelection($scope.usersToAdd);
                 allIds.push( $scope.authentication.user.id);
                 //console.info("document.getElementById('image').value " + document.getElementById("image").value);
@@ -70,6 +72,7 @@ angular.module('groups').controller('GroupsController',
             };
             $scope.update = function()
             {
+                $scope.isSubmited = true;
                 $scope.group.$update(function()
                 {
                     $location.path('groups/allGroups/' + $scope.group._id);
@@ -159,6 +162,7 @@ angular.module('groups').controller('GroupsController',
 
             $scope.addUsersToGroup = function () {
 
+                $scope.isSubmited = true;
                 var allIds = getMultiSelection($scope.usersToAdd);
                 var newMembers = new AddUsersToGroup({"allIds": allIds, "groupId": $routeParams.groupId});
                 newMembers.$save(function(response)
@@ -175,6 +179,7 @@ angular.module('groups').controller('GroupsController',
 
             $scope.addRequestsToGroup = function () {
 
+                $scope.isSubmited = true;
                 var requestsToAdd = getMultiSelection($scope.requestsToAdd);
                 var newMembers = new AddRequestsToGroup({"requestsToAdd": requestsToAdd, "groupId": $routeParams.groupId});
                 newMembers.$save(function(response)
@@ -191,6 +196,7 @@ angular.module('groups').controller('GroupsController',
 
             $scope.removeUsersFromGroup = function () {
 
+                $scope.isSubmited = true;
                 var allIds = getMultiSelection($scope.usersToRemove);
                 var removeMembers = new RemoveUsersFromGroup({"allIds": allIds, "groupId": $routeParams.groupId});
                 removeMembers.$save(function(response)

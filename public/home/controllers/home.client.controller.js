@@ -1,8 +1,10 @@
 /**
  * Created by ZIV on 16/11/2016.
  */
-angular.module('home').controller('HomeController', ['$http','$scope', '$location', 'Authentication','GetMyNextSportEvts', 'GetAllSportTypes', 'GetRelevantEvents', 'MatchingUsersAndEvents', 'GetMyNextFiveSportEvts',
-    function($http, $scope, $location, Authentication, GetMyNextSportEvts, GetAllSportTypes, GetRelevantEvents, MatchingUsersAndEvents, GetMyNextFiveSportEvts)
+angular.module('home').controller('HomeController', ['$http','$scope', '$location', 'Authentication','GetMyNextSportEvts',
+    'GetAllSportTypes', 'GetRelevantEvents', 'MatchingUsersAndEvents', 'GetMyNextFiveSportEvts', 'GetRelevantUsers',
+    function($http, $scope, $location, Authentication, GetMyNextSportEvts, GetAllSportTypes, GetRelevantEvents,
+             MatchingUsersAndEvents, GetMyNextFiveSportEvts, GetRelevantUsers)
     {
 
         $scope.authentication = Authentication;
@@ -51,7 +53,10 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             else if(searchType == "Users")
             {
                 console.info("Users");
-                getRelevantUsers();
+                getRelevantUsers(function (relevantUsers) {
+                    $scope.isSearched = true;
+                    $scope.relevantUsers = relevantUsers;
+                });
             }
 /*            else if(searchType == "Groups")
             {
@@ -67,48 +72,55 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
         var getRelevantEvents = function (callback) {
 
-            var eventsDetails = {
-                userId: $scope.authentication.user._id,
-                sportType: document.getElementById("sportTypeEvent").value,
-                dateEvtAsString: document.getElementById("dateEvtAsString").value,
-                timeStart: document.getElementById("timeStart").value,
-                timeEnd: document.getElementById("timeEnd").value,
-                country: document.getElementById("countryEvent").value,
-                city: document.getElementById("cityEvent").value,
-                radius: $scope.radiusEvent.dozens,
-                minMembers: document.getElementById("minMembersEvent").value,
-                maxMembers: document.getElementById("maxMembersEvent").value,
-                minAge: document.getElementById("minAgeEvent").value,
-                maxAge: document.getElementById("maxAgeEvent").value,
-                female: $scope.checkboxModel.femaleEvent,
-                male: $scope.checkboxModel.maleEvent
-            };
-            GetRelevantEvents.search(
+            if(document.getElementById("sportTypeEvent").value && document.getElementById("dateEvtAsString").value)
+            {
+                var eventsDetails = {
+                    userId: $scope.authentication.user._id,
+                    sportType: document.getElementById("sportTypeEvent").value,
+                    dateEvtAsString: document.getElementById("dateEvtAsString").value,
+                    timeStart: document.getElementById("timeStart").value,
+                    timeEnd: document.getElementById("timeEnd").value,
+                    country: document.getElementById("countryEvent").value,
+                    city: document.getElementById("cityEvent").value,
+                    radius: $scope.radiusEvent.dozens,
+                    minMembers: document.getElementById("minMembersEvent").value,
+                    maxMembers: document.getElementById("maxMembersEvent").value,
+                    minAge: document.getElementById("minAgeEvent").value,
+                    maxAge: document.getElementById("maxAgeEvent").value,
+                    female: $scope.checkboxModel.femaleEvent,
+                    male: $scope.checkboxModel.maleEvent
+                };
+                GetRelevantEvents.searchEvents(
                     eventsDetails
-            ).$promise.then(function (relevantEvents) {
-                console.info("relevantEvents: " + JSON.stringify(relevantEvents));
-                return callback(relevantEvents);
-            });
+                ).$promise.then(function (relevantEvents) {
+                    console.info("relevantEvents: " + JSON.stringify(relevantEvents));
+                    return callback(relevantEvents);
+                });
+            }
+            else {
+                return callback([])
+            }
+
         };
 
         var getRelevantUsers = function (callback) {
 
-            var eventsDetails = {
+            var usersDetails = {
                 userId: $scope.authentication.user._id,
                 sportType: document.getElementById("sportTypeUser").value,
                 country: document.getElementById("countryUser").value,
                 city: document.getElementById("cityUser").value,
-                radius: $scope.radiusEvent.dozens,
+                radius: $scope.radiusUser.dozens,
                 minAge: document.getElementById("minAgeUser").value,
                 maxAge: document.getElementById("maxAgeUser").value,
                 female: $scope.checkboxModel.femaleUser,
                 male: $scope.checkboxModel.maleUser
             };
-            GetRelevantEvents.search(
-                eventsDetails
-            ).$promise.then(function (relevantEvents) {
-                console.info("relevantEvents: " + JSON.stringify(relevantEvents));
-                return callback(relevantEvents);
+            GetRelevantUsers.searchUsers(
+                usersDetails
+            ).$promise.then(function (relevantUsers) {
+                console.info("relevantUsers: " + JSON.stringify(relevantUsers));
+                return callback(relevantUsers);
             });
         };
 
@@ -128,7 +140,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             {
                 $scope.myNextSportEvts = $scope.tomorrowSportEvts;
             }
-            else if (index == 4) {
+            else if (index == 4 || index == 6) {
                 modelOfAllForms();
             }
             else if(index == 5) {
@@ -137,7 +149,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
         };
 
         var modelOfAllForms = function () {
-
+            $scope.isSearched = false;
             $scope.radiusEvent = new Quantity(0);
             $scope.radiusCourt = new Quantity(0);
             $scope.radiusUser = new Quantity(0);
@@ -154,7 +166,10 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             $scope.cityGroup = $scope.authentication.user.city;
             $scope.dateEvtAsString = $scope.todayDate;
 
-            $scope.sportTypeList = GetAllSportTypes.query();
+            GetAllSportTypes.query(function (response) {
+                $scope.sportTypeList = response;
+                $scope.sportTypeEvent = $scope.sportTypeList[0];
+            });
 
             $scope.checkboxModel = {
                 femaleEvent : true,
@@ -193,10 +208,23 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             }
         };
 
+        $scope.openForm = function () {
+
+            $scope.isSearched = false;
+        };
+
         $scope.openEvent = function (sportEvt) {
             console.info("eventSelected1: " + $scope.eventSelected);
             $scope.eventSelected = sportEvt;
             $location.path('sportEvts/' + sportEvt._id);
+            console.info("eventSelected2: " + $scope.eventSelected);
+
+        };
+
+        $scope.openUser = function (user) {
+            console.info("eventSelected1: " + $scope.eventSelected);
+            $scope.userSelected = user;
+            $location.path('users/' + user._id);
             console.info("eventSelected2: " + $scope.eventSelected);
 
         };

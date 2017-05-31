@@ -16,8 +16,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             $scope.selectedUsers = null;
             $scope.selectedGroups = null;
-            $scope.usersToAdd = null;
-            $scope.groupsToAdd = null;
+
             $scope.requestsToAdd = null;
             var usersInEvent = [];
             var groupsInEvent = [];
@@ -33,13 +32,14 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 femaleEvent : true,
                 maleEvent : true
             };
-
-
+            $scope.openForIndividuals = true;
+            $scope.openForGroups = true;
+            $scope.isSubmited = false;
 
             $scope.create = function()
             {
+                $scope.isSubmited = true;
                 $scope.eventSelected = null;
-
                 var allGroups = getMultiSelection($scope.groupsToAdd);
                 var allIds = getMultiSelection($scope.usersToAdd);
                 var singleParticipants = [];
@@ -87,7 +87,6 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                         isStarted: false,
                         isEnded: false
                     });
-                    console.info("sportEvt: " + JSON.stringify(sportEvt));
                     sportEvt.$save(function(response)
                     {
                         $location.path('sportEvts/' + response._id);
@@ -133,7 +132,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.update = function()
             {
-                console.info("$scope.sportEvt: " + JSON.stringify($scope.sportEvt));
+                $scope.isSubmited = true;
                 $scope.sportEvt.$update(function()
                 {
                     $location.path('sportEvts/' + $scope.sportEvt._id);
@@ -166,14 +165,32 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.getCourtsMyGroupsUsersSportTypes = function (index) {
                 $scope.menuSelection = index;
                 $scope.courtList = GetAllCourts.query();
-                $scope.groupList = getGroupsCanBeAdded();
+
                 $scope.allUsersList = getAllUsers();
                 $scope.sportTypeList = getAllSportTypes();
+                getGroupsCanBeAdded(function (response) {
+                    $scope.groupList = response;
+                    if($routeParams.groupId)
+                    {
+                        for(var i = 0; i < $scope.groupList.length; i++)
+                        {
+                            if($routeParams.groupId == $scope.groupList[i]._id)
+                            {
+                                $scope.addGroupsList($scope.groupList[i]);
+                                break;
+                            }
+                        }
+                    }
+                });
+
                 var todayDate = new Date();
                 $scope.minDate = todayDate.toISOString().split('T')[0];
+
             };
-            var getGroupsCanBeAdded = function () {
-               return GetGroupsCanBeAdded.query();
+            var getGroupsCanBeAdded = function (callback) {
+               GetGroupsCanBeAdded.query().$promise.then(function (response) {
+                   return callback(response);
+               });
             };
             var getMembers = function (allGroups, callback) {
                 if(allGroups.length > 1)
@@ -418,6 +435,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.addUsersAndGroupsToEvent = function () {
 
+                $scope.isSubmited = true;
                 var singleParticipants = [];
                 var newParticipants = [];
                 var listUsersToAdd = getMultiSelection($scope.usersToAdd);
@@ -471,8 +489,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.addUserRequestsToEvent = function () {
 
+                $scope.isSubmited = true;
                 var requestsToAdd = getMultiSelection($scope.requestsToAdd);
-
                 var newMembers = new AddUserRequestsToEvent({
                     "requestsToAdd": requestsToAdd,
                     "sportEvtId": $routeParams.sportEvtId
@@ -505,8 +523,9 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 });
             };
 
-            $scope.removeUsersAndGroupsFromGroup = function () {
+            $scope.removeUsersAndGroupsFromEvent = function () {
 
+                $scope.isSubmited = true;
                 var usersToRemove = getMultiSelection($scope.usersToRemove);
                 var groupsToRemove = getMultiSelection($scope.groupsToRemove);
                 console.info("usersToRemove: " + usersToRemove);

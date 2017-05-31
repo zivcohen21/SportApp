@@ -6,10 +6,12 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
     {
         $scope.authentication = Authentication;
         $scope.searchKeyword = "";
+        $scope.isSubmited = false;
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
         $scope.create = function()
         {
+            $scope.isSubmited = true;
             var existing = isSportTypeExist(this.title);
             if(!existing)
             {

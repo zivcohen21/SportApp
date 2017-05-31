@@ -192,7 +192,7 @@ exports.list = function(req, res)
 };
 exports.userByID = function(req, res, next, id)
 {
-    User.findById(id).exec(function(err, user)
+    User.findById(id).populate('sportTypes', 'title').exec(function(err, user)
     {
         if (err)
             return next(err);
@@ -232,6 +232,7 @@ exports.update = function(req, res)
             return res.status(400).send({message: getErrorMessage(err)});
         }
         else {
+            enterLatLngToUser(req, res, req.user);
             res.json(req.user);
         }
     });
@@ -447,4 +448,132 @@ exports.getAllUsersNotInEvent = function (req, res)
             }
         });
     }
+};
+
+
+exports.getRelevantUsers = function(req, res)
+{
+    var query = url.parse(req.url, true).query;
+    var userId = query.userId;
+    var sportType = query.sportType;
+    var country = query.country;
+    var city = query.city;
+    var radius = query.radius;
+    var minAge = query.minAge;
+    var maxAge = query.maxAge;
+    var female = query.female;
+    var male = query.male;
+
+    var funcArr = [];
+    var paramArr = [];
+    var finalArr = [];
+    var arrToReturn = [];
+
+    User.find({_id: userId}).exec(function(err, theUser)
+    {
+        if (err)
+        {
+            return res.status(400).send({ message: getErrorMessage(err) });
+        }
+        else {
+           // User.find({$and: [{sportType: sportType}, {country: country}]}).exec(function(err, relevantUsers)
+            User.find({country: country}).exec(function(err, relevantUsers)
+                {
+                    if (err)
+                    {
+                        return res.status(400).send({ message: getErrorMessage(err) });
+                    }
+                    else if(relevantUsers.length > 0)
+                    {
+                        var numOfEvents = relevantUsers.length;
+
+                        console.info("relevantEvent.length: " + relevantUsers.length);
+                        if (city)
+                        {
+                            funcArr.push(general.searchByCityOfUser);
+                            paramArr.push(city);
+                        }
+
+                        if(minAge)
+                        {
+                            funcArr.push(general.searchByMinAge);
+                            paramArr.push(minAge);
+                        }
+                        if(maxAge)
+                        {
+                            funcArr.push(general.searchByMaxAge);
+                            paramArr.push(maxAge);
+                        }
+                       
+                        if((!female && male) || (female && !male))
+                        {
+                            funcArr.push(general.searchByGender);
+                            if(female)
+                                paramArr.push('female');
+                            else if(male)
+                                paramArr.push('male');
+                        }
+
+                        for (var i = 0; i < numOfEvents; i++)
+                        {
+                            //if (country.toUpperCase() == relevantUsers[i].country.toUpperCase())
+                            //{
+                                var isMatch = true;
+                                for (var j = 0; j < funcArr.length; j++)
+                                {
+                                    if (!funcArr[j](paramArr[j], relevantUsers[i]))
+                                    {
+                                        isMatch = false;
+                                        break;
+                                    }
+                                }
+                                if(isMatch) {
+                                    finalArr.push(relevantUsers[i]);
+                                }
+                            //}
+                        }
+
+                        if(radius > 0)
+                        {
+                            var theUserLocation = theUser[0].gpsLocation;
+                            var userCheckedCounter = 0;
+                            var numOfElements = finalArr.length;
+                            for(i = 0; i < numOfElements; i++)
+                            {
+                                var otherUserLocation = finalArr[i].gpsLocation;
+                                googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, otherUserLocation, function (a,b,distance) {
+                                    distance = distance /1000;
+
+                                    console.info("userCheckedCounter: " + userCheckedCounter);
+                                    console.info("numOfElements: " + numOfElements);
+                                    if (distance <= radius) {
+                                        console.info("distance1: " + distance);
+                                        console.info("radius1: " + radius);
+                                        console.info("userCheckedCounter1: " + userCheckedCounter);
+                                        arrToReturn.push(finalArr[userCheckedCounter]);
+                                    }
+                                    else {
+                                        console.info("userCheckedCounter2: " + userCheckedCounter);
+                                        console.info("distance2: " + distance);
+                                        console.info("radius2: " + radius);
+                                    }
+                                    userCheckedCounter++;
+                                    if (userCheckedCounter >= numOfElements) {
+                                        console.info("finalArr.length: " + arrToReturn.length);
+                                        res.json(arrToReturn);
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            arrToReturn = finalArr;
+                            console.info("arrToReturn.length: " + arrToReturn.length);
+                            res.json(arrToReturn);
+                        }
+                    }
+                });
+        }
+
+    });
+
 };

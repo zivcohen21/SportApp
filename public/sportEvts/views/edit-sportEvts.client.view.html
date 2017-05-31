@@ -111,18 +111,18 @@
                 </div>
 
                 <label class="pure-u-1 pure-u-md-1 header-label">Date & Time:</label>
-                <div class="pure-u-2-5 pure-u-md-2-5">
+                <div class="pure-u-1-2 pure-u-md-2-5">
                     <label for="date">Date*</label>
                     <input type="date" data-ng-model="sportEvt.dateEvtAsString" id="date" placeholder="date" class="pure-u-23-24" min="{{minDate | date:'yyyy-MM-dd'}}" required>
                 </div>
 
-                <div class="pure-u-1-4 pure-u-md-1-4">
+                <div class="pure-u-1-3 pure-u-md-1-4">
                     <label for="startTime">Start Time*</label>
-                    <input type="time" data-ng-model="sportEvt.startTimeAsString" id="startTime" placeholder="Start Time" class="pure-u-23-24" value="{{sportEvt.startTimeAsString}}" required>
+                    <input type="time" data-ng-model="sportEvt.startTimeAsString" id="startTime" placeholder="Start Time" class="pure-u-20-24" value="{{sportEvt.startTimeAsString}}" required>
                 </div>
-                <div class="pure-u-1-4 pure-u-md-1-4">
+                <div class="pure-u-1-2 pure-u-md-1-4">
                     <label for="duration">Duration (Hours)</label>
-                    <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-16-24" value="{{sportEvt.duration}}" min="0">
+                    <input type="number" data-ng-model="sportEvt.duration" id="duration" class="pure-u-10-24" value="{{sportEvt.duration}}" min="0">
                 </div>
 
                 <label class="pure-u-1 pure-u-md-1 header-label">Number Of Members: </label>
@@ -142,7 +142,7 @@
                 </div>
                 <label class="pure-u-1-2 pure-u-md-1-4 header-label">Age: </label>
                 <label class="pure-u-1-2 pure-u-md-1-4 header-label">Gender: </label>
-                <div class="pure-u-1 pure-u-md-1-4">
+                <div class="pure-u-1-2 pure-u-md-1-4">
                     <div class="pure-u-2-5 pure-u-md-1-3">
                         <label for="minAgeEvent">From</label>
                         <input type="number" ng-model="sportEvt.minAge" id="minAgeEvent" class="pure-u-20-24" min="0">
@@ -155,13 +155,13 @@
                 <div class="pure-u-1-2 pure-u-md-1-4">
                     <div class="checkBox-label">
                         <label for="femaleEvent">
-                            <input type="checkbox" ng-model="checkboxModel.femaleEvent" id="femaleEvent" >
+                            <input type="checkbox" ng-model="sportEvt.forFemale" id="femaleEvent" >
                             Female
                         </label>
                     </div>
                     <div class="checkBox-label">
                         <label for="maleEvent">
-                            <input type="checkbox" ng-model="checkboxModel.maleEvent" id="maleEvent">
+                            <input type="checkbox" ng-model="sportEvt.forMale" id="maleEvent">
                             Male
                         </label>
                     </div>
@@ -182,7 +182,7 @@
                 </div>
             </div>
             <div class="center-button">
-                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                <button type="submit" class="pure-button pure-button-primary" ng-disabled="isSubmited">Edit</button>
             </div>
 
         </fieldset>
