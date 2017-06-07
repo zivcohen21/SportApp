@@ -1,4 +1,4 @@
-<div class="admin-section_groups" ng-if="authentication.user._id == group.creator._id">
+<div class="admin-section_groups" ng-if="authentication.user._id == group.creator._id || !isInGroup">
     <span ng-if="windWidth < 799 && inGroupPage" style="font-size:25px; " class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <span ng-if="windWidth < 799 && !inGroupPage" style="font-size:25px; color: white" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content-groups">

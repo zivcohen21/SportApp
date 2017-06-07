@@ -453,6 +453,11 @@ exports.saveStatus = function(req, res)
                     return res.status(400).send({message: getErrorMessage(err)});
                 }
                 else {
+                    if(!req.user.rejectEventsResults)
+                    {
+                        general.initialRejectArray(req.user)
+                    }
+                    general.addRejectEvt(req.user, req.user.rejectEventsResults, notific.theEvent);
                     User.update({_id: req.user.id}, {$push: {myRejectedSportEvts: notific.theEvent._id}}).exec(function (err) {
                         if (err) {
                             return res.status(409).send({message: getErrorMessage(err)});

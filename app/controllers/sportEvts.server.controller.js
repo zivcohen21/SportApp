@@ -323,11 +323,9 @@ exports.getRelevantEvents = function(req, res)
             return res.status(400).send({ message: getErrorMessage(err) });
         }
         else {
-            //users.enterLatLng(req, res, user);
-            //googleMaps.getDistanceBetweenToAddresses(user[0].gpsLocation[0], user[0].gpsLocation[0]);
             SportEvt.find({$and: [{sportType: sportType}, {dateEvtAsString: dateEvtAsString}]}).sort('startTimeInMin').deepPopulate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific sportEvt.court', 'firstName lastName fullName title city country gpsLocation')
              .exec(function(err, relevantEvents)
-             {console.info("relevantEvent.length: " + relevantEvents.length);
+             {
                  if (err)
                  {
                     return res.status(400).send({ message: getErrorMessage(err) });

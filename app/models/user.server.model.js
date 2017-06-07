@@ -21,6 +21,7 @@ var UserSchema = new Schema({
         lat: Number,
         lng: Number
     },
+    picture: {},
     notific: [{ type: Schema.ObjectId, ref: 'Notific' }],
     phoneNumber: {type: String, default: ""},
     sportTypes: [{ type: Schema.ObjectId, ref: 'SportType' }],
@@ -42,6 +43,7 @@ var UserSchema = new Schema({
     mySportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     myAcceptedSportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     myRejectedSportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
+    rejectEventsResults: JSON,
     salt: { type: String },
     provider: { type: String, required: 'Provider is required' },
     providerId: String,
@@ -49,19 +51,7 @@ var UserSchema = new Schema({
     askedToJoinToEvent: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     askedToJoinToGroup: [{type: Schema.ObjectId, ref: 'Group'}],
     created: { type: Date, default: Date.now },
-    website: { type: String,
-        get: function(url)
-        {
-            if (!url)
-            { return url; }
-            else
-            {
-                if (url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0)
-                { url = 'http://' + url; }
-                return url;
-            }
-        }
-    },
+    newUser: {type: Boolean, default: true},
     role: { type: String, enum: ['Admin', 'Owner', 'User'] },
     currentModuleInApp: { type: String, default: 'SportApp' }
 });

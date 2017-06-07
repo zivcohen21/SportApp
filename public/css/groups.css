@@ -68,7 +68,7 @@ a {
         position: relative;
         display: flex;
         align-items: center;
-        min-height: 48px;
+        min-height: 20px;
         margin-left: 15%;
         cursor: pointer;
         user-select: none;
@@ -510,7 +510,7 @@ a {
 
     .rwd-table {
         position: relative;
-        margin-top: 60px;
+        margin-top: 15px;
         margin-left: auto;
         margin-right: auto;
         background: white;
@@ -657,6 +657,7 @@ a {
     }
     .form-control-group {
         position: relative;
+        display: block;
         margin: auto;
         width: 60%;
         height: 25px;

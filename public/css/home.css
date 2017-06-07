@@ -17,14 +17,6 @@ body {
     margin-top: 1em;
 }
 
-h1, h2 { font-weight: 300; text-align:center;}
-
-h1 { color: white; font-size: 40px;}
-
-h2 { color: #4a89dc; }
-
-h3 { font-weight: bold; color: black; font-size: 15px; }
-
 .logOut {
     text-decoration: underline;
     color: white;
@@ -482,13 +474,22 @@ footer img:focus , footer a:focus { outline: none; }
     padding: 10px;
 }
 
-
 @media screen and (min-width: 800px) {
+
+    h1, h2 { font-weight: 300; text-align:center; }
+
+    h1 { color: white; font-size: 40px;}
+
+    h2 { color: #4a89dc; font-size: 25px;}
+
+    h3 { font-weight: bold; color: black; font-size: 15px; }
+
 
     .nextEvents {
         position: relative;
-        width: 70%;
+        width: 80%;
         margin: auto;
+        border-bottom: 2px solid rgb(50, 54, 57);
     }
 
     .home-menu {
@@ -498,6 +499,7 @@ footer img:focus , footer a:focus { outline: none; }
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         width: 100%;
         top: -15px;
+        margin: auto;
     }
 
     .na-li-home {
@@ -505,25 +507,202 @@ footer img:focus , footer a:focus { outline: none; }
         display: flex;
         align-items: center;
         min-height: 48px;
-        margin-left: 5%;
         cursor: pointer;
         user-select: none;
         font-size: 1.1em;
         font-weight: 600;
-        left: 24%;
+        left: 40%;
+        margin: auto;
     }
 
     .first-child {
         margin-left: 0;
     }
+
+    .relevant-list {
+        top:-65px;
+    }
+
+    .searched-types {
+        display:inline-block;
+        padding: 5px;
+        margin: 3px 10px 3px 10px;
+        font-size: 1em;
+        font-weight: 600;
+        line-height: 25px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: rgb(50, 54, 57);
+        border-right: 1px solid transparent;
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        left: 10px;
+    }
+
+    .center-btns {
+        margin: auto;
+        width: 50%;
+        text-align: center;
+    }
+
+    .search-form {
+        margin-top: 50px;
+    }
+
+    .selection_search {
+        border: 6px solid rgb(50, 54, 57);
+        background-color: white;
+        color: rgb(50, 54, 57);
+    }
+
+    .times-title {
+        font-size: 1.4em;
+        font-weight: 700;
+        line-height: 35px;
+        color: rgb(50, 54, 57);
+        text-align: center;
+    }
+
+    .user-times {
+        display:inline-block;
+        padding: 3px;
+        margin: 1px 2px 1px 2px;
+        font-size: 0.8em;
+        font-weight: 500;
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: green;
+        border: 2px solid black;
+        left: 10px;
+    }
+
+    .days-title {
+        font-size: 0.95em;
+        font-weight: 600;
+        line-height: 25px;
+        color: rgb(50, 54, 57);
+    }
+
+    .home-times {
+        position: relative;
+        margin: auto;
+        width: 80%;
+        border-bottom: 2px solid rgb(50, 54, 57);
+        padding-bottom: 30px;
+        text-align: left;
+    }
+
+    .rwd-table-times td:before {
+        display: none;
+    }
+
+    .rwd-table-times th, .rwd-table-times td {
+        text-align: left;
+        font-size: 1.2em;
+    }
+
+    .rwd-table-times th, .rwd-table-times td {
+        display: table-cell;
+        padding: .25em .5em;
+    }
+
+    .rwd-table-times th:first-child, .rwd-table-times td:first-child {
+        padding-left: 0;
+    }
+
+    .rwd-table-times th:last-child, .rwd-table-times td:last-child {
+        padding-right: 0;
+    }
+
+    .rwd-table-times {
+        position: relative;
+        margin-top: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        background: white;
+        min-width: 50%;
+        color: rgb(50, 54, 57);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        border-radius: .4em;
+        overflow: hidden;
+        border-collapse: collapse;
+    }
+
+    .rwd-table-times tr:not(:first-child) {
+        border-bottom: 1px solid #cdcbc5;
+        cursor: pointer;
+    }
+    .rwd-table-times tr {
+        border-bottom: 1px solid #cdcbc5;
+    }
+
+
+    .rwd-table-times tr:not(:first-child):hover {
+        background: #bfbdb7;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    }
+
+    .rwd-table-times th, .rwd-table-times td {
+        margin: .5em 0.5em;
+    }
+
+    .rwd-table-times th, .rwd-table-times td {
+        padding: 0.5em !important;
+    }
+
+    .rwd-table-times th, .rwd-table-times td:before {
+        color: rgb(50, 54, 57);
+        font-weight: 600;
+    }
+
+    .search-section {
+        position: relative;
+        margin: auto;
+        width: 80%;
+        border-bottom: 2px solid rgb(50, 54, 57);
+        text-align: left;
+    }
+
+    .hideShow-btn {
+        display:inline-block;
+        padding: 5px;
+        margin: 3px 10px 3px 10px;
+        font-size: 1em;
+        font-weight: 600;
+        line-height: 25px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: rgb(50, 54, 57);
+        border: 1px solid black;
+        left: 10px;
+    }
 }
 
 @media screen and (max-width: 800px) {
+
+    h1, h2 { font-weight: 600; text-align:center; }
+
+    h1 { color: white; font-size: 20px;}
+
+    h2 { color: #4a89dc; font-size: 15px;}
+
+    h3 { font-weight: bold; color: black; font-size: 15px; }
+
 
     .nextEvents {
         position: relative;
         width: 100%;
         margin: auto;
+        top: -30px;
+        border-bottom: 2px solid rgb(50, 54, 57);
     }
     .home-menu {
         position: relative;
@@ -558,6 +737,137 @@ footer img:focus , footer a:focus { outline: none; }
     .na-li-home:last-child {
         right: 40px;
     }
+    .relevant-list {
+        top:55px;
+    }
+
+    .times-title {
+        font-size: 1em;
+        font-weight: 700;
+        line-height: 35px;
+        color: rgb(50, 54, 57);
+        text-align: center;
+    }
+
+    .user-times {
+        display:inline-block;
+        padding: 3px;
+        margin: 1px 2px 1px 2px;
+        font-size: 1em;
+        font-weight: 600;
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        background-color: green;
+        border: 2px solid black;
+        left: 10px;
+    }
+
+    .days-title {
+        font-size: 0.9em;
+        font-weight: 600;
+        line-height: 25px;
+        color: rgb(50, 54, 57);
+    }
+
+    .hours {
+        font-size: 0.9em;
+        font-weight: 600;
+        line-height: 25px;
+        color: white;
+    }
+
+    .home-times {
+        position: relative;
+        margin: auto;
+        width: 100%;
+        border-bottom: 2px solid rgb(50, 54, 57);
+        padding-bottom: 10px;
+        top: -30px;
+        text-align: left;
+    }
+
+    .small-table-times {
+        position: relative;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1;
+        color: rgb(50, 54, 57);
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .searched-types {
+        display:inline-block;
+        padding: 2px;
+        margin: 1px 5px 1px 5px;
+        font-size: 0.7em;
+        font-weight: 600;
+        line-height: 25px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: rgb(50, 54, 57);
+        border: 1px solid black;
+        left: 10px;
+        width: 20%;
+    }
+
+    .hideShow-btn {
+        display:inline-block;
+        padding: 2px;
+        margin: 1px 5px 1px 5px;
+        font-size: 0.7em;
+        font-weight: 600;
+        line-height: 25px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: rgb(50, 54, 57);
+        border: 1px solid black;
+        left: 10px;
+        width: 80%;
+    }
+
+    .center-btns {
+        margin: auto;
+        width: 100%;
+        text-align: center;
+    }
+
+    .small-table-home {
+        top: -30px;
+        position: relative;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1;
+        color: rgb(50, 54, 57);
+        text-align: left;
+        vertical-align: middle;
+    }
+    .search-section {
+        position: relative;
+        top: -20px;
+        margin: auto;
+        width: 100%;
+        border-bottom: 2px solid rgb(50, 54, 57);
+        text-align: left;
+    }
+
+    .selection_search {
+        border: 6px solid rgb(50, 54, 57);
+        background-color: white;
+        color: rgb(50, 54, 57);
+    }
+    .search-form {
+        margin-top: 50px;
+    }
+
 
 }
 

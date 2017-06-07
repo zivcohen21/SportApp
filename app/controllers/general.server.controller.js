@@ -225,15 +225,15 @@ var getArrTimeOfEventsAndUsers = function (callback) {
                     }
                 }
             }
-            User.find({isSearched: true}, '_id gpsLocation favoriteTimes sportTypes radiusOfSearch country city username localTimeZoneOffsetInMIn email myRejectedSportEvts')
-                .populate('sportTypes myRejectedSportEvts', 'title dateEvtAsString startTimeAsString sportType startTimeInMin court minNumOfMembers maxNumOfMembers optNumOfMembers').exec(function(err, usersTodayAndTomorrow)
+            User.find({isSearched: true}, '_id gpsLocation favoriteTimes sportTypes radiusOfSearch country city username localTimeZoneOffsetInMIn email myRejectedSportEvts rejectEventsResults')
+                .populate('sportTypes myRejectedSportEvts', 'title dateEvtAsString startTimeAsString sportType startTimeInMin court minNumOfMembers maxNumOfMembers optNumOfMembers creator groups minAge maxAge forFemale forMale duration').exec(function(err, usersTodayAndTomorrow)
             {
                 if (err) {}
                 else {
                     //console.info("usersTodayAndTomorrow.length: " + usersTodayAndTomorrow.length);
                     for (var userIndex = 0; userIndex < usersTodayAndTomorrow.length; userIndex++)
                     {
-                      /*  rejectEvents(usersTodayAndTomorrow[userIndex]);*/
+                        module.exports.rejectEvents(usersTodayAndTomorrow[userIndex]);
                         var relevantTimesPerUser = checkIfUserIsRelevant(usersTodayAndTomorrow[userIndex] ,todayDay ,tomorrowDay, flexRange);
                         for (var itemIndex = 0; itemIndex < relevantTimesPerUser.length; itemIndex++)
                         {
@@ -460,14 +460,38 @@ var userInEvent = function (userItem, eventItem) {
     return false;
 };
 /*------------------------search functions-----------------------------*/
-
+exports.searchByCountry = function(country, group)
+{
+    return country.toUpperCase() == group.defaultCourt.country.toUpperCase();
+};
 exports.searchByCityOfEvent = function(city, sportEvt)
 {
     return city.toUpperCase() == sportEvt.court.city.toUpperCase();
 };
-exports.searchByCityOfUser = function(city, user)
+exports.searchBySportTypeOfUser = function(sportType, user)
 {
-    return city.toUpperCase() == user.city.toUpperCase();
+    for(var i = 0; i < user.sportTypes.length; i++)
+    {
+        if(user.sportTypes[i] == sportType)
+        {
+            return true
+        }
+    }
+    return false;
+};
+exports.searchBySportTypeOfGroup = function(sportType, group)
+{
+    console.info("sportType: " + sportType);
+    console.info("group.theSportType: " + group.theSportType._id);
+    return sportType == group.theSportType._id;
+};
+exports.searchByCityOfItem = function(city, item)
+{
+    return city.toUpperCase() == item.city.toUpperCase();
+};
+exports.searchByCityOfGroup = function(city, group)
+{
+    return city.toUpperCase() == group.defaultCourt.city.toUpperCase();
 };
 exports.searchByMaxStartTime = function(maxStartTime, sportEvt)
 {
@@ -498,6 +522,14 @@ exports.searchByMaxMembers = function(maxMembers, sportEvt)
 exports.searchByMinMembers = function(minMembers, sportEvt)
 {
     return minMembers <= sportEvt.minNumOfMembers || !sportEvt.minNumOfMembers;
+};
+exports.searchByMaxMembersInGroup = function(maxMembers, group)
+{
+    return maxMembers >= group.members.length;
+};
+exports.searchByMinMembersInGroup = function(minMembers, group)
+{
+    return minMembers <= group.members.length;
 };
 exports.searchByMaxAge = function(maxAge, sportEvt)
 {
@@ -547,16 +579,184 @@ var matchByGender = function(param)
 };
 
 /*------------------------rejectEvents-----------------------------*/
-/*
 
-var rejectEvents = function (user) {
+
+exports.rejectEvents = function (user) {
 
     console.info("NEW");
     var rejectEventsResults;
+    if(!user.rejectEventsResults)
+    {
+        console.info(user.id + "NEW");
+        rejectEventsResults = module.exports.initialRejectArray(user);
+    }
+    else {
+        rejectEventsResults = user.rejectEventsResults;
+    }
+    if(user.myRejectedSportEvts)
+    {
+        var rejectEvents = user.myRejectedSportEvts;
+        for(var rejectEvtIndex = 0; rejectEvtIndex < rejectEvents.length; rejectEvtIndex++)
+        {
+            rejectEventsResults = module.exports.addRejectEvt(user, rejectEventsResults, rejectEvents[rejectEvtIndex]);
+        }
+       console.info("rejectEventsResults: " + JSON.stringify(rejectEventsResults));
+        return rejectEventsResults;
+    }
+};
+
+exports.addRejectEvt = function (user, rejectEventsResults, theEvent) {
+
+     if(theEvent.dateEvtAsString)
+    {
+        var day = new Date(theEvent.dateEvtAsString).getDay();
+        if(rejectEventsResults.day[day])
+        {
+            rejectEventsResults.day[day]++;
+        }
+        else
+        {
+            rejectEventsResults.day[day] = 1;
+        }
+    }
+    if(theEvent.startTimeAsString)
+    {
+        var startTimeInHour = (Number(theEvent.startTimeAsString.split(":")[0])*60
+        + Number(theEvent.startTimeAsString.split(":")[1]));
+        startTimeInHour = startTimeInHour / 60;
+        if(rejectEventsResults.startTimeInHour[startTimeInHour])
+        {
+            rejectEventsResults.startTimeInHour[startTimeInHour]++;
+        }
+        else
+        {
+            rejectEventsResults.startTimeInHour[startTimeInHour] = 1;
+        }
+    }
+    if(theEvent.duration)
+    {
+        if(rejectEventsResults.duration.length)
+        {
+            rejectEventsResults.duration.length++;
+        }
+        else
+        {
+            rejectEventsResults.duration.length = 1;
+        }
+        rejectEventsResults.duration.avg = (rejectEventsResults.duration.avg + theEvent.duration) / rejectEventsResults.duration.length;
+    }
+    if(theEvent.minNumOfMembers)
+    {
+        if(rejectEventsResults.minNumOfMembers.length)
+        {
+            rejectEventsResults.minNumOfMembers.length++;
+        }
+        else
+        {
+            rejectEventsResults.minNumOfMembers.length = 1;
+        }
+        rejectEventsResults.minNumOfMembers.avg = (rejectEventsResults.minNumOfMembers.avg + theEvent.minNumOfMembers) / rejectEventsResults.minNumOfMembers.length;
+    }
+    if(theEvent.maxNumOfMembers)
+    {
+        if(rejectEventsResults.maxNumOfMembers.length)
+        {
+            rejectEventsResults.maxNumOfMembers.length++;
+        }
+        else
+        {
+            rejectEventsResults.maxNumOfMembers.length = 1;
+        }
+        rejectEventsResults.maxNumOfMembers.avg = (rejectEventsResults.maxNumOfMembers.avg + theEvent.maxNumOfMembers) / rejectEventsResults.maxNumOfMembers.length;
+    }
+    if(theEvent.optNumOfMembers)
+    {
+        if(rejectEventsResults.optNumOfMembers.length)
+        {
+            rejectEventsResults.optNumOfMembers.length++;
+        }
+        else
+        {
+            rejectEventsResults.optNumOfMembers.length = 1;
+        }
+        rejectEventsResults.optNumOfMembers.avg = (rejectEventsResults.optNumOfMembers.avg + theEvent.optNumOfMembers) / rejectEventsResults.optNumOfMembers.length;
+    }
+    if(theEvent.minAge)
+    {
+        if(rejectEventsResults.minAge.length)
+        {
+            rejectEventsResults.minAge.length++;
+        }
+        else
+        {
+            rejectEventsResults.minAge.length = 1;
+        }
+        rejectEventsResults.minAge.avg = (rejectEventsResults.minAge.avg + theEvent.minAge) / rejectEventsResults.minAge.length;
+    }
+    if(theEvent.maxAge)
+    {
+        if(rejectEventsResults.maxAge.length)
+        {
+            rejectEventsResults.maxAge.length++;
+        }
+        else
+        {
+            rejectEventsResults.maxAge.length = 1;
+        }
+        rejectEventsResults.maxAge.avg = (rejectEventsResults.maxAge.avg + theEvent.maxAge) / rejectEventsResults.maxAge.length;
+    }
+    if(theEvent.forFemale)
+    {
+        rejectEventsResults.forFemale.yes++;
+    }
+    else
+    {
+        rejectEventsResults.forFemale.no++;
+    }
+    if(theEvent.forMale)
+    {
+        rejectEventsResults.forMale.yes++;
+    }
+    else
+    {
+        rejectEventsResults.forMale.no++;
+    }
+    if(theEvent.court)
+    {
+        rejectEventsResults.court.push(theEvent.court);
+    }
+    if(theEvent.groups.length > 0)
+    {
+        for(var i = 0; i < theEvent.groups.length; i++)
+        {
+            rejectEventsResults.groups.push(theEvent.groups[i]);
+        }
+    }
+    if(theEvent.sportType)
+    {
+        rejectEventsResults.sportType.push(theEvent.sportType);
+    }
+    if(theEvent.creator)
+    {
+        rejectEventsResults.creator.push(theEvent.creator);
+    }
+    User.update({_id: user.id}, {rejectEventsResults: rejectEventsResults}).exec(function(err)
+    {
+        if (err){
+        }
+        else {}
+    });
+    return rejectEventsResults;
+};
+
+
+exports.initialRejectArray = function (user) {
+
+    var rejectEventsResults;
     rejectEventsResults = {
         //"user": user,
-        "day": [],
-        "startTimeInHour": [],
+        "day": new Array(7),
+        "startTimeInHour": new Array(24),
         "duration": {
             "avg": 0,
             "length": 0
@@ -583,172 +783,71 @@ var rejectEvents = function (user) {
         },
         "forFemale": {
             "yes": 0,
-            "No": 0
+            "no": 0
         },
         "forMale": {
             "yes": 0,
-            "No": 0
+            "no": 0
         },
         "court": [],
         "groups": [],
         "sportType": [],
         "creator": []
     };
-    if(user.myRejectedSportEvts)
+
+    User.update({_id: user.id}, {rejectEventsResults: rejectEventsResults}).exec(function(err)
     {
-        var rejectEvents = user.myRejectedSportEvts;
-        for(var rejectEvtIndex = 0; rejectEvtIndex < rejectEvents.length; rejectEvtIndex++)
+        if (err){
+        }
+        else {}
+    });
+
+    return rejectEventsResults;
+
+};
+/*
+
+exports.rejectsAnalysis = function (user) {
+
+    var minRejectEvtsForAnalyzing = 10;
+    var numOfRejectEvts = user.myRejectedSportEvts.length;
+    if(numOfRejectEvts > minRejectEvtsForAnalyzing)
+    {
+        var allDays = user.rejectEventsResults.day;
+        var theDay;
+        for(var i = 0; i < allDays.length; i++)
         {
-            var theEvent = rejectEvents[rejectEvtIndex];
-            if(theEvent.dateEvtAsString)
+            if(allDays[i] > 0.8*numOfRejectEvts)
             {
-                var day = new Date(theEvent.dateEvtAsString).getDay();
-                console.info("day: " + day);
-                if(rejectEventsResults.day[day])
-                {
-                    rejectEventsResults.day[day]++;
-                }
-                else
-                {
-                    rejectEventsResults.day[day] = 1;
-                }
-                console.info("rejectEventsResults.day[day]: " + rejectEventsResults.day[day]);
-            }
-            if(theEvent.startTimeInMin)
-            {
-                var startTimeInHour = theEvent.startTimeInMin / 60;
-                console.info("startTimeInHour: " + startTimeInHour);
-                if(rejectEventsResults.startTimeInHour[startTimeInHour])
-                {
-                    rejectEventsResults.startTimeInHour[startTimeInHour]++;
-                }
-                else
-                {
-                    rejectEventsResults.startTimeInHour[startTimeInHour] = 1;
-                }
-                console.info("rejectEventsResults.startTimeInHour[startTimeInHour] : " + rejectEventsResults.startTimeInHour[startTimeInHour]);
-            }
-            if(theEvent.duration)
-            {
-                console.info("theEvent.duration : " + theEvent.duration);
-                if(rejectEventsResults.duration.length)
-                {
-                    rejectEventsResults.duration.length++;
-                }
-                else
-                {
-                    rejectEventsResults.duration.length = 1;
-                }
-                rejectEventsResults.duration.avg = (rejectEventsResults.duration.avg + theEvent.duration) / rejectEventsResults.duration.length;
-                console.info("rejectEventsResults.duration : " + rejectEventsResults.duration);
-            }
-            if(theEvent.minNumOfMembers)
-            {
-                if(rejectEventsResults.minNumOfMembers.length)
-                {
-                    rejectEventsResults.minNumOfMembers.length++;
-                }
-                else
-                {
-                    rejectEventsResults.minNumOfMembers.length = 1;
-                }
-                rejectEventsResults.minNumOfMembers.avg = (rejectEventsResults.minNumOfMembers.avg + theEvent.minNumOfMembers) / rejectEventsResults.minNumOfMembers.length;
-            }
-            if(theEvent.maxNumOfMembers)
-            {
-                if(rejectEventsResults.maxNumOfMembers.length)
-                {
-                    rejectEventsResults.maxNumOfMembers.length++;
-                }
-                else
-                {
-                    rejectEventsResults.maxNumOfMembers.length = 1;
-                }
-                rejectEventsResults.maxNumOfMembers.avg = (rejectEventsResults.maxNumOfMembers.avg + theEvent.maxNumOfMembers) / rejectEventsResults.maxNumOfMembers.length;
-            }
-            if(theEvent.optNumOfMembers)
-            {
-                if(rejectEventsResults.optNumOfMembers.length)
-                {
-                    rejectEventsResults.optNumOfMembers.length++;
-                }
-                else
-                {
-                    rejectEventsResults.optNumOfMembers.length = 1;
-                }
-                rejectEventsResults.optNumOfMembers.avg = (rejectEventsResults.optNumOfMembers.avg + theEvent.optNumOfMembers) / rejectEventsResults.optNumOfMembers.length;
-            }
-            if(theEvent.minAge)
-            {
-                if(rejectEventsResults.minAge.length)
-                {
-                    rejectEventsResults.minAge.length++;
-                }
-                else
-                {
-                    rejectEventsResults.minAge.length = 1;
-                }
-                rejectEventsResults.minAge.avg = (rejectEventsResults.minAge.avg + theEvent.minAge) / rejectEventsResults.minAge.length;
-            }
-            if(theEvent.maxAge)
-            {
-                if(rejectEventsResults.maxAge.length)
-                {
-                    rejectEventsResults.maxAge.length++;
-                }
-                else
-                {
-                    rejectEventsResults.maxAge.length = 1;
-                }
-                rejectEventsResults.maxAge.avg = (rejectEventsResults.maxAge.avg + theEvent.maxAge) / rejectEventsResults.maxAge.length;
-            }
-            if(theEvent.forFemale)
-            {
-                if(rejectEventsResults.forFemale.length)
-                {
-                    rejectEventsResults.forFemale.length++;
-                }
-                else
-                {
-                    rejectEventsResults.forFemale.length = 1;
-                }
-                rejectEventsResults.forFemale.avg = (rejectEventsResults.forFemale.avg + theEvent.forFemale) / rejectEventsResults.forFemale.length;
-            }
-            if(theEvent.forMale)
-            {
-                if(rejectEventsResults.forMale.length)
-                {
-                    rejectEventsResults.forMale.length++;
-                }
-                else
-                {
-                    rejectEventsResults.forMale.length = 1;
-                }
-                rejectEventsResults.forMale.avg = (rejectEventsResults.forMale.avg + theEvent.forMale) / rejectEventsResults.forMale.length;
-            }
-            if(theEvent.court)
-            {
-                rejectEventsResults.court.push(theEvent.court);
-                console.info("rejectEventsResults.court : " +  rejectEventsResults.court);
-            }
-            if(theEvent.groups)
-            {
-                rejectEventsResults.groups.push(theEvent.groups);
-                console.info("rejectEventsResults.groups : " +  rejectEventsResults.groups);
-            }
-            if(theEvent.sportType)
-            {
-                rejectEventsResults.sportType.push(theEvent.sportType);
-            }
-            if(theEvent.creator)
-            {
-                rejectEventsResults.creator.push(theEvent.creator);
+                theDay = i;
             }
         }
-       // console.info("rejectEventsResults: " + JSON.stringify(rejectEventsResults));
-        return rejectEventsResults;
+        var allHours = user.rejectEventsResults.startTimeInHour;
+        var theHour;
+        for(i = 0; i < allHours.length; i++)
+        {
+            if(allHours[i] > 0.7*numOfRejectEvts)
+            {
+                theHour = i;
+            }
+        }
+        var femaleYes = user.rejectEventsResults.forFemale.yes;
+        var femaleNo = user.rejectEventsResults.forFemale.no;
+        var maleYes = user.rejectEventsResults.forMale.yes;
+        var maleNo = user.rejectEventsResults.forMale.no;
+        if(femaleYes > 0.9*numOfRejectEvts)
+        {
+            var theFemale = true;
+        }
     }
-};*/
+
+
+};
+
+*/
+
+
+
 
 /*------------------------getOptimalTime-----------------------------*/
 exports.getOptimalTime = function(theEvent)

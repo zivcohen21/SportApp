@@ -12,5 +12,6 @@ module.exports = function(app)
         .get(courts.read)
         .put(users.requiresLogin, courts.update)
         .delete(users.requiresLogin, courts.hasAuthorization, courts.delete);
+    app.route('/api/getRelevantCourts').get(courts.getRelevantCourts);
     app.param('courtId', courts.courtByID);
 };

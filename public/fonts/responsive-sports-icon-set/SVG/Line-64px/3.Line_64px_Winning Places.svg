@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+<g>
+	
+		<polyline fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		40,17 40,48 24,48 24,17 	"/>
+	
+		<polyline fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		61,36 61,48 45,48 45,36 	"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M63,52H1v-3.5C1,47.959,1.457,48,1.998,48h60.031C62.571,48,63,47.959,63,48.5V52z"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M55,36H43.969C43.428,36,43,35.066,43,34.525v-1C43,32.984,43.428,33,43.969,33h18.079C62.588,33,63,32.984,63,33.525v1
+		C63,35.066,62.588,36,62.047,36H60"/>
+	
+		<polyline fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		19,26 19,48 3,48 3,26 	"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M34,16H22.976C22.435,16,22,14.993,22,14.452v-0.999C22,12.912,22.435,13,22.976,13h18.079C41.595,13,42,12.912,42,13.453v0.999
+		C42,14.993,41.595,16,41.054,16H39"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M13,26H2.008C1.467,26,1,25.087,1,24.546v-0.999C1,23.006,1.467,23,2.008,23h18.079C20.627,23,21,23.006,21,23.547v0.999
+		C21,25.087,20.627,26,20.086,26H18"/>
+</g>
+</svg>

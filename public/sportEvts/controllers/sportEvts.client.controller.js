@@ -35,6 +35,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.openForIndividuals = true;
             $scope.openForGroups = true;
             $scope.isSubmited = false;
+            $scope.eventsCounter = 0;
 
             $scope.create = function()
             {
@@ -218,12 +219,10 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.getMySportEvts = function()
             {
-                console.info("here1");
                 $scope.menuSelection = 1;
                 $scope.eventSelected = null;
                 GetMySportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
-                    $scope.mySportEvts = response;
-                    console.info("here4");
+                    $scope.sportEvts = response;
                 });
 
 
@@ -263,8 +262,9 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             };
 
             $scope.oldNewEvents = function (upcomingOrPast) {
-                $scope.upcomingOrPast = upcomingOrPast;
 
+                $scope.upcomingOrPast = upcomingOrPast;
+                $scope.eventsCounter = 0;
             };
 
             $scope.openEvent = function (sportEvt) {
@@ -277,8 +277,14 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.checkIfShow = function (sportEvt) {
 
-                return ($scope.upcomingOrPast=='Upcoming' && sportEvt.isStarted==false) || ($scope.upcomingOrPast=='Past' && sportEvt.isStarted==true);
-             };
+                var isShow = ($scope.upcomingOrPast=='Upcoming' && sportEvt.isStarted==false) || ($scope.upcomingOrPast=='Past' && sportEvt.isStarted==true);
+                if(isShow)
+                {
+                    $scope.eventsCounter++;
+                }
+                console.info($scope.eventsCounter);
+                return (isShow);
+            };
 
             $scope.goToPage = function (string, id) {
             $location.path(string + id);

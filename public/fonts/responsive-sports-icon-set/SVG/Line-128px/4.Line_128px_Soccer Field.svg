@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<g>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M106,119.592c0,4.091-3.316,7.408-7.408,7.408H29.408c-4.092,0-7.408-3.317-7.408-7.408V8.408C22,4.317,25.316,1,29.408,1h69.184
+		C102.684,1,106,4.317,106,8.408V119.592z"/>
+	
+		<line fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="22" y1="64" x2="106" y2="64"/>
+	
+		<circle fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="63.958" cy="63.94" r="15.065"/>
+	
+		<polyline fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		83,1 83,17 45,17 45,1 	"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M52.201,17.279c1.545,5.054,6.193,8.75,11.752,8.75s10.207-3.696,11.752-8.75"/>
+	
+		<polyline fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		45,127 45,111 83,111 83,127 	"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M75.703,110.721c-1.545-5.054-6.193-8.75-11.752-8.75s-10.207,3.696-11.752,8.75"/>
+	<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M101,19v100.567c0,1.305-1.088,2.433-2.393,2.433H29.362c-1.306,0-2.362-1.127-2.362-2.433V8.433C27,7.127,28.057,6,29.362,6H99
+		 M98.592,5.993c1.305,0,2.408,1.134,2.408,2.439V11"/>
+</g>
+</svg>

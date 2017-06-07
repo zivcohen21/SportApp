@@ -10,7 +10,7 @@ angular.module('groups')
             { update: { method: 'PUT' } }); }])
     .factory('GetMyGroups', ['$resource',
     function($resource) {
-        return $resource('api/groups/getMyGroups'); }])
+        return $resource('api/groups/getMyGroups/:userId', { userId: '@_id'}); }])
     .factory('GetAllUsers', ['$resource',
         function($resource) {
             return $resource('api/groups/getAllUsers'); }])

@@ -18,7 +18,20 @@ angular.module('home')
             return $resource('api/getRelevantUsers',
                 {},
                 { searchUsers: { method: 'GET', isArray: true } }); }])
+    .factory('GetRelevantCourts', ['$resource',
+        function($resource) {
+            return $resource('api/getRelevantCourts',
+                {},
+                { searchCourts: { method: 'GET', isArray: true } }); }])
+    .factory('GetRelevantGroups', ['$resource',
+        function($resource) {
+            return $resource('api/getRelevantGroups',
+                {},
+                { searchGroups: { method: 'GET', isArray: true } }); }])
     .factory('MatchingUsersAndEvents', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/matchingUsersAndEvents'); }])
+    .factory('SaveTimesHome', ['$resource',
+        function($resource) {
+            return $resource('api/saveTimesHome'); }])
 ;

@@ -195,7 +195,7 @@ angular.module('notifics').controller('NotificsController', ['$scope', '$route',
                     });
 
             }
-        }
+        };
 
     }
 ]);

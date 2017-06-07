@@ -1,9 +1,9 @@
 <!--Court-->
 
-<div class="pure-g search-body">
+<div class="pure-g search-body" ng-if="windWidth >= 800">
     <div class="pure-u-1 pure-u-md-1-4">
         <label for="sportTypeCourt">Sport</label>
-        <select id="sportTypeCourt" data-ng-model="sportType" class="pure-u-23-24">
+        <select id="sportTypeCourt" data-ng-model="sportTypeCourt._id" class="pure-u-23-24">
             <option ng-repeat="item in sportTypeList" value="{{item._id}}">{{item.title}}</option>
         </select>
     </div>
@@ -21,5 +21,28 @@
     <div class="pure-u-1-4 pure-u-md-1-4">
         <label for="radiusCourt">Max Radius- {{radiusCourt.dozens}} km</label>
         <input type="range" ng-model="radiusCourt.radius" id="radiusCourt" placeholder="Radius" class="pure-u-23-24" min="0" max="500">
+    </div>
+</div>
+<div class="pure-g search-body" ng-if="windWidth < 799">
+    <div class="pure-u-1 pure-u-md-1-4">
+        <label for="sportTypeCourt">Sport</label>
+        <select id="sportTypeCourt" data-ng-model="sportTypeCourt._id" class="pure-u-23-24">
+            <option ng-repeat="item in sportTypeList" value="{{item._id}}">{{item.title}}</option>
+        </select>
+    </div>
+    <div class="pure-u-1-2 pure-u-md-1-4">
+        <label for="countryCourt">Country</label>
+        <input type="text" list="countries" data-ng-model="countryCourt" id="countryCourt" placeholder="country" class="pure-u-23-24">
+        <datalist id="countries">
+            <span ng-include="'users/views/allCountries.html'"></span>
+        </datalist>
+    </div>
+    <div class="pure-u-1-2 pure-u-md-1-4">
+        <label for="cityCourt">City</label>
+        <input type="text" data-ng-model="cityCourt" id="cityCourt" placeholder="city" class="pure-u-23-24">
+    </div>
+    <div class="pure-u-1 pure-u-md-1-4">
+        <label for="radiusCourt">Max Radius- {{radiusCourt.dozens}} km</label>
+        <input type="range" ng-model="radiusCourt.radius" id="radiusCourt" placeholder="Radius" class="pure-u-15-24" min="0" max="500">
     </div>
 </div>

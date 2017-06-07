@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<circle fill="#26C6DA" stroke="#231F20" stroke-miterlimit="10" cx="64" cy="64" r="64"/>
+<g>
+	<g>
+		<path fill="#BF360C" d="M64,27.519c-20.116,0-36.481,16.366-36.481,36.482c0,20.116,16.365,36.481,36.481,36.481
+			S100.481,84.116,100.481,64C100.481,43.884,84.116,27.519,64,27.519z"/>
+		<path fill="#EEEEEE" d="M89.856,42.329c-0.86-1.107-3.974-4.004-4.004-4.033C79.773,33.12,72.009,30.264,64,30.264
+			c-18.602,0-33.736,15.134-33.736,33.736c0,18.602,15.135,33.736,33.736,33.736c18.603,0,33.736-15.134,33.736-33.736
+			C97.736,56.46,95.012,48.966,89.856,42.329z"/>
+	</g>
+	<g>
+		
+			<circle fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="64.008" cy="63.991" r="36.799"/>
+		<path fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M89.791,42.396c4.898,5.842,7.848,13.375,7.848,21.595c0,18.574-15.057,33.631-33.631,33.631
+			c-18.573,0-33.631-15.057-33.631-33.631c0-18.574,15.058-33.631,33.631-33.631c8.314,0,15.924,3.017,21.794,8.016"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="24" y1="64.317" x2="40.508" y2="64.317"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="87.492" y1="64.317" x2="104" y2="64.317"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="63.683" y1="104" x2="63.683" y2="87.492"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="63.683" y1="40.508" x2="63.683" y2="24"/>
+	</g>
+</g>
+</svg>

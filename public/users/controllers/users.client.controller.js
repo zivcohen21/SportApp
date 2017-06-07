@@ -10,6 +10,7 @@ angular.module('users').controller('UsersController',
             $scope.eventListOpen = null;
             $scope.groupListOpen = null;
             $scope.eventGroupSelection = 0;
+            $scope.eventsCounter = 0;
             $scope.editFavoriteTimes = false;
             $scope.sportsToAdd = [];
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -20,6 +21,7 @@ angular.module('users').controller('UsersController',
             };
             $scope.findOne = function(index)
             {
+                $scope.adminSelection = index;
                 Users.get(
                 {
                     userId: $routeParams.userId
@@ -106,7 +108,19 @@ angular.module('users').controller('UsersController',
 
             $scope.oldNewEvents = function (upcomingOrPast) {
                 $scope.upcomingOrPast = upcomingOrPast;
+                $scope.eventsCounter = 0;
             };
+            $scope.checkIfShow = function (sportEvt) {
+
+                var isShow = ($scope.upcomingOrPast=='Upcoming' && sportEvt.isStarted==false) || ($scope.upcomingOrPast=='Past' && sportEvt.isStarted==true);
+                if(isShow)
+                {
+                    $scope.eventsCounter++;
+                }
+                console.info($scope.eventsCounter);
+                return (isShow);
+            };
+
             $scope.openGroup = function (group) {
                 $scope.groupSelected = group;
                 $location.path('groups/allGroups/' + group._id);
@@ -115,17 +129,17 @@ angular.module('users').controller('UsersController',
                 $scope.eventSelected = sportEvt;
                 $location.path('sportEvts/' + sportEvt._id);
             };
-            $scope.checkIfShow = function (sportEvt) {
-                return ($scope.upcomingOrPast=='Upcoming' && sportEvt.isStarted==false) || ($scope.upcomingOrPast=='Past' && sportEvt.isStarted==true);
-            };
+
             $scope.openGroupList  = function () {
 
                 if ($scope.groupListOpen == null)
                 {
                     $scope.eventGroupSelection = 1;
                     $scope.eventListOpen = null;
-                    $scope.groupListOpen = $scope.authentication.user.id;
-                    GetMyGroups.query().$promise.then(function (response) {
+                    $scope.groupListOpen = $routeParams.userId;
+                    GetMyGroups.query({
+                        userId: $routeParams.userId
+                    }).$promise.then(function (response) {
                         $scope.myGroupsList = response;
                     });
                 }
@@ -139,11 +153,11 @@ angular.module('users').controller('UsersController',
                 {
                     $scope.eventGroupSelection = 2;
                     $scope.groupListOpen = null;
-                    $scope.eventListOpen = $scope.authentication.user.id;
+                    $scope.eventListOpen = $routeParams.userId;
                     GetMySportEvts.query({
-                        userId: $scope.authentication.user.id
+                        userId: $routeParams.userId
                     }).$promise.then(function (response) {
-                        $scope.mySportEvts = response;
+                        $scope.sportEvts = response;
                     });
                 }
                 else {
@@ -152,58 +166,6 @@ angular.module('users').controller('UsersController',
                 }
             };
 
-            $scope.setFavoriteTimes = function () {
-
-                if($scope.editFavoriteTimes == false)
-                {
-                    console.info("1");
-                    $scope.editFavoriteTimes = true;
-                }
-                else {
-                    console.info("2");
-                    $scope.editFavoriteTimes = false;
-                }
-            };
-            $scope.setDay = function (day) {
-                $scope.theDay = day;
-            };
-
-            $scope.checkboxSet = function (day, time) {
-
-                var favoriteTimes = [];
-                var favoriteHours = [];
-                var offset = new Date().getTimezoneOffset();
-                console.info("offset: " + offset);
-                for (var i = 0; i < $scope.user.favoriteTimes.length; i++)
-                {
-                    if($scope.user.favoriteTimes[i].day == day)
-                    {
-                        for (var j = 0; j < $scope.user.favoriteTimes[i].favoriteHours.length; j++)
-                        {
-                            if ($scope.user.favoriteTimes[i].favoriteHours[j].index == time.index)
-                            {
-                                $scope.user.favoriteTimes[i].favoriteHours[j].isIn = !$scope.user.favoriteTimes[i].favoriteHours[j].isIn;
-                            }
-                            favoriteHours[j] =
-                            {
-                                "index": $scope.user.favoriteTimes[i].favoriteHours[j].index,
-                                "timeInMin": $scope.user.favoriteTimes[i].favoriteHours[j].timeInMin,
-                                "timeAsString": $scope.user.favoriteTimes[i].favoriteHours[j].timeAsString,
-                                "isIn": $scope.user.favoriteTimes[i].favoriteHours[j].isIn,
-                                "_id": $scope.user.favoriteTimes[i].favoriteHours[j]._id
-                            }
-                        }
-                    }
-                    favoriteTimes[i] =
-                    {
-                        "day": $scope.user.favoriteTimes[i].day,
-                        "_id": $scope.user.favoriteTimes[i]._id,
-                        "favoriteHours": favoriteHours
-                    }
-                }
-
-
-            };
 
             $scope.showSports = function () {
                 $scope.isShowSports = !$scope.isShowSports;

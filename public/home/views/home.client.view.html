@@ -1,14 +1,39 @@
 <section ng-controller="HomeController" data-ng-init="getMyNextSportEvts()">
     <ul class="home-menu">
-        <li class="na-li-home" ng-click="homeSelection(1)" ng-class="{'selection_groups_menu': theHomeSelection==1}">NEXT EVENTS</li>
-<!--        <li class="na-li-home" ng-click="homeSelection(2)" ng-class="{'selection_groups_menu': theHomeSelection==2}">TODAY'S EVENTS</li>
-        <li class="na-li-home" ng-click="homeSelection(3)" ng-class="{'selection_groups_menu': theHomeSelection==3}">TOMORROW'S EVENTS</li>-->
-        <li class="na-li-home" ng-click="homeSelection(4)" ng-class="{'selection_groups_menu': theHomeSelection==4}">SEARCH EVENT</li>
-        <li class="na-li-home" ng-click="homeSelection(6)" ng-class="{'selection_groups_menu': theHomeSelection==6}">SEARCH USER</li>
+<!--        <li class="na-li-home" ng-click="homeSelection(6)" ng-class="{'selection_groups_menu': theHomeSelection==6}">NEXT EVENTS</li>
+               <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==2}">TODAY'S EVENTS</li>
+               <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==3}">TOMORROW'S EVENTS</li>
+               <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==4}">SEARCH EVENT</li>
+               <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==6}">SEARCH USER</li>-->
         <li class="na-li-home" ng-click="homeSelection(5)" ng-class="{'selection_groups_menu': theHomeSelection==5}">SUGGESTIONS</li>
     </ul>
-    <div class="nextEvents" ng-if="myNextSportEvts && myNextSportEvts.length >= 1 && theHomeSelection != 4 && theHomeSelection != 5 && theHomeSelection != 6">
-        <table class="rwd-table" ng-if="windWidth >= 800">
+
+    <div class="nextEvents" ng-if="theHomeSelection == 5 && allSuggestions.length > 0">
+        <div class="times-title">
+            Suggestions:
+        </div>
+        <div class="sportEvt-header" ng-repeat="suggestion in allSuggestions">
+            <span data-ng-bind="suggestion.user.username"></span>
+            <span data-ng-bind="suggestion.event.dateEvtAsString"></span>
+            <span data-ng-bind="suggestion.event.startTimeAsString"></span>
+            <span data-ng-bind="suggestion.event.sportType.title"></span>
+            <span data-ng-bind="suggestion.event.court.title"></span>
+            <span data-ng-bind="suggestion.event._id"></span>
+        </div>
+    </div>
+    <div class="nextEvents" ng-if="allSuggestions.length <= 0 && theHomeSelection == 5">
+        <div class="times-title">
+            Suggestions:
+        </div>
+        <h2>No Matches</h2>
+    </div>
+
+
+    <div class="nextEvents">
+        <div class="times-title">
+            Next Events:
+        </div>
+        <table class="rwd-table" ng-if="windWidth >= 800 && myNextSportEvts && myNextSportEvts.length >= 1">
             <tr>
                 <th>Sport</th>
                 <th>Date</th>
@@ -24,7 +49,7 @@
                 <td data-th="Participants">{{sportEvt.allParticipantsAndNotific.length}}</td>
             </tr>
         </table>
-        <div class="small-table" ng-if="windWidth < 799">
+        <div class="small-table-times" ng-if="windWidth < 799">
             <div class="sportEvt-header" ng-repeat="sportEvt in myNextSportEvts" ng-click="openEvent(sportEvt)">
                 <div class="left-side-event">
                     <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
@@ -40,60 +65,142 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="nextEvents" ng-if="(!myNextSportEvts || myNextSportEvts.length < 1) && theHomeSelection != 4">
-        <h3>No Events</h3>
-      <!--  <i class="fa fa-spinner" aria-hidden="true"></i>-->
-    </div>
-
-    <div ng-if="theHomeSelection == 5 && allSuggestions.length > 0">
-        <div class="sportEvt-header" ng-repeat="suggestion in allSuggestions">
-            <span data-ng-bind="suggestion.user.username"></span>
-            <span data-ng-bind="suggestion.event.dateEvtAsString"></span>
-            <span data-ng-bind="suggestion.event.startTimeAsString"></span>
-            <span data-ng-bind="suggestion.event.sportType.title"></span>
-            <span data-ng-bind="suggestion.event.court.title"></span>
-            <span data-ng-bind="suggestion.event._id"></span>
+        <div ng-if="(!myNextSportEvts || myNextSportEvts.length < 1)">
+            <h2>No Events</h2>
+            <!--  <i class="fa fa-spinner" aria-hidden="true"></i>-->
         </div>
     </div>
-    <div ng-if="allSuggestions.length <= 0">
-        <h2>No Matches</h2>
-    </div>
+   <!-- <div class="nextEvents" ng-if="(!myNextSportEvts || myNextSportEvts.length < 1) && theHomeSelection == 1">-->
 
-    <div class="center-button" ng-if="theHomeSelection == 4 || theHomeSelection == 6">
+
+    <!--<div class="center-button" ng-if="theHomeSelection == 4 || theHomeSelection == 6">
         <button type="submit" class="pure-button pure-button-primary" ng-if="isSearched" ng-click="openForm()">Search Again</button>
-    </div>
+    </div>-->
 
-    <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 4 && !isSearched">
-        <fieldset>
+     <div class="home-times">
+        <div class="times-title">
+            Your Available Times:
+        </div>
+        <div class="center-btns">
+            <button type="submit" ng-if="showTimes" class="hideShow-btn" ng-click="showHideTimes()">Hide Available Times</button>
+            <button type="submit" ng-if="!showTimes" class="hideShow-btn" ng-click="showHideTimes()">Show Available Times</button>
+        </div>
 
-            <div ng-include="'home/views/search-form-events.client.view.html'"></div>
 
-            <div class="center-button">
-                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        <table class="rwd-table-times" ng-if="windWidth >= 800 && showTimes">
+            <tr>
+                <th></th>
+                <th>Times</th>
+            </tr>
+            <tr class="days-title" ng-repeat="item in allDays">
+                <td data-th="days">{{item.dayByString + " (" + item.date + ")"}}:</td>
+                <td data-th="hours">
+                    <il class="sportEvt-header" ng-repeat="hour in item.range">
+                        <button type="button" class="user-times">{{hour.start}}-{{hour.end}}</button>
+                    </il>
+                </td>
+            </tr>
+        </table>
+        <div class="small-table-times" ng-if="windWidth < 799 && showTimes">
+            <div class="days-title" ng-repeat="item in allDays">
+                <div class="days">{{item.dayByString + " (" + item.date + ")"}}:</div>
+                <il class="hours" ng-repeat="hour in item.range">
+                    <button type="button" class="user-times">{{hour.start}}-{{hour.end}}</button>
+                </il>
             </div>
-        </fieldset>
-    </form>
-
-    <form data-ng-submit="searchAll('Users')" class="pure-form pure-form-stacked" ng-if="theHomeSelection == 6 && !isSearched">
-        <fieldset>
-
-            <div ng-include="'home/views/search-form-users.client.view.html'"></div>
-
-            <div class="center-button">
-                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+        <div class="center-btns" ng-if="showTimes">
+            <button type="submit" class="searched-types" ng-click="setFavoriteTimes()" ng-class="{'btn-selected': editFavoriteTimes}">Set Times</button>
+            <div ng-if="editFavoriteTimes==true" class="day-times-btns">
+                <button type="button" class="days-btn" ng-click="setDay('s')" ng-class="{'btn-selected': theDay =='s'}">S</button>
+                <button type="button" class="days-btn" ng-click="setDay('m')" ng-class="{'btn-selected': theDay =='m'}">M</button>
+                <button type="button" class="days-btn" ng-click="setDay('t')" ng-class="{'btn-selected': theDay =='t'}">T</button>
+                <button type="button" class="days-btn" ng-click="setDay('w')" ng-class="{'btn-selected': theDay =='w'}">W</button>
+                <button type="button" class="days-btn" ng-click="setDay('th')" ng-class="{'btn-selected': theDay =='th'}">Th</button>
+                <button type="button" class="days-btn" ng-click="setDay('f')" ng-class="{'btn-selected': theDay =='f'}">F</button>
+                <button type="button" class="days-btn" ng-click="setDay('sa')" ng-class="{'btn-selected': theDay =='sa'}">Sa</button>
+                <div class="checkbox_block">
+                    <il ng-repeat="times in authentication.user.favoriteTimes">
+                        <div ng-if="times.day==theDay">
+                            <il ng-repeat="time in times.favoriteHours">
+                                <button type="button" class="times-btn" ng-click="checkboxSet(times.day, time)" ng-class="{'btn_selected_times': time.isIn}">{{time.timeAsString}}</button>
+                            </il>
+                        </div>
+                    </il>
+                </div>
             </div>
-        </fieldset>
-    </form>
+        </div>
+    </div>
 
-    <div ng-if="theHomeSelection == 4 && isSearched && relevantEvents && relevantEvents.length > 0" ng-include="'home/views/list-relevant-sportEvts.client.view.html'"></div>
-    <div ng-if="theHomeSelection == 4 && isSearched && (!relevantEvents || relevantEvents.length == 0)">
-        <h2>No Events</h2>
+    <div class="search-section">
+        <div class="times-title">
+            Searching:
+        </div>
+        <div class="center-btns" style="margin: 10px auto 10px auto;">
+            <button type="submit" ng-if="isSearched != 1" class="searched-types" ng-click="homeSelection(1)" ng-class="{'selection_search': showEventsForm}">Search Event</button>
+            <button type="submit" ng-if="isSearched == 1" class="searched-types" ng-click="homeSelection(1)">Search Event Again</button>
+            <button type="submit" ng-if="isSearched != 2" class="searched-types" ng-click="homeSelection(2)" ng-class="{'selection_search': showUsersForm}">Search User</button>
+            <button type="submit" ng-if="isSearched == 2" class="searched-types" ng-click="homeSelection(2)">Search User Again</button>
+            <button type="submit" ng-if="isSearched != 3" class="searched-types" ng-click="homeSelection(3)" ng-class="{'selection_search': showCourtsForm}">Search Court</button>
+            <button type="submit" ng-if="isSearched == 3" class="searched-types" ng-click="homeSelection(3)">Search Court Again</button>
+            <button type="submit" ng-if="isSearched != 4" class="searched-types" ng-click="homeSelection(4)" ng-class="{'selection_search': showGroupsForm}">Search Group</button>
+            <button type="submit" ng-if="isSearched == 4" class="searched-types" ng-click="homeSelection(4)">Search Group Again</button>
+        </div>
+        <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked search-form" ng-if="isSearched == 0 && showEventsForm">
+            <fieldset>
+                <div ng-include="'home/views/search-form-events.client.view.html'"></div>
+
+                <div class="center-button">
+                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <form data-ng-submit="searchAll('Users')" class="pure-form pure-form-stacked search-form" ng-if="isSearched == 0 && showUsersForm">
+            <fieldset>
+                <div ng-include="'home/views/search-form-users.client.view.html'"></div>
+                <div class="center-button">
+                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <form data-ng-submit="searchAll('Courts')" class="pure-form pure-form-stacked search-form" ng-if="isSearched == 0 && showCourtsForm">
+            <fieldset>
+                <div ng-include="'home/views/search-form-courts.client.view.html'"></div>
+                <div class="center-button">
+                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <form data-ng-submit="searchAll('Groups')" class="pure-form pure-form-stacked search-form" ng-if="isSearched == 0 && showGroupsForm">
+            <fieldset>
+                <div ng-include="'home/views/search-form-groups.client.view.html'"></div>
+                <div class="center-button">
+                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="relevant-list" ng-if="theHomeSelection == 1 && isSearched == 1 && relevantEvents && relevantEvents.length > 0" ng-include="'home/views/list-relevant-sportEvts.client.view.html'"></div>
+        <div ng-if="theHomeSelection == 1 && isSearched == 1 && (!relevantEvents || relevantEvents.length == 0)">
+            <h2>No Events</h2>
+        </div>
+        <div class="relevant-list" ng-if="theHomeSelection == 2 && isSearched == 2 && relevantUsers && relevantUsers.length > 0" ng-include="'home/views/list-relevant-users.client.view.html'"></div>
+        <div ng-if="theHomeSelection == 2 && isSearched == 2 && (!relevantUsers || relevantUsers.length == 0)">
+            <h2>No Users</h2>
+        </div>
+        <div class="relevant-list" ng-if="theHomeSelection == 3 && isSearched == 3 && relevantCourts && relevantCourts.length > 0" ng-include="'home/views/list-relevant-courts.client.view.html'"></div>
+        <div ng-if="theHomeSelection == 3 && isSearched == 3 && (!relevantCourts || relevantCourts.length == 0)">
+            <h2>No Courts</h2>
+        </div>
+        <div class="relevant-list" ng-if="theHomeSelection == 4 && isSearched == 4 && relevantGroups && relevantGroups.length > 0" ng-include="'home/views/list-relevant-groups.client.view.html'"></div>
+        <div ng-if="theHomeSelection == 4 && isSearched == 4 && (!relevantGroups || relevantGroups.length == 0)">
+            <h2>No Groups</h2>
+        </div>
     </div>
-    <div ng-if="theHomeSelection == 6 && isSearched && relevantUsers && relevantUsers.length > 0" ng-include="'home/views/list-relevant-users.client.view.html'"></div>
-    <div ng-if="theHomeSelection == 6 && isSearched && (!relevantUsers || relevantUsers.length == 0)">
-        <h2>No Users</h2>
-    </div>
+
 </section>
 <!--
 <section ng-controller="HomeController" data-ng-init="getMyNextSportEvts()">

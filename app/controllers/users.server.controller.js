@@ -81,6 +81,7 @@ exports.signup = function(req, res, next)
                 if (err) return next(err);
                 enterLatLngToUser(req, res, user);
                 setFavoriteTimesArr(user);
+                var r = general.initialRejectArray(user);
                 return res.redirect('/');
             });
         });
@@ -225,7 +226,8 @@ exports.update = function(req, res)
         isSearched: req.body.isSearched,
         radiusOfSearch: req.body.radiusOfSearch,
         sportTypes: req.body.sportTypes,
-        favoriteTimes: req.body.favoriteTimes
+        favoriteTimes: req.body.favoriteTimes,
+        newUser: false
     }).exec(function(err)
     {
         if (err) {
@@ -381,26 +383,6 @@ var setFavoriteTimesArr = function (user) {
     });
 };
 
-exports.saveUsersTimes = function(req, res)
-{
-    console.info("blabla");
-    var timeIndex = req.body.timeIndex;
-    var day = req.body.day;
-    var isIn = req.body.isIn;
-    console.info("notificId: " + day);
-    console.info("req.user.id: " + req.user.id);
-    console.info("isIn: " + isIn);
-    User.update({_id: req.user.id, 'favoriteTimes.day': day, 'favoriteTimes.favoriteHours.index': timeIndex}, {$set: { 'favoriteTimes.favoriteHours.$.isIn': isIn }}).exec(function(err)
-    {
-        if (err) {
-            return res.status(400).send({message: getErrorMessage(err)});
-        }
-        else
-        {
-            res.json(req.user);
-        }
-    });
-};
 exports.getAllUsersNotInEvent = function (req, res)
 {
     var query = url.parse(req.url, true).query;
@@ -487,10 +469,15 @@ exports.getRelevantUsers = function(req, res)
                     {
                         var numOfEvents = relevantUsers.length;
 
-                        console.info("relevantEvent.length: " + relevantUsers.length);
+                        console.info("relevantUsers.length: " + relevantUsers.length);
+                        if (sportType)
+                        {
+                            funcArr.push(general.searchBySportTypeOfUser);
+                            paramArr.push(sportType);
+                        }
                         if (city)
                         {
-                            funcArr.push(general.searchByCityOfUser);
+                            funcArr.push(general.searchByCityOfItem);
                             paramArr.push(city);
                         }
 
@@ -571,9 +558,62 @@ exports.getRelevantUsers = function(req, res)
                             res.json(arrToReturn);
                         }
                     }
+                    else {
+                        console.info("relevantUsers: " + relevantUsers);
+                        res.json(relevantUsers);
+                    }
                 });
         }
 
     });
 
+};
+
+exports.saveTimesHome = function(req, res)
+{
+    var day = req.body.day;
+    var timeIndex = req.body.timeIndex;
+    var isIn = req.body.isIn;
+    console.info("day: " + day);
+    console.info("timeIndex: " + timeIndex);
+    console.info("isIn: " + isIn);
+    User.find({_id: req.user.id}).exec(function(err, user)
+    {
+        if (err) {
+            return res.status(400).send({message: getErrorMessage(err)});
+        }
+        else
+        {
+            var favoriteTimes = user[0].favoriteTimes;
+            console.info("favoriteTimes1: " + favoriteTimes);
+            for(var i = 0; i < favoriteTimes.length; i++)
+            {
+                if(favoriteTimes[i].day == day)
+                {
+                    for(var j = 0; j < favoriteTimes[i].favoriteHours.length; j++)
+                    {
+
+                        if(favoriteTimes[i].favoriteHours[j].index == timeIndex)
+                        {
+                            console.info("favoriteTimes[i].favoriteHours[j].index : " + favoriteTimes[i].favoriteHours[j].index );
+                            favoriteTimes[i].favoriteHours[j].isIn = isIn;
+                        }
+                    }
+                }
+            }
+            console.info("favoriteTimes2: " + favoriteTimes);
+            User.update({_id: req.user.id}, {
+                favoriteTimes: favoriteTimes
+            }).exec(function(err)
+            {
+                if (err) {
+                    return res.status(400).send({message: getErrorMessage(err)});
+                }
+                else {
+                    res.json(req.user);
+                }
+            });
+
+        }
+    });
 };

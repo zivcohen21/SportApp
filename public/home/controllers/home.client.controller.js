@@ -3,12 +3,20 @@
  */
 angular.module('home').controller('HomeController', ['$http','$scope', '$location', 'Authentication','GetMyNextSportEvts',
     'GetAllSportTypes', 'GetRelevantEvents', 'MatchingUsersAndEvents', 'GetMyNextFiveSportEvts', 'GetRelevantUsers',
+    'GetRelevantGroups', 'GetRelevantCourts','SaveTimesHome',
     function($http, $scope, $location, Authentication, GetMyNextSportEvts, GetAllSportTypes, GetRelevantEvents,
-             MatchingUsersAndEvents, GetMyNextFiveSportEvts, GetRelevantUsers)
+             MatchingUsersAndEvents, GetMyNextFiveSportEvts, GetRelevantUsers, GetRelevantGroups, GetRelevantCourts,SaveTimesHome)
     {
 
         $scope.authentication = Authentication;
-        $scope.isSearched = false;
+        $scope.editFavoriteTimes = false;
+        $scope.isSearched = 0;
+        $scope.showEventsForm = false;
+        $scope.showUsersForm = false;
+        $scope.showCourtsForm = false;
+        $scope.showGroupsForm = false;
+        $scope.showTimes = true;
+        $scope.allDays = [];
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         $scope.showOne = function (currentModule){
 
@@ -16,28 +24,44 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
         };
 
+        $scope.getHomePage = function () {
+            $scope.getMyNextSportEvts();
+
+        };
 
         $scope.getMyNextSportEvts = function () {
-            $scope.theHomeSelection = 1;
-            $scope.nextSportEvt = [];
-            $scope.todaySportEvts = [];
-            $scope.tomorrowSportEvts = [];
 
-            var currTime = new Date();
-            $scope.todayDate = currTime;
-            $scope.todayDate = $scope.todayDate.toISOString().split('T')[0];
-            var tomorrowDate = currTime;
-            tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-            tomorrowDate = tomorrowDate.toISOString().split('T')[0];
-            /*GetMyNextSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
-                $scope.nextSportEvts = response;
-                divideMySportEvts(response, tomorrowDate)
-            });*/
-            GetMyNextFiveSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
-                console.info("nextSportEvts: " + response);
-                $scope.myNextFiveEvents = response;
-                $scope.myNextSportEvts = $scope.myNextFiveEvents;
-            });
+            console.info($scope.authentication.user.newUser);
+            if(!$scope.authentication.user.newUser)
+            {
+                $scope.theHomeSelection = 0;
+                $scope.nextSportEvt = [];
+                $scope.todaySportEvts = [];
+                $scope.tomorrowSportEvts = [];
+
+                var currTime = new Date();
+                $scope.todayDate = currTime;
+                $scope.todayDate = $scope.todayDate.toISOString().split('T')[0];
+                var tomorrowDate = currTime;
+                tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+                tomorrowDate = tomorrowDate.toISOString().split('T')[0];
+                /*GetMyNextSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
+                 $scope.nextSportEvts = response;
+                 divideMySportEvts(response, tomorrowDate)
+                 });*/
+                GetMyNextFiveSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
+                    console.info("nextSportEvts: " + response);
+                    $scope.myNextFiveEvents = response;
+                    $scope.myNextSportEvts = $scope.myNextFiveEvents;
+                });
+                userTimes();
+            }
+            else{
+                $scope.authentication.user.newUser = false;
+                $location.path('users/' + $scope.authentication.user.id + '/edit');
+            }
+
+
         };
 
         $scope.searchAll = function (searchType) {
@@ -46,7 +70,8 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             {
                 console.info("Events");
                 getRelevantEvents(function (relevantEvents) {
-                    $scope.isSearched = true;
+                    $scope.isSearched = 1;
+                    console.info("$scope.isSearched: " + $scope.isSearched);
                     $scope.relevantEvents = relevantEvents;
                 });
             }
@@ -54,20 +79,26 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             {
                 console.info("Users");
                 getRelevantUsers(function (relevantUsers) {
-                    $scope.isSearched = true;
+                    $scope.isSearched = 2;
                     $scope.relevantUsers = relevantUsers;
                 });
-            }
-/*            else if(searchType == "Groups")
-            {
-                console.info("Groups");
-                getGroupsDetails();
             }
             else if(searchType == "Courts")
             {
                 console.info("Courts");
-                getCourtsDetails();
-            }*/
+                getRelevantCourts(function (relevantCourts) {
+                    $scope.isSearched = 3;
+                    $scope.relevantCourts = relevantCourts;
+                });
+            }
+            else if(searchType == "Groups")
+            {
+                console.info("Groups");
+                getRelevantGroups(function (relevantGroups) {
+                    $scope.isSearched = 4;
+                    $scope.relevantGroups = relevantGroups;
+                });
+            }
         };
 
         var getRelevantEvents = function (callback) {
@@ -124,10 +155,109 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             });
         };
 
-        $scope.homeSelection = function (index) {
-            $scope.theHomeSelection = index;
+        var getRelevantCourts = function (callback) {
 
+            var courtsDetails = {
+                userId: $scope.authentication.user._id,
+                sportType: document.getElementById("sportTypeEvent").value,
+                country: document.getElementById("countryEvent").value,
+                city: document.getElementById("cityEvent").value,
+                radius: $scope.radiusCourt.dozens
+            };
+            GetRelevantCourts.searchCourts(
+                courtsDetails
+            ).$promise.then(function (relevantCourts) {
+                console.info("relevantCourts: " + JSON.stringify(relevantCourts));
+                return callback(relevantCourts);
+            });
+        };
+
+        var getRelevantGroups = function (callback) {
+
+            var groupsDetails = {
+                userId: $scope.authentication.user._id,
+                sportType: document.getElementById("sportTypeGroup").value,
+                country: document.getElementById("countryGroup").value,
+                city: document.getElementById("cityGroup").value,
+                radius: $scope.radiusEvent.dozens,
+                minMembers: document.getElementById("minMembersGroup").value,
+                maxMembers: document.getElementById("maxMembersGroup").value,
+                minAge: document.getElementById("minAgeGroup").value,
+                maxAge: document.getElementById("maxAgeGroup").value,
+                female: $scope.checkboxModel.femaleGroup,
+                male: $scope.checkboxModel.maleGroup
+            };
+            console.info("groupsDetails.sportType: " + JSON.stringify(groupsDetails.sportType));
+            GetRelevantGroups.searchGroups(
+                groupsDetails
+            ).$promise.then(function (relevantGroups) {
+                console.info("relevantGroups: " + JSON.stringify(relevantGroups));
+                return callback(relevantGroups);
+            });
+        };
+
+        $scope.homeSelection = function (index) {
+
+            modelOfAllForms();
+            //$scope.myNextSportEvts = $scope.myNextFiveEvents;
             if(index==1)
+            {
+                if($scope.isSearched != index)
+                {
+                    $scope.showEventsForm = !$scope.showEventsForm;
+                }
+                else {
+                    $scope.showEventsForm = true;
+                }
+                $scope.isSearched = 0;
+                $scope.showUsersForm = false;
+                $scope.showCourtsForm = false;
+                $scope.showGroupsForm = false;
+            }
+            else if(index==2)
+            {
+                if($scope.isSearched != index)
+                {
+                    $scope.showUsersForm = !$scope.showUsersForm;
+                }
+                else {
+                    $scope.showUsersForm = true;
+                }
+                $scope.isSearched = 0;
+                $scope.showEventsForm = false;
+                $scope.showCourtsForm = false;
+                $scope.showGroupsForm = false;
+            }
+            else if(index==3)
+            {
+                if($scope.isSearched != index)
+                {
+                    $scope.showCourtsForm = !$scope.showCourtsForm;
+                }
+                else {
+                    $scope.showCourtsForm = true;
+                }
+                $scope.isSearched = 0;
+                $scope.showUsersForm = false;
+                $scope.showEventsForm = false;
+                $scope.showGroupsForm = false;
+            }
+            else if (index == 4)
+            {
+                if($scope.isSearched != index)
+                {
+                    $scope.showGroupsForm = !$scope.showGroupsForm;
+                }
+                else {
+                    $scope.showGroupsForm = true;
+                }
+                $scope.isSearched = 0;
+                $scope.showCourtsForm = false;
+                $scope.showUsersForm = false;
+                $scope.showEventsForm = false;
+            }
+
+         /*  if(index==1)
             {
                 $scope.myNextSportEvts = $scope.myNextFiveEvents;
             }
@@ -142,14 +272,15 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             }
             else if (index == 4 || index == 6) {
                 modelOfAllForms();
-            }
+            }*/
             else if(index == 5) {
                 suggestions();
             }
+            $scope.theHomeSelection = index;
         };
 
         var modelOfAllForms = function () {
-            $scope.isSearched = false;
+            //$scope.isSearched = 0;
             $scope.radiusEvent = new Quantity(0);
             $scope.radiusCourt = new Quantity(0);
             $scope.radiusUser = new Quantity(0);
@@ -169,13 +300,18 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             GetAllSportTypes.query(function (response) {
                 $scope.sportTypeList = response;
                 $scope.sportTypeEvent = $scope.sportTypeList[0];
+                $scope.sportTypeUser = $scope.sportTypeList[0];
+                $scope.sportTypeGroup = $scope.sportTypeList[0];
+                $scope.sportTypeCourt = $scope.sportTypeList[0];
             });
 
             $scope.checkboxModel = {
                 femaleEvent : true,
                 maleEvent : true,
                 femaleUser : true,
-                maleUser : true
+                maleUser : true,
+                femaleGroup : true,
+                maleGroup : true
             };
 
 
@@ -208,9 +344,123 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             }
         };
 
+        $scope.showHideTimes = function () {
+
+            $scope.showTimes = !$scope.showTimes;
+        };
+
+        var userTimes = function () {
+            $scope.getDateOfDay();
+            var times = $scope.authentication.user.favoriteTimes;
+            var start;
+            for(var i = 0; i < times.length; i++)
+            {
+                var middle = false;
+                var day = {
+                    "dayByString": '',
+                    "dayByNum": 0,
+                    "date": '',
+                    "range": []
+                };
+                var index = 38;
+                for(var j = 0; j < times[i].favoriteHours.length; j++)
+                {
+                    if(index == times[i].favoriteHours.length)
+                    {
+                        index = 0;
+                    }
+                    var range = {
+                        "start": '',
+                        "end": ''
+                    };
+
+                    if(times[i].favoriteHours[index].isIn)
+                    {
+                        if(!middle)
+                        {
+                            start = times[i].favoriteHours[index].timeAsString;
+                        }
+                        middle = true;
+                    }
+                    else if(middle){
+                        range.end = times[i].favoriteHours[index].timeAsString;
+                        range.start = start;
+                        middle = false;
+                        day.range.push(range);
+                    }
+                    if(index == 37 && times[i].favoriteHours[index].isIn)
+                    {
+                        range.end = times[i].favoriteHours[index+1].timeAsString;
+                        range.start = start;
+                        middle = false;
+                        day.range.push(range);
+                    }
+
+
+                    index++;
+                }
+                if(times[i].day == 's')
+                {
+                    day.dayByString = 'Sunday'
+                }
+                else if(times[i].day == 'm')
+                {
+                    day.dayByString = 'Monday'
+                }
+                else if(times[i].day == 't')
+                {
+                    day.dayByString = 'Tuesday'
+                }
+                else if(times[i].day == 'w')
+                {
+                    day.dayByString = 'Wednesday'
+                }
+                else if(times[i].day == 'th')
+                {
+                    day.dayByString = 'Thursday'
+                }
+                else if(times[i].day == 'f')
+                {
+                    day.dayByString = 'Friday'
+                }
+                else if(times[i].day == 'sa')
+                {
+                    day.dayByString = 'Saturday'
+                }
+                day.dayByNum = i;
+                day.date = setDate(i);
+                $scope.allDays.push(day);
+            }
+            console.info("$scope.allDays: " + JSON.stringify($scope.allDays));
+        };
+
+        var setDate = function(i)
+        {
+            var offset;
+            var theDay = new Date().getDay();
+            if(i < theDay)
+            {
+                offset = 7 - theDay + i;
+            }
+            else {
+                offset = i - theDay;
+            }
+            console.info("offset: " + offset);
+            var day = new Date();
+            day.setDate(day.getDate()+offset);
+            console.info("day: " + day);
+            return day.toISOString().split('T')[0];
+        };
+
+        $scope.getDateOfDay = function()
+        {
+
+
+        };
+
         $scope.openForm = function () {
 
-            $scope.isSearched = false;
+            $scope.isSearched = 0;
         };
 
         $scope.openEvent = function (sportEvt) {
@@ -238,7 +488,72 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
         };
 
+        $scope.setFavoriteTimes = function () {
 
+            if($scope.editFavoriteTimes == false)
+            {
+                console.info("1");
+                $scope.editFavoriteTimes = true;
+            }
+            else {
+                console.info("2");
+                $scope.editFavoriteTimes = false;
+            }
+        };
+
+        $scope.setDay = function (day) {
+            $scope.theDay = day;
+            console.info("$scope.theDay: " + $scope.theDay);
+        };
+
+        $scope.checkboxSet = function (day, time) {
+
+            console.info("time: " + time);
+            time.isIn = !time.isIn;
+
+            var saveTimesHome = new SaveTimesHome({"timeIndex": time.index, "isIn": time.isIn,
+                "day": day});
+            saveTimesHome.$save(function()  {
+
+                    var favoriteTimes = [];
+                    var favoriteHours = [];
+                    var offset = new Date().getTimezoneOffset();
+                    console.info("offset: " + offset);
+                    for (var i = 0; i < $scope.authentication.user.favoriteTimes.length; i++)
+                    {
+                        if($scope.authentication.user.favoriteTimes[i].day == day)
+                        {
+                            for (var j = 0; j < $scope.authentication.user.favoriteTimes[i].favoriteHours.length; j++)
+                            {
+                                if ($scope.authentication.user.favoriteTimes[i].favoriteHours[j].index == time.index)
+                                {
+                                    $scope.authentication.user.favoriteTimes[i].favoriteHours[j].isIn = time.isIn
+                                }
+                                favoriteHours[j] =
+                                {
+                                    "index": $scope.authentication.user.favoriteTimes[i].favoriteHours[j].index,
+                                    "timeInMin": $scope.authentication.user.favoriteTimes[i].favoriteHours[j].timeInMin,
+                                    "timeAsString": $scope.authentication.user.favoriteTimes[i].favoriteHours[j].timeAsString,
+                                    "isIn": $scope.authentication.user.favoriteTimes[i].favoriteHours[j].isIn,
+                                    "_id": $scope.authentication.user.favoriteTimes[i].favoriteHours[j]._id
+                                }
+                            }
+                        }
+                        favoriteTimes[i] =
+                        {
+                            "day": $scope.authentication.user.favoriteTimes[i].day,
+                            "_id": $scope.authentication.user.favoriteTimes[i]._id,
+                            "favoriteHours": favoriteHours
+                        }
+                    }
+                    $scope.allDays = [];
+                    userTimes();
+                },
+                function(errorResponse)
+                {
+                    $scope.error = errorResponse.data.message;
+                });
+        };
 
         var changeClass = function (r,className1,className2) {
             var regex = new RegExp("(?:^|\\s+)" + className1 + "(?:\\s+|$)");

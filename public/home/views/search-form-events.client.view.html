@@ -5,13 +5,13 @@
     <label class="pure-u-1 pure-u-md-3-8 header-label">Start Time:</label>
     <div class="pure-u-1 pure-u-md-1-3">
         <label for="sportTypeEvent">Sport</label>
-        <select id="sportTypeEvent" ng-model="sportTypeEvent._id" class="pure-u-23-24">
+        <select id="sportTypeEvent" ng-model="sportTypeEvent._id" class="pure-u-23-24" required>
             <option ng-repeat="item in sportTypeList" value="{{item._id}}">{{item.title}}</option>
         </select>
     </div>
     <div class="pure-u-2-5 pure-u-md-1-4">
         <label for="dateEvtAsString">Date</label>
-        <input type="date" data-ng-model="dateEvtAsString" id="dateEvtAsString" placeholder="date" class="pure-u-20-24">
+        <input type="date" data-ng-model="dateEvtAsString" id="dateEvtAsString" placeholder="date" class="pure-u-20-24" required>
     </div>
     <div class="pure-u-1-4 pure-u-md-1-6">
         <label for="timeStart">From</label>
@@ -79,7 +79,7 @@
 
     <div class="pure-u-1 pure-u-md-1-3">
         <label for="sportTypeEvent">Sport</label>
-        <select id="sportTypeEvent" ng-model="sportTypeEvent" class="pure-u-23-24">
+        <select id="sportTypeEvent" ng-model="sportTypeEvent._id" class="pure-u-23-24">
             <option ng-repeat="item in sportTypeList" value="{{item._id}}">{{item.title}}</option>
         </select>
     </div>
@@ -112,30 +112,31 @@
         <input type="range" ng-model="radiusEvent.radius" id="radiusEvent" placeholder="Radius" class="pure-u-15-24" min="0" max="500">
     </div>
     <label class="pure-u-1 pure-u-md-1-3 header-label">Number Of Members: </label>
+
     <div class="pure-u-1 pure-u-md-1-3">
-        <div class="pure-u-1-3 pure-u-md-1-3">
+        <div class="pure-u-2-5 pure-u-md-1-3">
             <label for="minMembersEvent">From</label>
             <input type="number" data-ng-model="minMembersEvent" id="minMembersEvent" class="pure-u-15-24">
         </div>
-        <div class="pure-u-1-3 pure-u-md-1-3">
+        <div class="pure-u-2-5 pure-u-md-1-3">
             <label for="maxMembersEvent">To</label>
             <input type="number" data-ng-model="maxMembersEvent" id="maxMembersEvent" class="pure-u-15-24" min=minMembers>
         </div>
     </div>
-    <label class="pure-u-1 pure-u-md-1-3 header-label">Age: </label>
-    <div class="pure-u-1 pure-u-md-1-3">
-        <div class="pure-u-1-3 pure-u-md-1-3">
+    <label class="pure-u-1-2 pure-u-md-1-3 header-label">Age: </label>
+    <label class="pure-u-1-2 pure-u-md-1-3 header-label">Gender: </label>
+    <div class="pure-u-1-2 pure-u-md-1-3">
+        <div class="pure-u-2-5 pure-u-md-1-3">
             <label for="minAgeEvent">From</label>
-            <input type="number" data-ng-model="minAgeEvent" id="minAgeEvent" class="pure-u-15-24">
+            <input type="number" data-ng-model="minAgeEvent" id="minAgeEvent" class="pure-u-23-24">
         </div>
-        <div class="pure-u-1-3 pure-u-md-1-3">
+        <div class="pure-u-2-5 pure-u-md-1-3">
             <label for="maxAgeEvent">To</label>
-            <input type="number" data-ng-model="maxAgeEvent" id="maxAgeEvent" class="pure-u-15-24" min=minAge>
+            <input type="number" data-ng-model="maxAgeEvent" id="maxAgeEvent" class="pure-u-23-24" min=minAge>
         </div>
     </div>
-    <label class="pure-u-1-4 pure-u-md-1-3 header-label">Gender: </label>
 
-    <div class="pure-u-1 pure-u-md-1-3">
+    <div class="pure-u-1-2 pure-u-md-1-3">
         <div class="checkBox-label">
             <label for="femaleEvent">
                 <input type="checkbox" ng-model="checkboxModel.femaleEvent" id="femaleEvent" >

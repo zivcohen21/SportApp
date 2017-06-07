@@ -4,7 +4,7 @@
 angular.module('sportEvts').config(['$routeProvider', function($routeProvider)
 { $routeProvider.
     when('/sportEvts', { templateUrl: 'sportEvts/views/main-sportEvts.client.view.html' }).
-    when('/sportEvts/list', { templateUrl: 'sportEvts/views/list-sportEvts.client.view.html' }).
+    when('/sportEvts/list', { templateUrl: 'sportEvts/views/list-all-sportEvts.client.view.html' }).
     when('/sportEvts/mySportEvts', { templateUrl: 'sportEvts/views/list-my-sportEvts.client.view.html' }).
     when('/sportEvts/create', { templateUrl: 'sportEvts/views/create-sportEvt.client.view.html' }).
     when('/sportEvts/create/:groupId', { templateUrl: 'sportEvts/views/create-sportEvt.client.view.html' }).

@@ -26,6 +26,8 @@ module.exports = function()
             fullName: profile.displayName,
             email: profile.emails[0].value,
             username: profile.username,
+            picture: profile.picture,
+            city: profile.city,
             provider: 'facebook',
             providerId: profile.id,
             providerData: providerData

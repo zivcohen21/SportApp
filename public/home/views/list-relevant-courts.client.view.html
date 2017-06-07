@@ -1,0 +1,25 @@
+<table class="rwd-table-users" ng-if="windWidth >= 800">
+    <tr>
+        <th></th>
+        <th>Full Name</th>
+        <th>City</th>
+    </tr>
+    <tr ng-repeat="user in relevantUsers | filter: searchKeyword" ng-click="openUser(user)">
+        <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
+        <td data-th="Full Name">{{user.fullName}}</td>
+        <td data-th="City">{{user.city}}</td>
+    </tr>
+</table>
+
+<div class="small-table-users" ng-if="windWidth < 799">
+    <div class="user-header" ng-repeat="user in relevantUsers | filter: searchKeyword" ng-click="openUser(user)">
+        <div class="left-side-user">
+            <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
+            <!--<span data-ng-bind="group.image"></span>-->
+        </div>
+        <div class="center-side-user">
+            <span class= "name-part" data-ng-bind="user.fullName"></span>
+            <span class= "court-part" data-ng-bind="user.city"></span>
+        </div>
+    </div>
+</div>

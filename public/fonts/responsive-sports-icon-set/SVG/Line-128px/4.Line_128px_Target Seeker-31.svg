@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<g>
+	<g>
+		<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M46.013,66H3c-1.104,0-2-0.895-2-2c0-1.104,0.896-2,2-2h43.014c1.104,0,2,0.896,2,2C48.013,65.105,47.118,66,46.013,66z"/>
+	</g>
+	<g>
+		<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M125,66H81.987c-1.104,0-2-0.895-2-2c0-1.104,0.895-2,2-2H125c1.104,0,2,0.896,2,2C127,65.105,126.105,66,125,66z"/>
+	</g>
+	<g>
+		<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M66,81.986V125c0,1.104-0.896,2-2,2c-1.104,0-2-0.896-2-2V81.986c0-1.105,0.896-2,2-2C65.104,79.986,66,80.881,66,81.986z"/>
+	</g>
+	<g>
+		<path fill="none" stroke="#646464" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M66,3v43.013c0,1.104-0.896,1.999-2,1.999c-1.104,0-2-0.895-2-1.999V3c0-1.105,0.896-2,2-2C65.104,1,66,1.895,66,3z"/>
+	</g>
+	
+		<circle fill="none" stroke="#646464" stroke-width="1.9995" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="63.98" cy="64" r="2.019"/>
+</g>
+</svg>

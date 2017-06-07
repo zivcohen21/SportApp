@@ -2,6 +2,8 @@
  * Created by ZIV on 17/11/2016.
  */
 var mongoose = require('mongoose'),
+    general = require('../../app/controllers/general.server.controller'),
+    googleMaps = require('../../app/controllers/googleMaps.server.controller'),
     url = require('url'),
     Group = mongoose.model('Group'),
     User = mongoose.model('User');
@@ -21,6 +23,7 @@ var getErrorMessage = function(err)
 exports.create = function(req, res)
 {
     var group = new Group(req.body);
+    console.info("group: " + JSON.stringify(group));
     group.creator = req.user;
     var allMembers = group.members;
     var i;
@@ -28,18 +31,18 @@ exports.create = function(req, res)
     {
         if (err)
         {
-            return res.status(400).send({ message: getErrorMessage(err) });
+            return res.status(401).send({ message: getErrorMessage(err) });
         }
         else {
             User.update({_id: req.user.id}, {$push: {myGroups: group.id}}).exec(function(err) {
                 if (err) {
-                    return res.status(400).send({message: getErrorMessage(err)});
+                    return res.status(402).send({message: getErrorMessage(err)});
                 }
             });
 
             User.update({_id: req.user.id}, {$push: {myGroupsAdmin: group.id}}).exec(function(err) {
                 if (err) {
-                    return res.status(400).send({message: getErrorMessage(err)});
+                    return res.status(403).send({message: getErrorMessage(err)});
                 }
             });
 
@@ -47,7 +50,7 @@ exports.create = function(req, res)
             {
                 User.update({_id: allMembers[i]}, {$push: {myGroups: group.id}}).exec(function(err) {
                     if (err) {
-                        return res.status(400).send({message: getErrorMessage(err)});
+                        return res.status(404).send({message: getErrorMessage(err)});
                     }
                 });
             }
@@ -89,6 +92,12 @@ exports.update = function(req, res)
     group.title = req.body.title;
     group.defaultCourt = req.body.defaultCourt;
     group.theSportType = req.body.theSportType;
+
+    group.minAge = req.body.minAge;
+    group.maxAge = req.body.maxAge;
+    group.forFemale = req.body.forFemale;
+    group.forMale = req.body.forMale;
+
     console.info("group: " + group);
     group.save(function(err)
     {
@@ -354,6 +363,161 @@ exports.getGroupsCanBeAdded = function (req, res)
         }
         else { res.json(group); }
     });
+};
+
+
+exports.getRelevantGroups = function(req, res)
+{
+    var query = url.parse(req.url, true).query;
+    var userId = query.userId;
+    var sportType = query.sportType;
+    var country = query.country;
+    var city = query.city;
+    var radius = query.radius;
+    var minMembers = query.minMembers;
+    var maxMembers = query.maxMembers;
+    var minAge = query.minAge;
+    var maxAge = query.maxAge;
+    var female = query.female;
+    var male = query.male;
+
+    var funcArr = [];
+    var paramArr = [];
+    var finalArr = [];
+    var arrToReturn = [];
+
+    User.find({_id: userId}).exec(function(err, theUser)
+    {
+        if (err)
+        {
+            return res.status(400).send({ message: getErrorMessage(err) });
+        }
+        else {
+            // User.find({$and: [{sportType: sportType}, {country: country}]}).exec(function(err, relevantUsers)
+            Group.find().populate('creator defaultCourt theSportType', 'firstName lastName fullName title city country').exec(function(err, relevantGroups)
+            {
+                if (err)
+                {
+                    return res.status(400).send({ message: getErrorMessage(err) });
+                }
+                else if(relevantGroups.length > 0)
+                {
+                    var numOfEvents = relevantGroups.length;
+
+                    console.info("relevantGroups.length: " + relevantGroups.length);
+                    if (sportType)
+                    {
+                        console.info("sportType: " + sportType);
+                        funcArr.push(general.searchBySportTypeOfGroup);
+                        paramArr.push(sportType);
+                    }
+                    if (country)
+                    {
+                        console.info("country: " + country);
+                        funcArr.push(general.searchByCountry);
+                        paramArr.push(country);
+                    }
+                    if (city)
+                    {
+                        funcArr.push(general.searchByCityOfGroup);
+                        paramArr.push(city);
+                    }
+                    if(minMembers)
+                    {
+                        funcArr.push(general.searchByMinMembersInGroup);
+                        paramArr.push(minMembers);
+                    }
+                    if(maxMembers)
+                    {
+                        funcArr.push(general.searchByMaxMembersInGroup);
+                        paramArr.push(maxMembers);
+                    }
+                    if(minAge)
+                    {
+                        funcArr.push(general.searchByMinAge);
+                        paramArr.push(minAge);
+                    }
+                    if(maxAge)
+                    {
+                        funcArr.push(general.searchByMaxAge);
+                        paramArr.push(maxAge);
+                    }
+
+                    if((!female && male) || (female && !male))
+                    {
+                        funcArr.push(general.searchByGender);
+                        if(female)
+                            paramArr.push('female');
+                        else if(male)
+                            paramArr.push('male');
+                    }
+
+                    for (var i = 0; i < numOfEvents; i++)
+                    {
+                        //if (country.toUpperCase() == relevantUsers[i].country.toUpperCase())
+                        //{
+                        var isMatch = true;
+                        for (var j = 0; j < funcArr.length; j++)
+                        {
+                            if (!funcArr[j](paramArr[j], relevantGroups[i]))
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+                        if(isMatch) {
+                            finalArr.push(relevantGroups[i]);
+                        }
+                        //}
+                    }
+
+                    if(radius > 0)
+                    {
+                        var theUserLocation = theUser[0].gpsLocation;
+                        var userCheckedCounter = 0;
+                        var numOfElements = finalArr.length;
+                        for(i = 0; i < numOfElements; i++)
+                        {
+                            var otherUserLocation = finalArr[i].gpsLocation;
+                            googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, otherUserLocation, function (a,b,distance) {
+                                distance = distance /1000;
+
+                                console.info("userCheckedCounter: " + userCheckedCounter);
+                                console.info("numOfElements: " + numOfElements);
+                                if (distance <= radius) {
+                                    console.info("distance1: " + distance);
+                                    console.info("radius1: " + radius);
+                                    console.info("userCheckedCounter1: " + userCheckedCounter);
+                                    arrToReturn.push(finalArr[userCheckedCounter]);
+                                }
+                                else {
+                                    console.info("userCheckedCounter2: " + userCheckedCounter);
+                                    console.info("distance2: " + distance);
+                                    console.info("radius2: " + radius);
+                                }
+                                userCheckedCounter++;
+                                if (userCheckedCounter >= numOfElements) {
+                                    console.info("finalArr.length: " + arrToReturn.length);
+                                    res.json(arrToReturn);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        arrToReturn = finalArr;
+                        console.info("arrToReturn.length: " + arrToReturn.length);
+                        res.json(arrToReturn);
+                    }
+                }
+                else {
+                    console.info("relevantGroups: " + relevantGroups);
+                    res.json(relevantGroups);
+                }
+            });
+        }
+
+    });
+
 };
 
 

@@ -580,6 +580,7 @@ a {
     }
 
 
+    /*
     .rwd-table td:before {
         display: none;
     }
@@ -642,6 +643,7 @@ a {
         color: rgb(50, 54, 57);
         font-weight: 600;
     }
+    */
 
 
 }/* ##########################################################################################################*/
@@ -1148,19 +1150,6 @@ a {
     .rwd-table th, .rwd-table td:before {
         color: rgb(50, 54, 57);
         font-weight: 500;
-    }
-
-    .small-table {
-        top: -45px;
-        position: relative;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 700;
-        font-size: 1.1rem;
-        line-height: 1;
-        color: rgb(50, 54, 57);
-        text-align: left;
-        border-top: 2px solid gray;
-        vertical-align: middle;
     }
 
 

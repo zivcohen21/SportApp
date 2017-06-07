@@ -3,6 +3,8 @@
  */
 var mongoose = require('mongoose'),
     Court = mongoose.model('Court'),
+    User = mongoose.model('User'),
+    general = require('../../app/controllers/general.server.controller'),
     googleMaps = require('../../app/controllers/googleMaps.server.controller');
 
 var getErrorMessage = function(err)
@@ -140,4 +142,109 @@ var enterLatLngToCourt = function (req, res, court) {
             }
         });
     });
+};
+
+
+exports.getRelevantCourts = function(req, res)
+{
+    var query = url.parse(req.url, true).query;
+    var userId = query.userId;
+    /*var sportType = query.sportType;*/
+    var country = query.country;
+    var city = query.city;
+    var radius = query.radius;
+
+    var funcArr = [];
+    var paramArr = [];
+    var finalArr = [];
+    var arrToReturn = [];
+
+    User.find({_id: userId}).exec(function(err, theUser)
+    {
+        if (err)
+        {
+            return res.status(400).send({ message: getErrorMessage(err) });
+        }
+        else {
+            // User.find({$and: [{sportType: sportType}, {country: country}]}).exec(function(err, relevantUsers)
+            Court.find({country: country}).exec(function(err, relevantCourts)
+            {
+                if (err)
+                {
+                    return res.status(400).send({ message: getErrorMessage(err) });
+                }
+                else if(relevantCourts.length > 0)
+                {
+                    var numOfCourts = relevantCourts.length;
+
+                    console.info("relevantCourts.length: " + relevantCourts.length);
+                    if (city)
+                    {
+                        funcArr.push(general.searchByCityOfItem);
+                        paramArr.push(city);
+                    }
+
+                    for (var i = 0; i < numOfCourts; i++)
+                    {
+                        var isMatch = true;
+                        for (var j = 0; j < funcArr.length; j++)
+                        {
+                            if (!funcArr[j](paramArr[j], relevantCourts[i]))
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+                        if(isMatch) {
+                            finalArr.push(relevantCourts[i]);
+                        }
+                    }
+
+                    if(radius > 0)
+                    {
+                        var theUserLocation = theUser[0].gpsLocation;
+                        var courtCheckedCounter = 0;
+                        var numOfElements = finalArr.length;
+                        for(i = 0; i < numOfElements; i++)
+                        {
+                            var courtLocation = finalArr[i].gpsLocation;
+                            googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, courtLocation, function (a,b,distance) {
+                                distance = distance /1000;
+
+                                console.info("courtCheckedCounter: " + courtCheckedCounter);
+                                console.info("numOfElements: " + numOfElements);
+                                if (distance <= radius) {
+                                    console.info("distance1: " + distance);
+                                    console.info("radius1: " + radius);
+                                    console.info("courtCheckedCounter1: " + courtCheckedCounter);
+                                    arrToReturn.push(finalArr[courtCheckedCounter]);
+                                }
+                                else {
+                                    console.info("courtCheckedCounter2: " + courtCheckedCounter);
+                                    console.info("distance2: " + distance);
+                                    console.info("radius2: " + radius);
+                                }
+                                courtCheckedCounter++;
+                                if (courtCheckedCounter >= numOfElements) {
+                                    console.info("finalArr.length: " + arrToReturn.length);
+                                    res.json(arrToReturn);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        arrToReturn = finalArr;
+                        console.info("arrToReturn.length: " + arrToReturn.length);
+                        res.json(arrToReturn);
+                    }
+                }
+                else {
+                    console.info("relevantCourts: " + relevantCourts);
+                    res.json(relevantCourts);
+                }
+            });
+        }
+
+    });
+
 };

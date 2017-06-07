@@ -21,6 +21,11 @@ angular.module('groups').controller('GroupsController',
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             $scope.inGroupPage = true;
             $scope.isSubmited = false;
+            $scope.checkboxModel = {
+                femaleGroup : true,
+                maleGroup : true
+            };
+            $scope.isSearched = true;
 
             $scope.create = function()
             {
@@ -30,14 +35,18 @@ angular.module('groups').controller('GroupsController',
                 //console.info("document.getElementById('image').value " + document.getElementById("image").value);
                 var group = new Groups(
                 {
-                    title: this.title,
+                    title: document.getElementById("title").value,
                     members: allIds,
                     theSportType:  document.getElementById("sportType").value,
                     defaultCourt:  document.getElementById("court").value,
-                   // image: document.getElementById("image").value,
-                    isSearched: $scope.isSearched
+                    minAge: document.getElementById("minAgeGroup").value,
+                    maxAge: document.getElementById("maxAgeGroup").value,
+                    forFemale: $scope.checkboxModel.femaleGroup,
+                    forMale: $scope.checkboxModel.maleGroup,
+                    isSearched: document.getElementById("isSearched").value
 
                 });
+
                 group.$save(function(response)
                 {
 
@@ -73,6 +82,8 @@ angular.module('groups').controller('GroupsController',
             $scope.update = function()
             {
                 $scope.isSubmited = true;
+                console.info("group.forFemale " + $scope.group.forFemale);
+                console.info("group.forMale " + $scope.group.forMale);
                 $scope.group.$update(function()
                 {
                     $location.path('groups/allGroups/' + $scope.group._id);
@@ -108,7 +119,9 @@ angular.module('groups').controller('GroupsController',
 
             $scope.myGroups = function () {
                 $scope.menuSelection = 1;
-                $scope.myGroupsList = GetMyGroups.query();
+                $scope.myGroupsList = GetMyGroups.query({
+                    userId: $scope.authentication.user.id
+                });
             };
 
             $scope.allUsers = function () {

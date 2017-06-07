@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<circle fill="#80DEEA" stroke="#231F20" stroke-miterlimit="10" cx="64" cy="64" r="64"/>
+<g>
+	<g>
+		<polygon fill="none" points="55.217,56.334 39.369,40.674 39.363,40.675 55.16,56.319 		"/>
+		<polygon fill="#EF5350" points="57.521,57.552 80.305,88.314 88.523,80.097 		"/>
+		<path fill="#FBC02D" d="M80.191,88.267c-0.438,0.438-0.682,1.022-0.684,1.644c-0.004,0.62,0.232,1.2,0.666,1.632l4.152,4.152
+			c1.572,1.573,3.672,2.439,5.906,2.44c2.27,0,4.406-0.888,6.02-2.5c3.305-3.305,3.332-8.654,0.061-11.926l-4.152-4.152
+			c-0.43-0.43-1.006-0.666-1.621-0.666c-0.625,0-1.213,0.243-1.654,0.685L80.191,88.267z"/>
+		<polygon fill="#BF360C" points="56.443,56.313 40.645,40.663 33.285,40.663 25.295,48.542 		"/>
+		<path fill="#E57373" d="M56.602,56.359l-7.74-31.739l-8.217,8.003c0,0,0,8.05,0.006,8.05l15.85,15.66L56.602,56.359z"/>
+		<polygon fill="#D50000" points="55.346,56.459 55.32,56.359 55.217,56.334 		"/>
+	</g>
+	<g>
+		<path fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M95.898,83.482c3.402,3.402,3.373,8.944-0.061,12.379c-3.436,3.435-8.977,3.463-12.379,0.061"/>
+		<path fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M84.801,82.563l-5.477,5.478c-1.029,1.03-1.039,2.708-0.018,3.729l3.939,3.941"/>
+		<path fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M95.688,83.271l-3.941-3.941c-1.02-1.021-2.699-1.012-3.729,0.019l-0.492,0.492"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="95.838" y1="95.861" x2="103.977" y2="104"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="79.203" y1="87.918" x2="56.639" y2="56.663"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="87.939" y1="79.226" x2="56.662" y2="56.641"/>
+		
+			<line fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="56.639" y1="56.663" x2="42.998" y2="43.021"/>
+		
+			<polyline fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+			40.021,40.342 32.512,40.342 24.023,48.717 56.582,56.833 		"/>
+		
+			<polyline fill="none" stroke="#263238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+			39.701,40.021 39.701,32.489 48.408,24 56.357,56.57 		"/>
+	</g>
+</g>
+</svg>

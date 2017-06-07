@@ -13,6 +13,7 @@ module.exports = function(app)
         failureFlash: true
     }));
     app.route('/api/getRelevantUsers').get(users.getRelevantUsers);
+    app.route('/api/saveTimesHome').post(users.saveTimesHome);
     app.route('/api/users')
         .get(users.list);
     app.route('/api/users/:userId')
@@ -22,7 +23,6 @@ module.exports = function(app)
 /*    app.route('/api/removeUser/:userId').delete(users.requiresLogin, users.delete);*/
         /*.delete(users.requiresLogin, users.hasAuthorization, users.delete);*/
     app.route('/api/users/enterAddress').post(users.enterAddress);
-    app.route('/api/users/saveUsersTimes').post(users.saveUsersTimes);
 
     app.param('userId', users.userByID);
 
