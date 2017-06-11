@@ -56,10 +56,6 @@
     content: "\e9b2";
 }
 
-.icon-settings:before {
-    content: "\e994";
-}
-
 .icon-notifics:before {
     content: "\e951";
 }
@@ -170,9 +166,6 @@ a, button {
 .nav li:nth-child(9n+8) {
     background: #12679b;
 }
-.nav li:nth-child(9n+9) {
-    background: #097191;
-}
 
 /*.head-Home {background-color: rgb(208, 101, 3)}
 .head-Notifications {background-color: rgb(233, 147, 26)}
@@ -204,7 +197,7 @@ a, button {
      /* Transforms the list into a horizontal navigation */
     .nav li {
         float: left;
-        width: 12.5%;
+        width: 14.28571%;
         text-align: center;
         -webkit-transition: border .5s;
         -moz-transition: border .5s;
@@ -218,51 +211,45 @@ a, button {
     }
 
     /* hover, focused and active effects that add a little colored border to the different items */
-    .nav li:nth-child(8n+1) a:hover,
-    .nav li:nth-child(8n+1) a:active,
-    .nav li:nth-child(8n+1) a:focus {
+    .nav li:nth-child(7n+1) a:hover,
+    .nav li:nth-child(7n+1) a:active,
+    .nav li:nth-child(7n+1) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+2) a:hover,
-    .nav li:nth-child(8n+2) a:active,
-    .nav li:nth-child(8n+2) a:focus {
+    .nav li:nth-child(7n+2) a:hover,
+    .nav li:nth-child(7n+2) a:active,
+    .nav li:nth-child(7n+2) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+3) a:hover,
-    .nav li:nth-child(8n+3) a:active,
-    .nav li:nth-child(8n+3) a:focus {
+    .nav li:nth-child(7n+3) a:hover,
+    .nav li:nth-child(7n+3) a:active,
+    .nav li:nth-child(7n+3) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+4) a:hover,
-    .nav li:nth-child(8n+4) a:active,
-    .nav li:nth-child(8n+4) a:focus {
+    .nav li:nth-child(7n+4) a:hover,
+    .nav li:nth-child(7n+4) a:active,
+    .nav li:nth-child(7n+4) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+5) a:hover,
-    .nav li:nth-child(8n+5) a:active,
-    .nav li:nth-child(8n+5) a:focus {
+    .nav li:nth-child(7n+5) a:hover,
+    .nav li:nth-child(7n+5) a:active,
+    .nav li:nth-child(7n+5) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+6) a:hover,
-    .nav li:nth-child(8n+6) a:active,
-    .nav li:nth-child(8n+6) a:focus {
+    .nav li:nth-child(7n+6) a:hover,
+    .nav li:nth-child(7n+6) a:active,
+    .nav li:nth-child(7n+6) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
-    .nav li:nth-child(8n+7) a:hover,
-    .nav li:nth-child(8n+7) a:active,
-    .nav li:nth-child(8n+7) a:focus {
-        border-bottom: 4px solid #167fc3;
-    }
-
-    .nav li:nth-child(8n+8) a:hover,
-    .nav li:nth-child(8n+8) a:active,
-    .nav li:nth-child(8n+8) a:focus {
+    .nav li:nth-child(7n+7) a:hover,
+    .nav li:nth-child(7n+7) a:active,
+    .nav li:nth-child(7n+7) a:focus {
         border-bottom: 4px solid #167fc3;
     }
 
@@ -541,7 +528,7 @@ a, button {
     font-family: 'Lato',Calibri,Arial,sans-serif;
     font-weight: normal;
     text-align: left;
-    color: rgb(7, 16, 15);
+    color: white;
     font-size: 1.5em;
     background: none;
     border: none;
@@ -614,7 +601,7 @@ a, button {
 
     /* When JavaScript is disabled, we hide the menu */
     .no-js .nav ul {
-        max-height: 30em;
+        max-height: 0;
         overflow: hidden;
     }
 

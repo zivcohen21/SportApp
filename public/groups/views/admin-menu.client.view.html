@@ -1,4 +1,4 @@
-<div class="admin-section_groups" ng-if="authentication.user._id == group.creator._id || !isInGroup">
+<div class="admin-section_groups">
     <span ng-if="windWidth < 799 && inGroupPage" style="font-size:25px; " class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <span ng-if="windWidth < 799 && !inGroupPage" style="font-size:25px; color: white" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content-groups">
@@ -11,6 +11,7 @@
         <button ng-if="!isInGroup && !isInWaitingList" class="admin-button" ng-click="askToJoinToGroup()">Ask To Join</button>
         <button ng-if="!isInGroup && isInWaitingList" class="admin-button">Waiting For Answer</button>
         <button ng-if="isInGroup" class="admin-button" ng-click="adminSelect(7, 'sportEvts/create/' + group._id);">Create Group Event</button>
+        <button ng-if="isInGroup" class="admin-button" ng-click="leaveGroup();">Leave Group</button>
     </div>
 </div>
 

@@ -1,0 +1,9 @@
+<div class="admin-section">
+    <span ng-if="windWidth < 799" style="font-size:25px;" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
+    <div class="dropdown-content">
+
+        <button class="admin-button" ng-click="adminSelect(1, 'sportTypes/' + sportType._id)" ng-class="{'admin-selection-btn': adminSelection==1}">SPORT PAGE</button>
+        <button class="admin-button" ng-click="adminSelect(2, 'sportTypes/' + sportType._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">EDIT SPORT</button>
+
+    </div>
+</div>

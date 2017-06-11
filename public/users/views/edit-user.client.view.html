@@ -116,7 +116,19 @@
             </il>
         </div>
     </div>
-    <table class="rwd-table-users" ng-if="windWidth >= 800">
+
+    <table class="participants-table-groupPage" style="width: 30%;" ng-if="windWidth > 800">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="row-sport" ng-repeat="sportType in sportTypeList | filter: searchKeyword"  ng-click="addSportsList(sportType)" ng-class="{'selected_user': sportsToAdd.indexOf(sportType) != -1 }">
+            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
+            <td data-th="Name">{{sportType.title}}</td>
+        </tr>
+    </table>
+
+   <!-- <table class="rwd-table-users" ng-if="windWidth >= 800">
         <tr>
             <th>Icon</th>
             <th>Name</th>
@@ -126,19 +138,30 @@
             <td data-th="Name">{{sportType.title}}</td>
         </tr>
 
-    </table>
+    </table>-->
 
+    <table class="participants-table-groupPage" style="width: 90%;" ng-if="windWidth < 799">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="row-sport" ng-repeat="sportType in sportTypeList | filter: searchKeyword" ng-click="addSportsList(sportType)" ng-class="{'selected_user': sportsToAdd.indexOf(sportType) != -1 }">
+            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
+            <td data-th="Name">{{sportType.title}}</td>
+        </tr>
+    </table>
+<!--
     <div class="small-table-users" ng-if="isShowSports && windWidth < 799">
         <div class="sportType-header" ng-repeat="sportType in sportTypeList | filter: searchKeyword" ng-click="addSportsList(sportType)" ng-class="{'selected_user': sportsToAdd.indexOf(sportType) != -1 }">
             <div class="left-side-sportType">
-                <!--<i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>-->
-                <!-- <span class= "picture-part" data-ng-bind="group.image"></span>-->
+                &lt;!&ndash;<i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>&ndash;&gt;
+                &lt;!&ndash; <span class= "picture-part" data-ng-bind="group.image"></span>&ndash;&gt;
             </div>
             <div class="center-side-sportType">
                 <span class= "title-part" data-ng-bind="sportType.title"></span>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="center-button">
         <button type="submit" class="pure-button pure-button-primary" ng-click="update()">Save</button>

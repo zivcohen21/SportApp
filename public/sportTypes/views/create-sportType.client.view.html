@@ -8,7 +8,12 @@
                     <label for="title">Name*</label>
                     <input type="text" data-ng-model="title" id="title" class="pure-u-18-24 pure-u-md-7-24" required>
                 </div>
+                <div class="pure-u-1 pure-u-md-1">
+                    <label for="icon">Icon (url of svg file from images folder. ex: /images/football.svg)</label>
+                    <input type="text" name="file" id="icon" data-ng-model="icon"/>
+                </div>
             </div>
+
             <div class="center-button">
                 <button type="submit" class="pure-button pure-button-primary" ng-disabled="isSubmited">Submit</button>
             </div>

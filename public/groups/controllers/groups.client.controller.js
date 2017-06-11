@@ -73,8 +73,9 @@ angular.module('groups').controller('GroupsController',
 
                     // console.info("response: " + JSON.stringify(response));
                     $scope.group = response;
-                    $scope.theSportType = response.theSportType;
-                    $scope.theCourt = response.defaultCourt;
+                    $scope.theSportType = $scope.group.theSportType;
+                    $scope.theCourt = $scope.group.defaultCourt;
+                    $scope.sportEvts = $scope.group.sportEvts;
                     checkIfInGroup($scope.group);
                     console.info("findOne " + $routeParams.groupId);
                 });
@@ -148,13 +149,20 @@ angular.module('groups').controller('GroupsController',
             $scope.usersInGroup = function () {
                 $scope.adminSelection = 6;
                 $scope.inGroupPage = false;
+                $scope.usersListInGroup = [];
                 Groups.get({
                     groupId: $routeParams.groupId
                 }).$promise.then(function (response) {
                    // $scope.adminSelection = index;
                     // console.info("response: " + JSON.stringify(response));
                     $scope.group = response;
-                    $scope.usersListInGroup = $scope.group.members;
+                    for(var i = 0; i < $scope.group.members.length; i++)
+                    {
+                        if($scope.group.members[i].id != $scope.authentication.user.id)
+                        {
+                            $scope.usersListInGroup.push($scope.group.members[i])
+                        }
+                    }
                     checkIfInGroup($scope.group);
                 });
 
@@ -199,6 +207,7 @@ angular.module('groups').controller('GroupsController',
                 {
 
                     $location.path('groups/allGroups/' + response._id);
+
                 },
                 function(errorResponse)
                 {
@@ -207,20 +216,26 @@ angular.module('groups').controller('GroupsController',
 
             };
 
-            $scope.removeUsersFromGroup = function () {
+            $scope.removeUsers = function () {
 
                 $scope.isSubmited = true;
                 var allIds = getMultiSelection($scope.usersToRemove);
+                removeUsersFromGroup(allIds)
+            };
+
+            var removeUsersFromGroup = function (allIds) {
+
+                $scope.isSubmited = true;
                 var removeMembers = new RemoveUsersFromGroup({"allIds": allIds, "groupId": $routeParams.groupId});
                 removeMembers.$save(function(response)
-                {
-
-                    $location.path('groups/allGroups/' + response._id);
-                },
-                function(errorResponse)
-                {
-                    $scope.error = errorResponse.data.message;
-                });
+                    {
+                        $location.path('groups/allGroups/' + response._id);
+                        $route.reload();
+                    },
+                    function(errorResponse)
+                    {
+                        $scope.error = errorResponse.data.message;
+                    });
             };
 
             var getMultiSelection = function (listOfUsers) {
@@ -266,7 +281,7 @@ angular.module('groups').controller('GroupsController',
                     GetSportEvtsOfGroup.query({
                         groupId: group._id
                     }).$promise.then(function (response) {
-                        $scope.sportEvtOfGroup = response;
+                        $scope.sportEvts = response;
                     });
                 }
                 else {
@@ -364,6 +379,12 @@ angular.module('groups').controller('GroupsController',
                 else if($scope.index == -1) {
                     $scope.usersToRemove.push(member);
                 }
+            };
+
+            $scope.leaveGroup = function () {
+                var removeUser = [];
+                removeUser.push($scope.authentication.user.id);
+                removeUsersFromGroup(removeUser)
             };
 
         }

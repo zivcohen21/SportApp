@@ -63,6 +63,7 @@ exports.update = function(req, res)
 {
     var sportType = req.sportType;
     sportType.title = req.body.title;
+    sportType.icon = req.body.icon;
     sportType.save(function(err)
     {
         if (err)

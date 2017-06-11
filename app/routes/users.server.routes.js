@@ -9,7 +9,7 @@ module.exports = function(app)
     app.route('/signin').get(users.renderSignin).post(passport.authenticate('local',
     {
         successRedirect: '/',
-        failureRedirect: '/signin',
+        failureRedirect: '/',
         failureFlash: true
     }));
     app.route('/api/getRelevantUsers').get(users.getRelevantUsers);

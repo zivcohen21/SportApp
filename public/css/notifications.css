@@ -81,7 +81,8 @@ body {
         position: absolute;
         top: 10px;
         left: 5%;
-        font-size: 1.25em;
+        width: 85%;
+        font-size: 1.15em;
         font-weight: 600;
         line-height: 1.5;
     }
@@ -110,8 +111,7 @@ body {
     .header-center {
         height: 110px;
         /*border-right: 3px solid black;*/
-        margin-top: -5px;
-        width: 80%;
+        width: 90%;
         left: 0;
         right: 0;
     }

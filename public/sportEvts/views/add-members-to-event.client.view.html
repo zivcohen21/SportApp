@@ -1,6 +1,8 @@
 <section data-ng-controller="SportEvtsController" data-ng-init="allUsersAndGroupsNotInEvent()">
     <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
     <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
+    <div ng-include="'users/views/users-groups-lists.client.view.html'"></div>
+<!--
 
     <div class="add-userAndGroups">
         <div class="add-users-side-with-admin-section">
@@ -53,7 +55,7 @@
                 <div class="user-header" ng-repeat="user in usersNotInEvent | filter: searchKeywordUsers" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
                     <div class="left-side-user">
                         <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                        <!--<span data-ng-bind="group.image"></span>-->
+                        &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
                     </div>
                     <div class="center-side-user">
                         <span class= "name-part" data-ng-bind="user.fullName"></span>
@@ -114,7 +116,7 @@
                 <div class="user-header" ng-repeat="group in groupsNotInEvent | filter: searchKeywordGroups" ng-click="addGroupsList(group)" ng-class="{'selected_user': groupsToAdd.indexOf(group) != -1 }">
                     <div class="left-side-add-group">
                         <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>
-                        <!--<span data-ng-bind="group.image"></span>-->
+                        &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
                     </div>
                     <div class="center-side-add-group">
                         <span class= "title-part" data-ng-bind="group.title"></span>
@@ -125,6 +127,7 @@
             </div>
         </div>
     </div>
+-->
 
 
     <div class="center-button">

@@ -65,7 +65,7 @@
             </div>
 
             <div ng-if="eventListOpen!=null" class="userPage-eventList">
-                <div ng-if="windWidth >= 800">
+<!--                <div ng-if="windWidth >= 800">
                     <div class="sportEvts-top">
                         <div class="mobile-app-toggle-userPage">
                             <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
@@ -90,9 +90,8 @@
                         </span>
                         </div>
                     </div>
-                </div>
-                <div class="sportEvts-userPage" ng-include="'sportEvts/views/sportEvts-list.client.view.html'"></div>
-                <!--<div ng-if="windWidth >= 800">
+                </div>-->
+                <div ng-if="windWidth >= 800">
                     <div class="sportEvts-top">
                         <div class="mobile-app-toggle-userPage">
                             <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
@@ -112,7 +111,7 @@
                             <th>Court</th>
                             <th>Participants</th>
                         </tr>
-                        <tr ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+                        <tr ng-repeat="sportEvt in sportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
                             <td data-th="Sport" ng-if="checkIfShow(sportEvt)">{{sportEvt.sportType.title}}</td>
                             <td data-th="Date" ng-if="checkIfShow(sportEvt)">{{sportEvt.dateEvtAsString}}</td>
                             <td data-th="Time" ng-if="checkIfShow(sportEvt)">{{sportEvt.startTimeAsString}}</td>
@@ -135,7 +134,7 @@
                         </div>
                     </div>
                     <div class="small-table-userPage">
-                        <div class="sportEvt-header" ng-repeat="sportEvt in mySportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)" ng-if="checkIfShow(sportEvt)">
+                        <div class="sportEvt-header" ng-repeat="sportEvt in sportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)" ng-if="checkIfShow(sportEvt)">
                             <div class="left-side-event">
                                 <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
                                 <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
@@ -150,7 +149,7 @@
                             </div>
                         </div>
                     </div>
-                </div>-->
+                </div>
 
             </div>
         </div>

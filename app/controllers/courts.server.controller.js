@@ -4,6 +4,7 @@
 var mongoose = require('mongoose'),
     Court = mongoose.model('Court'),
     User = mongoose.model('User'),
+    url = require('url'),
     general = require('../../app/controllers/general.server.controller'),
     googleMaps = require('../../app/controllers/googleMaps.server.controller');
 

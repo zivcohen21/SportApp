@@ -583,12 +583,11 @@ var matchByGender = function(param)
 
 exports.rejectEvents = function (user) {
 
-    console.info("NEW");
     var rejectEventsResults;
     if(!user.rejectEventsResults)
     {
         console.info(user.id + "NEW");
-        rejectEventsResults = module.exports.initialRejectArray(user);
+
     }
     else {
         rejectEventsResults = user.rejectEventsResults;
@@ -596,156 +595,161 @@ exports.rejectEvents = function (user) {
     if(user.myRejectedSportEvts)
     {
         var rejectEvents = user.myRejectedSportEvts;
-        for(var rejectEvtIndex = 0; rejectEvtIndex < rejectEvents.length; rejectEvtIndex++)
-        {
-            rejectEventsResults = module.exports.addRejectEvt(user, rejectEventsResults, rejectEvents[rejectEvtIndex]);
-        }
+        rejectEventsResults = module.exports.setResultsRejectEvents(user, rejectEvents);
+
        console.info("rejectEventsResults: " + JSON.stringify(rejectEventsResults));
-        return rejectEventsResults;
+
     }
+    return rejectEventsResults;
 };
 
-exports.addRejectEvt = function (user, rejectEventsResults, theEvent) {
+exports.setResultsRejectEvents = function (user, rejectEvents) {
 
-     if(theEvent.dateEvtAsString)
+    var rejectEventsResults = module.exports.initialRejectArray(user);
+    for(var rejectEvtIndex = 0; rejectEvtIndex < rejectEvents.length; rejectEvtIndex++)
     {
-        var day = new Date(theEvent.dateEvtAsString).getDay();
-        if(rejectEventsResults.day[day])
+        var theEvent = rejectEvents[rejectEvtIndex];
+        if(theEvent.dateEvtAsString)
         {
-            rejectEventsResults.day[day]++;
+            var day = new Date(theEvent.dateEvtAsString).getDay();
+            if(rejectEventsResults.day[day])
+            {
+                rejectEventsResults.day[day]++;
+            }
+            else
+            {
+                rejectEventsResults.day[day] = 1;
+            }
+        }
+        if(theEvent.startTimeAsString)
+        {
+            var startTimeInHour = (Number(theEvent.startTimeAsString.split(":")[0])*60
+            + Number(theEvent.startTimeAsString.split(":")[1]));
+            startTimeInHour = startTimeInHour / 60;
+            if(rejectEventsResults.startTimeInHour[startTimeInHour])
+            {
+                rejectEventsResults.startTimeInHour[startTimeInHour]++;
+            }
+            else
+            {
+                rejectEventsResults.startTimeInHour[startTimeInHour] = 1;
+            }
+        }
+        if(theEvent.duration)
+        {
+            if(rejectEventsResults.duration.length)
+            {
+                rejectEventsResults.duration.length++;
+            }
+            else
+            {
+                rejectEventsResults.duration.length = 1;
+            }
+            rejectEventsResults.duration.avg = (rejectEventsResults.duration.avg + theEvent.duration) / rejectEventsResults.duration.length;
+        }
+        if(theEvent.minNumOfMembers)
+        {
+            if(rejectEventsResults.minNumOfMembers.length)
+            {
+                rejectEventsResults.minNumOfMembers.length++;
+            }
+            else
+            {
+                rejectEventsResults.minNumOfMembers.length = 1;
+            }
+            rejectEventsResults.minNumOfMembers.avg = (rejectEventsResults.minNumOfMembers.avg + theEvent.minNumOfMembers) / rejectEventsResults.minNumOfMembers.length;
+        }
+        if(theEvent.maxNumOfMembers)
+        {
+            if(rejectEventsResults.maxNumOfMembers.length)
+            {
+                rejectEventsResults.maxNumOfMembers.length++;
+            }
+            else
+            {
+                rejectEventsResults.maxNumOfMembers.length = 1;
+            }
+            rejectEventsResults.maxNumOfMembers.avg = (rejectEventsResults.maxNumOfMembers.avg + theEvent.maxNumOfMembers) / rejectEventsResults.maxNumOfMembers.length;
+        }
+        if(theEvent.optNumOfMembers)
+        {
+            if(rejectEventsResults.optNumOfMembers.length)
+            {
+                rejectEventsResults.optNumOfMembers.length++;
+            }
+            else
+            {
+                rejectEventsResults.optNumOfMembers.length = 1;
+            }
+            rejectEventsResults.optNumOfMembers.avg = (rejectEventsResults.optNumOfMembers.avg + theEvent.optNumOfMembers) / rejectEventsResults.optNumOfMembers.length;
+        }
+        if(theEvent.minAge)
+        {
+            if(rejectEventsResults.minAge.length)
+            {
+                rejectEventsResults.minAge.length++;
+            }
+            else
+            {
+                rejectEventsResults.minAge.length = 1;
+            }
+            rejectEventsResults.minAge.avg = (rejectEventsResults.minAge.avg + theEvent.minAge) / rejectEventsResults.minAge.length;
+        }
+        if(theEvent.maxAge)
+        {
+            if(rejectEventsResults.maxAge.length)
+            {
+                rejectEventsResults.maxAge.length++;
+            }
+            else
+            {
+                rejectEventsResults.maxAge.length = 1;
+            }
+            rejectEventsResults.maxAge.avg = (rejectEventsResults.maxAge.avg + theEvent.maxAge) / rejectEventsResults.maxAge.length;
+        }
+        if(theEvent.forFemale)
+        {
+            rejectEventsResults.forFemale.yes++;
         }
         else
         {
-            rejectEventsResults.day[day] = 1;
+            rejectEventsResults.forFemale.no++;
         }
-    }
-    if(theEvent.startTimeAsString)
-    {
-        var startTimeInHour = (Number(theEvent.startTimeAsString.split(":")[0])*60
-        + Number(theEvent.startTimeAsString.split(":")[1]));
-        startTimeInHour = startTimeInHour / 60;
-        if(rejectEventsResults.startTimeInHour[startTimeInHour])
+        if(theEvent.forMale)
         {
-            rejectEventsResults.startTimeInHour[startTimeInHour]++;
+            rejectEventsResults.forMale.yes++;
         }
         else
         {
-            rejectEventsResults.startTimeInHour[startTimeInHour] = 1;
+            rejectEventsResults.forMale.no++;
         }
-    }
-    if(theEvent.duration)
-    {
-        if(rejectEventsResults.duration.length)
+        if(theEvent.court)
         {
-            rejectEventsResults.duration.length++;
+            rejectEventsResults.court.push(theEvent.court);
         }
-        else
+        if(theEvent.groups.length > 0)
         {
-            rejectEventsResults.duration.length = 1;
+            for(var i = 0; i < theEvent.groups.length; i++)
+            {
+                rejectEventsResults.groups.push(theEvent.groups[i]);
+            }
         }
-        rejectEventsResults.duration.avg = (rejectEventsResults.duration.avg + theEvent.duration) / rejectEventsResults.duration.length;
-    }
-    if(theEvent.minNumOfMembers)
-    {
-        if(rejectEventsResults.minNumOfMembers.length)
+        if(theEvent.sportType)
         {
-            rejectEventsResults.minNumOfMembers.length++;
+            rejectEventsResults.sportType.push(theEvent.sportType);
         }
-        else
+        if(theEvent.creator)
         {
-            rejectEventsResults.minNumOfMembers.length = 1;
+            rejectEventsResults.creator.push(theEvent.creator);
         }
-        rejectEventsResults.minNumOfMembers.avg = (rejectEventsResults.minNumOfMembers.avg + theEvent.minNumOfMembers) / rejectEventsResults.minNumOfMembers.length;
-    }
-    if(theEvent.maxNumOfMembers)
-    {
-        if(rejectEventsResults.maxNumOfMembers.length)
+        User.update({_id: user.id}, {rejectEventsResults: rejectEventsResults}).exec(function(err)
         {
-            rejectEventsResults.maxNumOfMembers.length++;
-        }
-        else
-        {
-            rejectEventsResults.maxNumOfMembers.length = 1;
-        }
-        rejectEventsResults.maxNumOfMembers.avg = (rejectEventsResults.maxNumOfMembers.avg + theEvent.maxNumOfMembers) / rejectEventsResults.maxNumOfMembers.length;
+            if (err){
+            }
+            else {}
+        });
     }
-    if(theEvent.optNumOfMembers)
-    {
-        if(rejectEventsResults.optNumOfMembers.length)
-        {
-            rejectEventsResults.optNumOfMembers.length++;
-        }
-        else
-        {
-            rejectEventsResults.optNumOfMembers.length = 1;
-        }
-        rejectEventsResults.optNumOfMembers.avg = (rejectEventsResults.optNumOfMembers.avg + theEvent.optNumOfMembers) / rejectEventsResults.optNumOfMembers.length;
-    }
-    if(theEvent.minAge)
-    {
-        if(rejectEventsResults.minAge.length)
-        {
-            rejectEventsResults.minAge.length++;
-        }
-        else
-        {
-            rejectEventsResults.minAge.length = 1;
-        }
-        rejectEventsResults.minAge.avg = (rejectEventsResults.minAge.avg + theEvent.minAge) / rejectEventsResults.minAge.length;
-    }
-    if(theEvent.maxAge)
-    {
-        if(rejectEventsResults.maxAge.length)
-        {
-            rejectEventsResults.maxAge.length++;
-        }
-        else
-        {
-            rejectEventsResults.maxAge.length = 1;
-        }
-        rejectEventsResults.maxAge.avg = (rejectEventsResults.maxAge.avg + theEvent.maxAge) / rejectEventsResults.maxAge.length;
-    }
-    if(theEvent.forFemale)
-    {
-        rejectEventsResults.forFemale.yes++;
-    }
-    else
-    {
-        rejectEventsResults.forFemale.no++;
-    }
-    if(theEvent.forMale)
-    {
-        rejectEventsResults.forMale.yes++;
-    }
-    else
-    {
-        rejectEventsResults.forMale.no++;
-    }
-    if(theEvent.court)
-    {
-        rejectEventsResults.court.push(theEvent.court);
-    }
-    if(theEvent.groups.length > 0)
-    {
-        for(var i = 0; i < theEvent.groups.length; i++)
-        {
-            rejectEventsResults.groups.push(theEvent.groups[i]);
-        }
-    }
-    if(theEvent.sportType)
-    {
-        rejectEventsResults.sportType.push(theEvent.sportType);
-    }
-    if(theEvent.creator)
-    {
-        rejectEventsResults.creator.push(theEvent.creator);
-    }
-    User.update({_id: user.id}, {rejectEventsResults: rejectEventsResults}).exec(function(err)
-    {
-        if (err){
-        }
-        else {}
-    });
+
     return rejectEventsResults;
 };
 

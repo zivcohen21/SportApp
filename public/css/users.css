@@ -26,14 +26,6 @@ a {
     color: white;
 }
 
-.userPage{
-    position: inherit;
-    color: rgb(50, 54, 57);
-    line-height: 2;
-    font-weight: 600;
-    margin-bottom: 50px;
-}
-
 .rwd-table-users th {
     display: none;
 }
@@ -54,6 +46,14 @@ a {
 }
 
 @media screen and (min-width: 800px) {
+
+    .userPage{
+        position: relative;
+        color: rgb(50, 54, 57);
+        line-height: 2;
+        margin-bottom: 50px;
+        top: 40px;
+    }
 
     .users-menu {
         position: relative;
@@ -207,7 +207,7 @@ a {
 
     .userPage-main-part {
         position: relative;
-        width: 40%;
+        width: 60%;
         margin: auto;
         text-align: center;
     }
@@ -215,7 +215,7 @@ a {
     .userPage-details {
         position: relative;
         margin: auto;
-        width: 80%;
+        width: 50%;
         border-bottom: 1px dashed rgb(50, 54, 57);
         padding-bottom: 30px;
         text-align: left;
@@ -225,7 +225,7 @@ a {
         position: relative;
         font-size: 18px;
         height: 100%;
-        width: 80%;
+        width: 100%;
         margin: auto;
         text-align: center;
         top: 80px;
@@ -245,9 +245,8 @@ a {
 
     .userPage-eventList {
         position: relative;
-        font-size: 18px;
         height: 100%;
-        width: 80%;
+        width: 100%;
         margin: auto;
         text-align: center;
         top: 80px;
@@ -438,6 +437,9 @@ a {
         box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
     }
 
+    .row-sport {
+        width: 10%;
+    }
 
     .pure-g > div {
         -webkit-box-sizing: border-box;
@@ -695,6 +697,13 @@ a {
 }/* ##########################################################################################################*/
 
 @media screen and (max-width: 800px) {
+
+    .userPage{
+        position: relative;
+        color: rgb(50, 54, 57);
+        line-height: 2;
+        margin-bottom: 50px;
+    }
 
     .users-menu {
         position: relative;
@@ -1231,7 +1240,6 @@ a {
         font-weight: 700;
         font-size: 0.8rem;
         line-height: 1;
-        top: 50px;
         color: rgb(50, 54, 57);
         text-align: left;
         border-top: 2px solid gray;
@@ -1288,8 +1296,7 @@ a {
         background-color: white;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         width: 95%;
-        margin: auto;
-        top: 30px;
+        margin: 20px auto 20px auto;
     }
 
     .user-to-add {
@@ -1513,13 +1520,16 @@ a {
         text-align: left;
         float: left;
         clear: left;
-        top: 35%;
+        top: 14px;
     }
 
     .center-button-users {
         text-align: center;
         margin: auto auto auto auto;
         width: 100%;
+        font-size: 14px;
+        font-weight: 700;
+        height: 35px;
     }
 
     .day-times-btns {
@@ -1530,6 +1540,19 @@ a {
     .sportEvts-userPage {
         position: relative;
         top: 70px;
+    }
+
+    .add-users-groups-top {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        top: -30px;
+        text-align: center;
+        background-color: rgb(50, 54, 57);
     }
 }
 

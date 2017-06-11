@@ -18,11 +18,6 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
         $scope.showTimes = true;
         $scope.allDays = [];
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        $scope.showOne = function (currentModule){
-
-            $scope.currentModuleInApp = currentModule;
-
-        };
 
         $scope.getHomePage = function () {
             $scope.getMyNextSportEvts();
@@ -159,9 +154,9 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
             var courtsDetails = {
                 userId: $scope.authentication.user._id,
-                sportType: document.getElementById("sportTypeEvent").value,
-                country: document.getElementById("countryEvent").value,
-                city: document.getElementById("cityEvent").value,
+                sportType: document.getElementById("sportTypeCourt").value,
+                country: document.getElementById("countryCourt").value,
+                city: document.getElementById("cityCourt").value,
                 radius: $scope.radiusCourt.dozens
             };
             GetRelevantCourts.searchCourts(
@@ -213,6 +208,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 $scope.showUsersForm = false;
                 $scope.showCourtsForm = false;
                 $scope.showGroupsForm = false;
+                $scope.showTimes = false;
             }
             else if(index==2)
             {
@@ -227,6 +223,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 $scope.showEventsForm = false;
                 $scope.showCourtsForm = false;
                 $scope.showGroupsForm = false;
+                $scope.showTimes = false;
             }
             else if(index==3)
             {
@@ -241,6 +238,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 $scope.showUsersForm = false;
                 $scope.showEventsForm = false;
                 $scope.showGroupsForm = false;
+                $scope.showTimes = false;
             }
             else if (index == 4)
             {
@@ -255,6 +253,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 $scope.showCourtsForm = false;
                 $scope.showUsersForm = false;
                 $scope.showEventsForm = false;
+                $scope.showTimes = false;
             }
 
          /*  if(index==1)
@@ -555,35 +554,6 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 });
         };
 
-        var changeClass = function (r,className1,className2) {
-            var regex = new RegExp("(?:^|\\s+)" + className1 + "(?:\\s+|$)");
-            if( regex.test(r.className) ) {
-                r.className = r.className.replace(regex,' '+className2+' ');
-            }
-            else{
-                r.className = r.className.replace(new RegExp("(?:^|\\s+)" + className2 + "(?:\\s+|$)"),' '+className1+' ');
-            }
-            return r.className;
-        };
-
-        //  Creating our button in JS for smaller screens
-       // var menuElements = document.getElementById('mainMenu');
-       // menuElements.insertAdjacentHTML('afterBegin','<button type="button" id="menutoggle" class="navtoogle" aria-hidden="true"><i aria-hidden="true" class="icon-menu"> </i> Menu</button>');
-
-        //  Toggle the class on click to show / hide the menu
-        document.getElementById('menutoggle').onclick = function() {
-            changeClass(this, 'navtoogle active', 'navtoogle');
-        };
-
-        // http://tympanus.net/codrops/2013/05/08/responsive-retina-ready-menu/comment-page-2/#comment-438918
-        document.onclick = function(e) {
-            var mobileButton = document.getElementById('menutoggle'),
-                buttonStyle =  mobileButton.currentStyle ? mobileButton.currentStyle.display : getComputedStyle(mobileButton, null).display;
-
-            if(buttonStyle === 'block' && e.target !== mobileButton && new RegExp(' ' + 'active' + ' ').test(' ' + mobileButton.className + ' ')) {
-                changeClass(mobileButton, 'navtoogle active', 'navtoogle');
-            }
-        }
 
     }
 ]);

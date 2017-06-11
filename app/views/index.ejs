@@ -47,7 +47,11 @@
         <script type="text/javascript" src="/chat/config/chat.client.routes.js"></script>
 
         <script type="text/javascript" src="/application.js"></script>
-        <script type="text/javascript" src="/home/controllers/mod.custom.js"></script>
+        <script type="text/javascript" src="/menu/controllers/mod.custom.js"></script>
+        <script type="text/javascript" src="/menu/menu.client.module.js"></script>
+        <script type="text/javascript" src="/menu/controllers/menu.client.controller.js"></script>
+        <script type="text/javascript" src="/menu/services/menu.client.service.js"></script>
+        <script type="text/javascript" src="/menu/config/menu.client.routes.js"></script>
 
         <title><%= title %></title>
         <link href="../css/home.css" rel="stylesheet">
@@ -74,7 +78,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <% if (user) { %>
-            <div ng-include="'home/views/top.client.view.html'"></div>
+            <div ng-include="'menu/views/top.client.view.html'"></div>
         <% } %>
     </head>
     <body>
@@ -82,7 +86,7 @@
         <% if (!user) { %>
        <!--  <div data-ng-show="!authentication.user">-->
             <div class="hgroup">
-                <h2>SportApp</h2>
+                <h1>SportApp</h1>
             </div>
 
             <form class="signup-form" action="/signup">

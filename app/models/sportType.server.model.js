@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 var SportTypesSchema = new Schema({
     title: String,
-    icon:  {data: Buffer, contentType: String },
+    icon:  String,
     groups: { type: Schema.ObjectId, ref: 'Group' },
     users:  { type: Schema.ObjectId, ref: 'User' },
     courts: { type: Schema.ObjectId, ref: 'Court' },

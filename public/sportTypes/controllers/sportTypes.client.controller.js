@@ -16,7 +16,8 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
             if(!existing)
             {
                 var sportType = new SportTypes({
-                    title: this.title
+                    title: this.title,
+                    icon: "/images/soccer.svg"
                 });
                 sportType.$save(function(response)
                  {
@@ -42,6 +43,8 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
         };
         $scope.update = function()
         {
+            $scope.sportType.icon = document.getElementById("icon").value;
+            console.info("$scope.sportType.icon: " + $scope.sportType.icon);
             $scope.sportType.$update(function()
             {
                 $location.path('sportTypes/' + $scope.sportType._id);
@@ -76,6 +79,7 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
         $scope.sectionSelection = function (index, thePath) {
             $scope.menuSelection = index;
             $location.path(thePath);
+            console.info("thePath: " + thePath);
             console.info("$scope.menuSelection: " + $scope.menuSelection);
         };
 
@@ -92,6 +96,19 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
 
         $scope.goToPage = function (string, id) {
             $location.path(string + id);
+        };
+
+        $scope.uploadFile = function(files) {
+            var fd = new FormData();
+            //Take the first selected file
+            fd.append("file", files[0]);
+            console.info("files[0]: " + JSON.stringify(files[0]));
+            /*$http.post(uploadUrl, fd, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).success( ...all right!... ).error( ..damn!... );
+*/
         };
 
         var isSportTypeExist = function (title)

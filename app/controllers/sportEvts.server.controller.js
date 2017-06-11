@@ -278,7 +278,7 @@ exports.getSportEvtsOfGroup = function(req, res)
 {
     var groupId = req.group.id;
     updateIsStarted(req, res, function (response) {
-        SportEvt.find({group: groupId}).sort('-created').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title')
+        SportEvt.find({groups: {$in: [groupId]}}).sort('-created').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title')
             .exec(function(err, sportEvtsOfGroup)
             {
                 if (err)
@@ -588,6 +588,7 @@ exports.removeUsersFromEvent = function (req, res)
             {
                 for(var j = 0; j < sportEvt.allParticipantsAndNotific.length; j++)
                 {
+
                     userId = sportEvt.allParticipantsAndNotific[j].theUser;
                     if(sportEvt.allParticipantsAndNotific[j]._id == usersToRemove[i])
                     {
@@ -598,7 +599,7 @@ exports.removeUsersFromEvent = function (req, res)
                         });
                     }
 
-                    else if(sportEvt.allParticipantsAndNotific[j].theUser.id == usersToRemove[i].id)
+                    else if(sportEvt.allParticipantsAndNotific[j].theUser == usersToRemove[i])
                     {
                         SportEvt.update({_id: sportEvtId}, {$pull: {allParticipantsAndNotific: {theUser: usersToRemove[i]}}}).exec(function(err) {
                             if (err) {

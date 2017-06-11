@@ -1,0 +1,81 @@
+<section ng-controller="MenuController">
+    <div class="topPage">
+        <h3 class="log-out-main w3-large">Hi <span data-ng-bind="authentication.user.fullName"></span>,  <a  class="logOut" href="/signout">  Log Out</a></h3>
+        <nav id="mainMenu" class="nav">
+            <button type="button" id="menutoggle" class="navtoogle" aria-hidden="true">
+                <i aria-hidden="true" class="icon-menu"></i></button>
+            <ul>
+                <li>
+                    <a href="/#!/" ng-click="showOne('SportApp')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="icon-home"></i>
+                                    </span>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/users/{{authentication.user._id}}/notifics" ng-click="showOne('Notifications')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="fa fa-bell"></i>
+                                    </span>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/users/{{authentication.user._id}}" ng-click="showOne('Profile')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="fa fa-user"></i>
+                                    </span>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/sportEvts/mySportEvts" ng-click="showOne('Events')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="icon-events"></i>
+                                    </span>
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/groups/myGroups" ng-click="showOne('Groups')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="fa fa-users"></i>
+                                    </span>
+                        <span>Groups</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/courts" ng-click="showOne('Courts')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="fa fa-map-marker"></i>
+                                    </span>
+                        <span>Courts</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#!/sportTypes" ng-click="showOne('Sports')">
+                                    <span class="icon">
+                                        <i aria-hidden="true" class="fa fa-futbol-o"></i>
+                                    </span>
+                        <span>Sports</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="log-out-in-menu">
+                        <a class="logOut" href="/signout">
+                                        <span class="icon">
+                                            <i aria-hidden="true" class="fa fa-sign-out"></i>
+                                        </span>
+                            <span>Log out</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="page-title">
+            <span data-ng-bind="currentModuleInApp"></span>
+        </div>
+    </div>
+</section>

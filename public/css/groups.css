@@ -298,7 +298,7 @@ a {
     .participants-table-groupPage td:before {
         content: attr(data-th) ": ";
         font-weight: bold;
-        width: 9em;
+        width: 1em;
         display: inline-block;
     }
     .participants-table-groupPage td:before {
@@ -306,7 +306,7 @@ a {
     }
 
     .participants-table-groupPage th, .participants-table-groupPage td {
-        text-align: center;
+        /*text-align: center;*/
         font-size: 15px;
     }
 
@@ -316,18 +316,19 @@ a {
     }
 
     .participants-table-groupPage th:first-child, .participants-table-groupPage td:first-child {
-        padding-left: 0;
+        width: 2%;
     }
 
     .participants-table-groupPage th:last-child, .participants-table-groupPage td:last-child {
-        padding-right: 0;
+        width: 10%;
     }
 
     .participants-table-groupPage {
         position: relative;
         background: transparent;
-        width: 90%;
-        margin-top: 30px;
+        width: 60%;
+        margin-top: 65px;
+        margin-bottom: 30px;
         margin-right: auto;
         margin-left: auto;
         color: rgb(50, 54, 57);
@@ -510,7 +511,7 @@ a {
 
     .rwd-table {
         position: relative;
-        margin-top: 15px;
+        margin-top: 25px;
         margin-left: auto;
         margin-right: auto;
         background: white;
@@ -646,12 +647,13 @@ a {
 
     .groups-top {
         position: relative;
-        top:-31px;
+        top: -30px;
         height: 100%;
         width: 100%;
         margin-right: auto;
         margin-left: auto;
-        padding-bottom: 35px;
+        padding-bottom: 10px;
+        padding-top: 10px;
         text-align: center;
         background-color: rgb(50, 54, 57);
     }
@@ -661,7 +663,6 @@ a {
         margin: auto;
         width: 60%;
         height: 25px;
-        top: 25px;
         font-size:0.8em;
         line-height: 1;
         color: #555;
@@ -777,7 +778,6 @@ a {
         margin: auto;
         text-align: center;
         top: 30px;
-        border-bottom: 1px dashed rgb(50, 54, 57);
     }
 
     .groupPage-participants_list {
@@ -1143,7 +1143,7 @@ a {
         height: 40px;
         /* border-right: 3px solid black;*/
         width: 75%;
-        top: 5px;
+        top: -10px;
         line-height: 1px;
         text-align: center;
         vertical-align: middle;
@@ -1164,6 +1164,7 @@ a {
         width: 100%;
         float: left;
         clear: left;
+        top: -5px;
     }
 
 
@@ -1174,6 +1175,7 @@ a {
         width: 100%;
         float: left;
         clear: left;
+        top: 3px;
     }
 
 
@@ -1209,6 +1211,9 @@ a {
         text-align: center;
         top: 15px;
         width: 70%;
+        font-size: 14px;
+        font-weight: 700;
+        height: 35px;
     }
 
     .pure-button-primary {
@@ -1273,6 +1278,10 @@ a {
 
     input[type='checkbox']:checked:after {
         left: 45%;
+    }
+
+    .add-userAndGroups {
+        position: relative;
     }
 
 }

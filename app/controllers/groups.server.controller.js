@@ -244,6 +244,8 @@ exports.removeUsersFromGroup = function (req, res)
 
     var groupId = req.body.groupId;
     var allIds = req.body.allIds;
+    console.info("allIds: " + JSON.stringify(allIds));
+
     Group.findById(groupId).exec(function(err, group) {
 
         if (err)
@@ -263,6 +265,22 @@ exports.removeUsersFromGroup = function (req, res)
                     return res.status(400).send({message: getErrorMessage(err)});
                 }
             });
+            console.info("group.creator: " + group.creator);
+            if(allIds[i] == group.creator)
+            {
+
+                Group.update({_id: group.id}, {creator: group.members[0]}).exec(function(err) {
+                    if (err) {
+                        return res.status(400).send({message: getErrorMessage(err)});
+                    }
+                });
+
+                User.update({_id: allIds[i]}, {$pull: {myGroupsAdmin: groupId}}).exec(function(err) {
+                    if (err) {
+                        return res.status(400).send({message: getErrorMessage(err)});
+                    }
+                });
+            }
         }
 
         res.json(group);

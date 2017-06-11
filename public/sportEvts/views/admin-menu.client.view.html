@@ -1,4 +1,4 @@
-<div data-ng-show="authentication.user._id == sportEvt.creator._id || !isInEvent" class="admin-section">
+<div class="admin-section">
     <span ng-if="windWidth < 799 && inEventPage" style="font-size:25px;" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <span ng-if="windWidth < 799 && !inEventPage" style="font-size:25px; color: white" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content">
@@ -11,5 +11,6 @@
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(7, '/sportEvts/' + sportEvt._id + '/removeMembers')" ng-class="{'admin-selection-btn': adminSelection==7}">Remove Participants</button>
         <button ng-if="!isInEvent && !isInWaitingList" class="admin-button" ng-click="askToJoinToEvent()">Ask To Join</button>
         <button ng-if="isInWaitingList" class="admin-button">Waiting For Answer</button>
+        <button ng-if="isInEvent" class="admin-button" ng-click="leaveEvent();">Leave Event</button>
     </div>
 </div>

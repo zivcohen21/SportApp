@@ -1,14 +1,15 @@
 /**
  * Created by ZIV on 27/11/2016.
  */
-angular.module('courts').controller('CourtsController', ['$scope', '$http', '$routeParams', '$location', 'Authentication', 'Courts',
+/*var localStorage = require('localStorage');*/
+angular.module('courts').controller('CourtsController', ['$scope', '$http', '$routeParams', '$location', 'Authentication',
+    'Courts',
     function($scope, $http, $routeParams, $location, Authentication, Courts)
     {
         $scope.authentication = Authentication;
         $scope.searchKeyword = "";
         $scope.isSubmited = false;
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
         $scope.create = function()
         {
             $scope.isSubmited = true;

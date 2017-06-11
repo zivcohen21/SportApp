@@ -8,26 +8,37 @@
         </span>
     </div>
 
-    <table class="rwd-table" ng-if="windWidth > 800">
+    <table class="participants-table-groupPage" style="width: 30%;" ng-if="windWidth > 800">
         <tr>
-            <th>Icon</th>
-            <th>Name</th>
+            <th></th>
+            <th></th>
         </tr>
-        <tr ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
-            <td data-th="Icon"></td>
+        <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
+            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
             <td data-th="Name">{{sportType.title}}</td>
         </tr>
     </table>
 
-     <div class="small-table" ng-if="windWidth < 799">
+    <table class="participants-table-groupPage" style="width: 90%;" ng-if="windWidth < 799">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
+            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
+            <td data-th="Name">{{sportType.title}}</td>
+        </tr>
+    </table>
+
+     <!--<div class="small-table" ng-if="windWidth < 799">
          <div class="group-header" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
              <div class="left-side-group">
-                 <!--<i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>-->
-                 <!-- <span class= "picture-part" data-ng-bind="group.image"></span>-->
+                 &lt;!&ndash;<i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>&ndash;&gt;
+                 &lt;!&ndash; <span class= "picture-part" data-ng-bind="group.image"></span>&ndash;&gt;
              </div>
              <div class="center-side-group">
                  <span class= "name-part" data-ng-bind="sportType.title"></span>
              </div>
          </div>
-     </div>
+     </div>-->
 </section>

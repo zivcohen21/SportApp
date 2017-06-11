@@ -33,7 +33,7 @@
         <div class="times-title">
             Next Events:
         </div>
-        <table class="rwd-table" ng-if="windWidth >= 800 && myNextSportEvts && myNextSportEvts.length >= 1">
+        <table class="participants-table-groupPage" ng-if="windWidth >= 800 && myNextSportEvts && myNextSportEvts.length >= 1">
             <tr>
                 <th>Sport</th>
                 <th>Date</th>
@@ -134,17 +134,17 @@
 
     <div class="search-section">
         <div class="times-title">
-            Searching:
+            Search:
         </div>
         <div class="center-btns" style="margin: 10px auto 10px auto;">
-            <button type="submit" ng-if="isSearched != 1" class="searched-types" ng-click="homeSelection(1)" ng-class="{'selection_search': showEventsForm}">Search Event</button>
-            <button type="submit" ng-if="isSearched == 1" class="searched-types" ng-click="homeSelection(1)">Search Event Again</button>
-            <button type="submit" ng-if="isSearched != 2" class="searched-types" ng-click="homeSelection(2)" ng-class="{'selection_search': showUsersForm}">Search User</button>
-            <button type="submit" ng-if="isSearched == 2" class="searched-types" ng-click="homeSelection(2)">Search User Again</button>
-            <button type="submit" ng-if="isSearched != 3" class="searched-types" ng-click="homeSelection(3)" ng-class="{'selection_search': showCourtsForm}">Search Court</button>
-            <button type="submit" ng-if="isSearched == 3" class="searched-types" ng-click="homeSelection(3)">Search Court Again</button>
-            <button type="submit" ng-if="isSearched != 4" class="searched-types" ng-click="homeSelection(4)" ng-class="{'selection_search': showGroupsForm}">Search Group</button>
-            <button type="submit" ng-if="isSearched == 4" class="searched-types" ng-click="homeSelection(4)">Search Group Again</button>
+            <button type="submit" ng-if="isSearched != 1" class="searched-types" ng-click="homeSelection(1)" ng-class="{'selection_search': showEventsForm}">Event</button>
+            <button type="submit" ng-if="isSearched == 1" class="searched-types" ng-click="homeSelection(1)">Event Again</button>
+            <button type="submit" ng-if="isSearched != 2" class="searched-types" ng-click="homeSelection(2)" ng-class="{'selection_search': showUsersForm}">User</button>
+            <button type="submit" ng-if="isSearched == 2" class="searched-types" ng-click="homeSelection(2)">User Again</button>
+            <button type="submit" ng-if="isSearched != 3" class="searched-types" ng-click="homeSelection(3)" ng-class="{'selection_search': showCourtsForm}">Court</button>
+            <button type="submit" ng-if="isSearched == 3" class="searched-types" ng-click="homeSelection(3)">Court Again</button>
+            <button type="submit" ng-if="isSearched != 4" class="searched-types" ng-click="homeSelection(4)" ng-class="{'selection_search': showGroupsForm}">Group</button>
+            <button type="submit" ng-if="isSearched == 4" class="searched-types" ng-click="homeSelection(4)">Group Again</button>
         </div>
         <form data-ng-submit="searchAll('Events')" class="pure-form pure-form-stacked search-form" ng-if="isSearched == 0 && showEventsForm">
             <fieldset>
