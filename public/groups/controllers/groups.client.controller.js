@@ -10,8 +10,7 @@ angular.module('groups').controller('GroupsController',
                  GetAllCourts, GetSportEvtsOfGroup, GetMembers, JoinToGroup, AddRequestsToGroup)
         {
             $scope.selectedUsers = [];
-            $scope.usersToRemove = [];
-            $scope.usersToAdd = [];
+            $scope.usersToDo = [];
             $scope.requestsToAdd = [];
             $scope.authentication = Authentication;
             $scope.groupSelected = null;
@@ -31,7 +30,7 @@ angular.module('groups').controller('GroupsController',
             $scope.create = function()
             {
                 $scope.isSubmited = true;
-                var allIds = getMultiSelection($scope.usersToAdd);
+                var allIds = getMultiSelection($scope.usersToDo);
                 allIds.push( $scope.authentication.user.id);
                 //console.info("document.getElementById('image').value " + document.getElementById("image").value);
                 var group = new Groups(
@@ -185,7 +184,8 @@ angular.module('groups').controller('GroupsController',
             $scope.addUsersToGroup = function () {
 
                 $scope.isSubmited = true;
-                var allIds = getMultiSelection($scope.usersToAdd);
+                var allIds = getMultiSelection($scope.usersToDo);
+                console.info("allIds: " + allIds);
                 var newMembers = new AddUsersToGroup({"allIds": allIds, "groupId": $routeParams.groupId});
                 newMembers.$save(function(response)
                 {
@@ -220,7 +220,7 @@ angular.module('groups').controller('GroupsController',
             $scope.removeUsers = function () {
 
                 $scope.isSubmited = true;
-                var allIds = getMultiSelection($scope.usersToRemove);
+                var allIds = getMultiSelection($scope.usersToDo);
                 removeUsersFromGroup(allIds)
             };
 
@@ -345,15 +345,15 @@ angular.module('groups').controller('GroupsController',
 
             };
 
-            $scope.addList = function (member)
+            $scope.addUsersList = function (member)
             {
-                $scope.index = $scope.usersToAdd.indexOf(member);
+                $scope.index = $scope.usersToDo.indexOf(member);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.usersToAdd.splice($scope.index, 1);
+                    $scope.usersToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.usersToAdd.push(member);
+                    $scope.usersToDo.push(member);
                 }
             };
 
@@ -372,13 +372,13 @@ angular.module('groups').controller('GroupsController',
 
             $scope.manageRemove = function (member)
             {
-                $scope.index = $scope.usersToRemove.indexOf(member);
+                $scope.index = $scope.usersToDo.indexOf(member);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.usersToRemove.splice($scope.index, 1);
+                    $scope.usersToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.usersToRemove.push(member);
+                    $scope.usersToDo.push(member);
                 }
             };
 

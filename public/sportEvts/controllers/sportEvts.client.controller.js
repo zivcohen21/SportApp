@@ -42,8 +42,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             {
                 $scope.isSubmited = true;
                 $scope.eventSelected = null;
-                var allGroups = getMultiSelection($scope.groupsToAdd);
-                var allIds = getMultiSelection($scope.usersToAdd);
+                var allGroups = getMultiSelection($scope.groupsToDo);
+                var allIds = getMultiSelection($scope.usersToDo);
                 var singleParticipants = [];
                 var allParticipantsAndNotific = [];
 
@@ -625,7 +625,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                     $scope.groupsToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.groupsToDo.push(group);
+                    $scope.groupsToRemove.push(group);
                 }
             };
             

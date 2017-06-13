@@ -430,7 +430,6 @@ exports.createAndSendGroupsNotifics = function (req, res, group, type) {
             {
                 module.exports.createAndSendGroupsNotificsForMember(req, res, group, type, group.members[i]);
             }
-            res.json(group);
         }
     });
 };
