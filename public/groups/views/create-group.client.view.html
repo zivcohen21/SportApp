@@ -121,6 +121,7 @@
 
         </fieldset>
     </form>
+<!--
 
     <div class="groups-top">
         <div class="manage-users-title center_align">Add Users</div>
@@ -170,7 +171,7 @@
         <div class="user-header" ng-repeat="user in usersList | filter: searchKeyword" ng-click="addList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
+                &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
             </div>
             <div class="center-side-user">
                 <span class= "name-part" data-ng-bind="user.fullName"></span>
@@ -178,8 +179,9 @@
             </div>
         </div>
     </div>
+-->
 
-
+    <div ng-include="'users/views/users-list-to-add.client.view.html'"></div>
 
     <div class="center-button">
         <button type="submit" class="pure-button pure-button-primary" ng-click="create()" ng-disabled="isSubmited">Add</button>

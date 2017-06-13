@@ -1,6 +1,7 @@
 <div class="info">
     <button class="event-btn links">
-        <a data-ng-href="#!/sportEvts/{{notific.theEvent._id}}">Event Details</a>
+        <a ng-if="notific.notificType == 'inviteToEvent' || notific.notificType == 'eventSuggestion' || notific.notificType == 'removeFromEvent'" data-ng-href="#!/sportEvts/{{notific.theEvent._id}}">Event Details</a>
+        <a ng-if="notific.notificType == 'addToGroup' || notific.notificType == 'removeFromGroup'" data-ng-href="#!/groups/allGroups/{{notific.theGroup._id}}">Group Details</a>
     </button>
 </div>
 <br>
@@ -14,6 +15,12 @@
     <button class="block__btn setTime-btn" ng-click="setStatus(notific, 'Propose Another Time')" ng-class="{'btn-selected': notific.status=='Propose Another Time'}">Propose Another Time</button>
 </div>
 
+<div data-ng-show="notific.notificType == 'inviteToEvent' && notific.status=='Propose Another Time'" class="checkbox_block">
+    <il ng-repeat="time in notific.arrTimes">
+        <button class="times-btn" ng-click="checkboxSet(notific, time)" ng-class="{'btn_selected_times': time.isIn}">{{time.timeAsString}}</button>
+    </il>
+</div>
+
 <div ng-show="notific.notificType == 'eventSuggestion'" class="all-btns">
     <button class="block__btn noAnswer-btn" ng-click="setStatus(notific, 'No Answer')" ng-class="{'btn-selected': notific.suggestionStatus=='No Answer'}">No Answer</button>
     <br>
@@ -21,8 +28,3 @@
     <button class="block__btn out-btn" ng-click="setStatus(notific, 'Reject')" ng-class="{'btn-selected': notific.suggestionStatus=='Reject'}">Reject</button>
 </div>
 
-<div data-ng-show="notific.notificType == 'inviteToEvent' && notific.status=='Propose Another Time'" class="checkbox_block">
-    <il ng-repeat="time in notific.arrTimes">
-        <button class="times-btn" ng-click="checkboxSet(notific, time)" ng-class="{'btn_selected_times': time.isIn}">{{time.timeAsString}}</button>
-    </il>
-</div>

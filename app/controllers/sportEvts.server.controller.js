@@ -44,7 +44,7 @@ exports.create = function(req, res)
                 console.info("sportEvt.startTimeInMin: " +  sportEvt.startTimeInMin);
             }
 
-            console.info("sportEvt: " + JSON.stringify(sportEvt));
+           /* console.info("sportEvt: " + JSON.stringify(sportEvt));*/
             sportEvt.save(function(err)
             {
                 if (err) {
@@ -65,7 +65,7 @@ exports.create = function(req, res)
                             }
                         });
                     }
-                    notifics.createAndSendNotifics(req, res, sportEvt);
+                    notifics.createAndSendEventsNotifics(req, res, sportEvt);
                 }
             });
         }
@@ -506,7 +506,15 @@ exports.addUsersToEvent = function (req, res)
                     }
                 });
             }
-            notifics.createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
+            for(i = 0; i < singleParticipants.length; i++)
+            {
+                SportEvt.update({_id: sportEvt._id}, {$push: {'singleParticipants': singleParticipants[i]}}).exec(function (err) {
+                    if (err) {
+                        return res.status(405).send({message: getErrorMessage(err)});
+                    }
+                });
+            }
+            notifics.createAndSendEventsNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
 
             res.json(sportEvt);
         }
@@ -537,8 +545,15 @@ exports.addUserRequestsToEvent = function (req, res)
                     return res.status(405).send({message: getErrorMessage(err)});
                 }
             });
+            SportEvt.update({_id: sportEvt._id}, {$push: {'singleParticipants': singleParticipants}}).exec(function(err)
+            {
+                if (err) {
+                    return res.status(405).send({message: getErrorMessage(err)});
+                }
+            });
         }
-        notifics.createAndSendNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
+
+        notifics.createAndSendEventsNotificsForNewParticipants(req, res, sportEvt, newParticipants, singleParticipants);
 
         res.json(sportEvt);
     });
@@ -550,8 +565,7 @@ exports.removeUsersFromEvent = function (req, res)
     var sportEvtId = req.body.sportEvtId;
     var usersToRemove = req.body.usersToRemove;
     var groupsToRemove = req.body.groupsToRemove;
-    console.info("groupsToRemove: " + groupsToRemove);
-    console.info("groupsToRemove.length: " + groupsToRemove.length);
+    console.info("usersToRemove: " + usersToRemove);
     SportEvt.findById(sportEvtId).exec(function(err, sportEvt) {
 
         if (err)
@@ -584,7 +598,10 @@ exports.removeUsersFromEvent = function (req, res)
                     });
                 }
             }
-            for (var i = 0; i < usersToRemove.length; i++)
+            console.info("sportEvt: " + JSON.stringify(sportEvt));
+            console.info("usersToRemove: " + usersToRemove);
+            notifics.createAndSendNotificsForRemoveParticipants(req, res, sportEvt, usersToRemove);
+            /*for (var i = 0; i < usersToRemove.length; i++)
             {
                 for(var j = 0; j < sportEvt.allParticipantsAndNotific.length; j++)
                 {
@@ -614,7 +631,7 @@ exports.removeUsersFromEvent = function (req, res)
                         }
                     });
                 }
-            }
+            }*/
             res.json(sportEvt);
         }
     });

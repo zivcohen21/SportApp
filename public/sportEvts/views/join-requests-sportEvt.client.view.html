@@ -1,63 +1,6 @@
 <section data-ng-controller="SportEvtsController" data-ng-init="allUsersAndGroupsNotInEvent()">
     <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
     <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
-    <div class="groups-top">
-        <div class="manage-users-title center_align">Join Requests</div>
-        <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
-        <div class="usersList-to-add" ng-if="requestsToAdd.length && requestsToAdd.length > 0 && windWidth >= 800">
-            <il data-ng-repeat="user in requestsToAdd">
-                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="requestsList(user)"></button>
-                <i ng-click="requestsList(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
-                 color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
-                  border-left: 1px solid transparent;
-                  border-right: 1px solid black;
-                  border-bottom: 1px solid black;
-                  border-top: 1px solid black;"
-                   class="fa fa-times" aria-hidden="true "></i>
-            </il>
-        </div>
 
-        <div class="usersList-to-add" ng-if="requestsToAdd.length && requestsToAdd.length > 0 && windWidth < 700">
-            <il data-ng-repeat="user in requestsToAdd">
-                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="requestsList(user)"></button>
-                <i ng-click="requestsList(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
-                 color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
-                 border-bottom-right-radius: 10px;
-                 border-top-right-radius: 10px;
-                 border-left: 1px solid transparent;
-                 border-right: 1px solid black;
-                 border-bottom: 1px solid black;
-                 border-top: 1px solid black;"
-                   class="fa fa-times" aria-hidden="true "></i>
-            </il>
-        </div>
-    </div>
-    <table class="rwd-table-users" ng-if="windWidth >= 800">
-        <tr>
-            <th></th>
-            <th>Full Name</th>
-            <th>City</th>
-        </tr>
-        <tr ng-repeat="user in usersAskedToJoin | filter: searchKeyword" ng-click="requestsList(user)" ng-class="{'selected_user': requestsToAdd.indexOf(user) != -1 }">
-            <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
-            <td data-th="Full Name">{{user.fullName}}</td>
-            <td data-th="City">{{user.city}}</td>
-        </tr>
-    </table>
-
-    <div class="small-table-users" ng-if="windWidth < 799">
-        <div class="user-header" ng-repeat="user in usersAskedToJoin | filter: searchKeyword" ng-click="requestsList(user)" ng-class="{'selected_user': requestsToAdd.indexOf(user) != -1 }">
-            <div class="left-side-user">
-                <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
-            </div>
-            <div class="center-side-user">
-                <span class= "name-part" data-ng-bind="user.fullName"></span>
-                <span class= "court-part" data-ng-bind="user.city"></span>
-            </div>
-        </div>
-    </div>
-    <div class="center-button">
-        <button type="submit" class="pure-button pure-button-primary" ng-click="addUserRequestsToEvent()" ng-disabled="isSubmited">Add</button>
-    </div>
+    <div ng-include="'users/views/join-requests-list.client.view.html'"></div>
 </section>

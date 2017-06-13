@@ -83,7 +83,10 @@ angular.module('notifics').controller('NotificsController', ['$scope', '$route',
 
         $scope.getMyNotifics = function()
         {
-            $scope.myNotifics = GetMyNotifics.query({ userId: $routeParams.userId });
+            GetMyNotifics.query({ userId: $routeParams.userId }).$promise.then(function (response) {
+                $scope.myNotifics = response;
+                    console.info(JSON.stringify($scope.myNotifics));
+            });
  /*         $scope.newNotifics = GetMyNewNotifics.query({ userId: $routeParams.userId });
             $scope.oldNotifics = GetMyOldNotifics.query({ userId: $routeParams.userId });*/
 

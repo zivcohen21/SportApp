@@ -17,13 +17,14 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.selectedUsers = null;
             $scope.selectedGroups = null;
 
-            $scope.requestsToAdd = null;
             var usersInEvent = [];
             var groupsInEvent = [];
-            $scope.usersToAdd = [];
+           /* $scope.usersToAdd = [];
             $scope.groupsToAdd = [];
             $scope.usersToRemove = [];
-            $scope.groupsToRemove = [];
+            $scope.groupsToRemove = [];*/
+            $scope.usersToDo = [];
+            $scope.groupsToDo = [];
             $scope.requestsToAdd = [];
             $scope.inEventPage = true;
             $scope.isShowUsers = false;
@@ -444,8 +445,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 $scope.isSubmited = true;
                 var singleParticipants = [];
                 var newParticipants = [];
-                var listUsersToAdd = getMultiSelection($scope.usersToAdd);
-                var listGroupsToAdd = getMultiSelection($scope.groupsToAdd);
+                var listUsersToAdd = getMultiSelection($scope.usersToDo);
+                var listGroupsToAdd = getMultiSelection($scope.groupsToDo);
                 getMembers(listGroupsToAdd, function (result)
                 {
                     for (i = 0; i < result.length; i++)
@@ -523,7 +524,7 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                     for(var i = 0; i < $scope.sportEvt.allParticipantsAndNotific.length; i++)
                     {
                         if($scope.sportEvt.allParticipantsAndNotific[i].theUser.id != $scope.authentication.user._id)
-                        $scope.users.push($scope.sportEvt.allParticipantsAndNotific[i]);
+                            $scope.users.push($scope.sportEvt.allParticipantsAndNotific[i].theUser);
                     }
                     $scope.groups =  $scope.sportEvt.groups;
                 });
@@ -532,8 +533,8 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.removeUsersAndGroups = function () {
 
                 $scope.isSubmited = true;
-                var usersToRemove = getMultiSelection($scope.usersToRemove);
-                var groupsToRemove = getMultiSelection($scope.groupsToRemove);
+                var usersToRemove = getMultiSelection($scope.usersToDo);
+                var groupsToRemove = getMultiSelection($scope.groupsToDo);
                 console.info("usersToRemove: " + usersToRemove);
                 removeUsersAndGroupsFromEvent(usersToRemove, groupsToRemove);
             };
@@ -572,25 +573,25 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             $scope.addUsersList = function (member)
             {
-                $scope.index = $scope.usersToAdd.indexOf(member);
+                $scope.index = $scope.usersToDo.indexOf(member);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.usersToAdd.splice($scope.index, 1);
+                    $scope.usersToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.usersToAdd.push(member);
+                    $scope.usersToDo.push(member);
                 }
             };
 
             $scope.addGroupsList = function (group)
             {
-                $scope.index = $scope.groupsToAdd.indexOf(group);
+                $scope.index = $scope.groupsToDo.indexOf(group);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.groupsToAdd.splice($scope.index, 1);
+                    $scope.groupsToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.groupsToAdd.push(group);
+                    $scope.groupsToDo.push(group);
                 }
             };
 
@@ -607,24 +608,24 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             };
 
             $scope.removeUsersList = function (member) {
-                $scope.index = $scope.usersToRemove.indexOf(member);
+                $scope.index = $scope.usersToDo.indexOf(member);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.usersToRemove.splice($scope.index, 1);
+                    $scope.usersToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.usersToRemove.push(member);
+                    $scope.usersToDo.push(member);
                 }
             };
 
             $scope.removeGroupsList = function (group) {
-                $scope.index = $scope.groupsToRemove.indexOf(group);
+                $scope.index = $scope.groupsToDo.indexOf(group);
                 console.info("index: " + $scope.index);
                 if($scope.index !== -1){
-                    $scope.groupsToRemove.splice($scope.index, 1);
+                    $scope.groupsToDo.splice($scope.index, 1);
                 }
                 else if($scope.index == -1) {
-                    $scope.groupsToRemove.push(group);
+                    $scope.groupsToDo.push(group);
                 }
             };
             

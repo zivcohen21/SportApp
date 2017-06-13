@@ -24,6 +24,16 @@
                             <span data-ng-bind="notific.status" class="important-details"></span>
                         </div>
                     </div>
+                    <div ng-if="notific.notificType == 'removeFromEvent'">
+                        <h3 class="notific-block__title">
+
+                            "{{notific.theEvent.creator.username}}" removed you from a
+                            <span data-ng-bind="notific.theEvent.sportType.title"></span>
+                            event on
+                            <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,
+                            <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>
+                        </h3>
+                    </div>
                     <div ng-if="notific.notificType == 'eventSuggestion'">
                        <h3 class="notific-block__title">
                            Event Suggestion for:
@@ -36,11 +46,20 @@
                            <span data-ng-bind="notific.suggestionStatus" class="important-details"></span>
                        </div>
                     </div>
+                    <div ng-if="notific.notificType == 'addToGroup'">
+                        <h3 class="notific-block__title">
 
-                   <!--<span data-ng-show="isOpen!=notific._id" class="links reply-back-link" ng-click="replyToggle(notific)">More Info & Reply</span>-->
-                   <!--<span data-ng-show="isOpen==notific._id && isStatusSelected==false" class="links reply-back-link" ng-click="replyToggle(notific)">Close</span>-->
-                   <!-- <span data-ng-show="isOpen==notific._id && isStatusSelected==true" class="links reply-back-link-down" ng-click="replyToggle(notific)">Close</span>-->
+                            "{{notific.theGroup.creator.username}}" Added you to the group:
+                             <span data-ng-bind="notific.theGroup.title"></span>
+                        </h3>
+                    </div>
+                    <div ng-if="notific.notificType == 'removeFromGroup'">
+                        <h3 class="notific-block__title">
 
+                            "{{notific.theGroup.creator.username}}" removed you from the group:
+                             <span data-ng-bind="notific.theGroup.title"></span>
+                        </h3>
+                    </div>
                 </div>
                 <span class="delete-btn" data-ng-click="delete(notific._id)">
                     <i aria-hidden="true" class="fa fa-trash w3-large w3-text-black w3-hover-opacity" ></i>
@@ -61,6 +80,10 @@
                 'noAnswer-border_info': notific.suggestionStatus=='No Answer',
                 'in-border_info': notific.suggestionStatus=='Accept',
                 'out-border_info': notific.suggestionStatus=='Reject',}">
+                <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
+            </div>
+
+            <div ng-show="(notific.notificType == 'removeFromEvent' || notific.notificType == 'addToGroup' || notific.notificType == 'removeFromGroup') && isOpen == notific._id" class="notific-block__info">
                 <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
             </div>
 

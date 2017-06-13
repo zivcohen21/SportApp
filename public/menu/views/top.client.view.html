@@ -5,7 +5,7 @@
             <button type="button" id="menutoggle" class="navtoogle" aria-hidden="true">
                 <i aria-hidden="true" class="icon-menu"></i></button>
             <ul>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='SportApp'}">
                     <a href="/#!/" ng-click="showOne('SportApp')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="icon-home"></i>
@@ -13,7 +13,7 @@
                         <span>Home</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Notifications'}">
                     <a href="/#!/users/{{authentication.user._id}}/notifics" ng-click="showOne('Notifications')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="fa fa-bell"></i>
@@ -21,7 +21,7 @@
                         <span>Notifications</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Profile'}">
                     <a href="/#!/users/{{authentication.user._id}}" ng-click="showOne('Profile')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="fa fa-user"></i>
@@ -29,7 +29,7 @@
                         <span>Profile</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Events'}">
                     <a href="/#!/sportEvts/mySportEvts" ng-click="showOne('Events')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="icon-events"></i>
@@ -37,7 +37,7 @@
                         <span>Events</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Groups'}">
                     <a href="/#!/groups/myGroups" ng-click="showOne('Groups')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="fa fa-users"></i>
@@ -45,7 +45,7 @@
                         <span>Groups</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Courts'}">
                     <a href="/#!/courts" ng-click="showOne('Courts')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="fa fa-map-marker"></i>
@@ -53,7 +53,7 @@
                         <span>Courts</span>
                     </a>
                 </li>
-                <li>
+                <li ng-class="{'main-menu-selected': currentModuleInApp=='Sports'}">
                     <a href="/#!/sportTypes" ng-click="showOne('Sports')">
                                     <span class="icon">
                                         <i aria-hidden="true" class="fa fa-futbol-o"></i>

@@ -4,6 +4,7 @@
 var mongoose = require('mongoose'),
     general = require('../../app/controllers/general.server.controller'),
     googleMaps = require('../../app/controllers/googleMaps.server.controller'),
+    notifics = require('../../app/controllers/notifics.server.controller'),
     url = require('url'),
     Group = mongoose.model('Group'),
     User = mongoose.model('User');
@@ -25,8 +26,6 @@ exports.create = function(req, res)
     var group = new Group(req.body);
     console.info("group: " + JSON.stringify(group));
     group.creator = req.user;
-    var allMembers = group.members;
-    var i;
     group.save(function(err)
     {
         if (err)
@@ -46,14 +45,7 @@ exports.create = function(req, res)
                 }
             });
 
-            for (i = 0; i < allMembers.length; i++)
-            {
-                User.update({_id: allMembers[i]}, {$push: {myGroups: group.id}}).exec(function(err) {
-                    if (err) {
-                        return res.status(404).send({message: getErrorMessage(err)});
-                    }
-                });
-            }
+            notifics.createAndSendGroupsNotifics(req, res, group, 'addToGroup');
 
             res.json(group);
         }
@@ -179,7 +171,7 @@ exports.addUsersToGroup = function (req, res)
 
     var groupId = req.body.groupId;
     var allIds = req.body.allIds;
-    Group.findById(groupId).exec(function(err, group) {
+    Group.findById(groupId).populate('creator members defaultCourt theSportType askedToJoin', 'firstName lastName fullName username city title').exec(function(err, group) {
 
         if (err)
         {
@@ -193,12 +185,7 @@ exports.addUsersToGroup = function (req, res)
                         return res.status(400).send({message: getErrorMessage(err)});
                     }
                 });
-
-                User.update({_id: allIds[i]}, {$push: {myGroups: groupId}}).exec(function(err) {
-                    if (err) {
-                        return res.status(400).send({message: getErrorMessage(err)});
-                    }
-                });
+                notifics.createAndSendGroupsNotificsForMember(req, res, group, 'addToGroup', allIds[i]);
             }
 
             res.json(group);
@@ -212,7 +199,7 @@ exports.addRequestsToGroup = function (req, res)
 
     var groupId = req.body.groupId;
     var requestsToAdd = req.body.requestsToAdd;
-    Group.findById(groupId).exec(function(err, group) {
+    Group.findById(groupId).populate('creator members defaultCourt theSportType askedToJoin', 'firstName lastName fullName username city title').exec(function(err, group) {
 
         if (err)
         {
@@ -231,6 +218,7 @@ exports.addRequestsToGroup = function (req, res)
                         return res.status(400).send({message: getErrorMessage(err)});
                     }
                 });
+                notifics.createAndSendGroupsNotificsForMember(req, res, group, 'addToGroup', requestsToAdd[i]);
             }
 
             res.json(group);
@@ -246,7 +234,7 @@ exports.removeUsersFromGroup = function (req, res)
     var allIds = req.body.allIds;
     console.info("allIds: " + JSON.stringify(allIds));
 
-    Group.findById(groupId).exec(function(err, group) {
+    Group.findById(groupId).populate('creator members defaultCourt theSportType askedToJoin', 'firstName lastName fullName username city title').exec(function(err, group) {
 
         if (err)
         {
@@ -260,12 +248,8 @@ exports.removeUsersFromGroup = function (req, res)
                 }
             });
 
-            User.update({_id: allIds[i]}, {$pull: {myGroups: groupId}}).exec(function(err) {
-                if (err) {
-                    return res.status(400).send({message: getErrorMessage(err)});
-                }
-            });
-            console.info("group.creator: " + group.creator);
+            notifics.createAndSendGroupsNotificsForMember(req, res, group, 'removeFromGroup', allIds[i]);
+
             if(allIds[i] == group.creator)
             {
 
@@ -536,12 +520,4 @@ exports.getRelevantGroups = function(req, res)
 
     });
 
-};
-
-
-Array.prototype.contains = function ( needle ) {
-    for (i in this) {
-        if (this[i] == needle) return true;
-    }
-    return false;
 };

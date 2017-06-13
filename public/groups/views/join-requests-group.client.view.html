@@ -1,7 +1,10 @@
 <section data-ng-controller="GroupsController" data-ng-init="allUsersNotInGroup(5)">
     <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
     <div ng-include="'groups/views/group-main.client.view.html'"></div>
-    <div class="groups-top">
+
+    <div ng-include="'users/views/join-requests-list.client.view.html'"></div>
+
+    <!--<div class="groups-top">
         <div class="manage-users-title center_align">Join Requests</div>
         <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
         <div class="usersList-to-add" ng-if="requestsToAdd.length && requestsToAdd.length > 0 && windWidth >= 800">
@@ -49,7 +52,7 @@
         <div class="user-header" ng-repeat="user in usersAskedToJoin | filter: searchKeyword" ng-click="requestsList(user)" ng-class="{'selected_user': requestsToAdd.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
+                &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
             </div>
             <div class="center-side-user">
                 <span class= "name-part" data-ng-bind="user.fullName"></span>
@@ -59,5 +62,5 @@
     </div>
     <div class="center-button">
         <button type="submit" class="pure-button pure-button-primary" ng-click="addRequestsToGroup()" ng-disabled="isSubmited">Add</button>
-    </div>
+    </div>-->
 </section>

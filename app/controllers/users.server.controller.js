@@ -306,7 +306,7 @@ exports.getMyOldNotifics = function(req, res)
 
 exports.getMyNotifics = function(req, res)
 {
-    Notific.find({user: req.user.id}).sort('-created').deepPopulate('creator theEvent.court theEvent.sportType theEvent.group', 'firstName lastName fullName dateEvtAsString startTimeAsString court group sportType').exec(function(err, notific)
+    Notific.find({user: req.user.id}).sort('-created').deepPopulate('creator theEvent.court theEvent.sportType theEvent.group theEvent.creator theGroup.creator', 'firstName lastName fullName dateEvtAsString startTimeAsString court group sportType username').exec(function(err, notific)
     {
         if (err)
         {

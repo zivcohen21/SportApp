@@ -4,13 +4,16 @@
     <div class="dropdown-content">
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(1, '/sportEvts/' + sportEvt._id)" ng-class="{'admin-selection-btn': adminSelection==1}">The Event</button>
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(2, '/sportEvts/' + sportEvt._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Event</button>
-        <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Event</button>
-        <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(4, '/'); moreCourts()" ng-class="{'admin-selection-btn': adminSelection==4}">More Courts</button>
+        <!--<button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(4, '/'); moreCourts()" ng-class="{'admin-selection-btn': adminSelection==4}">More Courts</button>-->
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(5, '/sportEvts/' + sportEvt._id + '/addMembers')" ng-class="{'admin-selection-btn': adminSelection==5}">Add Participants</button>
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(6, '/sportEvts/' + sportEvt._id + '/joinRequests')" ng-class="{'admin-selection-btn': adminSelection==6}">Join Requests</button>
         <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(7, '/sportEvts/' + sportEvt._id + '/removeMembers')" ng-class="{'admin-selection-btn': adminSelection==7}">Remove Participants</button>
+
         <button ng-if="!isInEvent && !isInWaitingList" class="admin-button" ng-click="askToJoinToEvent()">Ask To Join</button>
         <button ng-if="isInWaitingList" class="admin-button">Waiting For Answer</button>
         <button ng-if="isInEvent" class="admin-button" ng-click="leaveEvent();">Leave Event</button>
+
+        <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Event</button>
+
     </div>
 </div>

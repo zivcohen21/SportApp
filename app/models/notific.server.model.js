@@ -21,6 +21,7 @@ var NotificSchema = new Schema({
         timeInMin: Number,
         isIn: Boolean
     }],
+    theGroup: {type: Schema.ObjectId, ref: 'Group'},
     creator:
     {
         type: Schema.ObjectId,
@@ -28,7 +29,7 @@ var NotificSchema = new Schema({
     },
     text: String,
     notificType: {
-        type: String, enum: ['inviteToEvent', 'eventSuggestion']
+        type: String, enum: ['inviteToEvent', 'eventSuggestion', 'addToGroup', 'removeFromGroup', 'removeFromEvent']
     },
     isDeleted: {type: Boolean, default: false},
     suggestionStatus: {type: String, enum: ['No Answer', 'Accept', 'Reject']}
@@ -46,7 +47,10 @@ NotificSchema.plugin(deepPopulate, {
         },
         'theEvent.creator': {
             select: 'username'
-        }
+        },
+        'theGroup.creator': {
+            select: 'username'
+        },
     }
 });
 mongoose.model('Notific', NotificSchema);

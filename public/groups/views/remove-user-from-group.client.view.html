@@ -1,8 +1,13 @@
 <section data-ng-controller="GroupsController" data-ng-init="usersInGroup()">
     <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
     <div ng-include="'groups/views/group-main.client.view.html'"></div>
-    <div class="groups-top">
+
+    <div class="top-add-remove-group">
         <div class="manage-users-title center_align">Remove Participants</div>
+    </div>
+
+    <div class="groups-top">
+       <!-- <div class="manage-users-title center_align">Remove Participants</div>-->
         <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
         <div class="usersList-to-add" ng-if="usersToRemove.length && usersToRemove.length > 0 && windWidth >= 800">
             <il data-ng-repeat="user in usersToRemove">
@@ -38,7 +43,7 @@
             <th>Full Name</th>
             <th>City</th>
         </tr>
-        <tr ng-repeat="user in usersListInGroup | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
+        <tr ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
             <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
             <td data-th="Full Name">{{user.fullName}}</td>
             <td data-th="City">{{user.city}}</td>
@@ -46,7 +51,7 @@
     </table>
 
     <div class="small-table-users" ng-if="windWidth < 799">
-        <div class="user-header" ng-repeat="user in usersListInGroup | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
+        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
                 <!--<span data-ng-bind="group.image"></span>-->

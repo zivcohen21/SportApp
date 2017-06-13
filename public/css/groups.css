@@ -31,7 +31,6 @@ a {
     color: rgb(50, 54, 57);
     line-height: 2;
     font-weight: 600;
-    margin-bottom: 5%;
 }
 
 .rwd-table th {
@@ -136,10 +135,10 @@ a {
     .form-control-group {
         position: relative;
         display:block;
-        width:20%;
+        width:50%;
         height:34px;
         padding:6px 12px;
-        top: 50px;
+        top: 90px;
         font-size:14px;
         line-height:1.42857143;
         color:#555;
@@ -327,13 +326,14 @@ a {
         position: relative;
         background: transparent;
         width: 60%;
-        margin-top: 65px;
+        margin-top: 100px;
         margin-bottom: 30px;
         margin-right: auto;
         margin-left: auto;
         color: rgb(50, 54, 57);
         overflow: hidden;
         border-collapse: collapse;
+        text-align: center;
     }
 
     .participants-table-groupPage tr:not(:first-child) {
@@ -647,13 +647,12 @@ a {
 
     .groups-top {
         position: relative;
-        top: -30px;
+        top: -32px;
         height: 100%;
         width: 100%;
         margin-right: auto;
         margin-left: auto;
-        padding-bottom: 10px;
-        padding-top: 10px;
+        padding-bottom: 30px;
         text-align: center;
         background-color: rgb(50, 54, 57);
     }
@@ -663,6 +662,7 @@ a {
         margin: auto;
         width: 60%;
         height: 25px;
+        top: 15px;
         font-size:0.8em;
         line-height: 1;
         color: #555;
@@ -694,10 +694,10 @@ a {
 
     .manage-users-title {
         position: relative;
-        top: 5px;
+        top: 20px;
         font-size: 15px;
-        font-weight: 700;
-        color: white;
+        font-weight: 600;
+        color:white;
     }
 
 
@@ -1017,7 +1017,7 @@ a {
     }
 
     .small-table {
-        top: -30px;
+        top: -32px;
         position: relative;
         font-family: 'Open Sans', sans-serif;
         font-weight: 700;
@@ -1209,11 +1209,9 @@ a {
 
     .center-button {
         text-align: center;
-        top: 15px;
         width: 70%;
         font-size: 14px;
         font-weight: 700;
-        height: 35px;
     }
 
     .pure-button-primary {
@@ -1283,5 +1281,12 @@ a {
     .add-userAndGroups {
         position: relative;
     }
-
+    .top-add-remove-group {
+        position: relative;
+        height: 50px;
+        width: 100%;
+        text-align: center;
+        background-color: rgb(50, 54, 57);
+        top: -32px;
+    }
 }

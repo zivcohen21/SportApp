@@ -21,6 +21,7 @@ angular.module('groups').controller('GroupsController',
             $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             $scope.inGroupPage = true;
             $scope.isSubmited = false;
+            $scope.isShowUsers = false;
             $scope.checkboxModel = {
                 femaleGroup : true,
                 maleGroup : true
@@ -138,7 +139,7 @@ angular.module('groups').controller('GroupsController',
                     // console.info("response: " + JSON.stringify(response));
                     $scope.group = response;
                     $scope.usersAskedToJoin = response.askedToJoin;
-                    $scope.usersListNotInGroup = AllUsersNotInGroup.query({
+                    $scope.users = AllUsersNotInGroup.query({
                         groupId: $routeParams.groupId
                     });
                     checkIfInGroup($scope.group);
@@ -149,7 +150,7 @@ angular.module('groups').controller('GroupsController',
             $scope.usersInGroup = function () {
                 $scope.adminSelection = 6;
                 $scope.inGroupPage = false;
-                $scope.usersListInGroup = [];
+                $scope.users = [];
                 Groups.get({
                     groupId: $routeParams.groupId
                 }).$promise.then(function (response) {
@@ -160,7 +161,7 @@ angular.module('groups').controller('GroupsController',
                     {
                         if($scope.group.members[i].id != $scope.authentication.user.id)
                         {
-                            $scope.usersListInGroup.push($scope.group.members[i])
+                            $scope.users.push($scope.group.members[i])
                         }
                     }
                     checkIfInGroup($scope.group);
@@ -266,7 +267,7 @@ angular.module('groups').controller('GroupsController',
             $scope.getAllUsersSportTypesCourts = function (index) {
                 if(index == 3)
                     $scope.menuSelection = 3;
-                $scope.usersList = GetAllUsers.query();
+                $scope.users = GetAllUsers.query();
                 $scope.courtList = GetAllCourts.query();
                 $scope.sportTypeList = GetAllSportTypes.query();
             };
@@ -386,6 +387,8 @@ angular.module('groups').controller('GroupsController',
                 removeUser.push($scope.authentication.user.id);
                 removeUsersFromGroup(removeUser)
             };
-
+            $scope.showUsers = function () {
+                $scope.isShowUsers = !$scope.isShowUsers;
+            };
         }
     ]);

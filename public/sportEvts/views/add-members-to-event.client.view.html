@@ -1,7 +1,10 @@
 <section data-ng-controller="SportEvtsController" data-ng-init="allUsersAndGroupsNotInEvent()">
     <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
     <div ng-include="'sportEvts/views/admin-menu.client.view.html'"></div>
-    <div ng-include="'users/views/users-groups-lists.client.view.html'"></div>
+    <div class="top-add-remove">
+        <div class="manage-users-title center_align">Add Participants</div>
+    </div>
+    <div style="position: relative; top: -32px" ng-include="'users/views/users-groups-lists.client.view.html'"></div>
 <!--
 
     <div class="add-userAndGroups">

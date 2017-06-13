@@ -8,7 +8,13 @@ angular.module('menu').controller('MenuController', ['$scope', '$location', 'Aut
 
         $scope.authentication = Authentication;
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        $scope.currentModuleInApp = localStorage.getItem("currentModule");
+        if(localStorage.getItem("currentModule"))
+        {
+            $scope.currentModuleInApp = localStorage.getItem("currentModule");
+        }
+        else {
+            $scope.currentModuleInApp = 'SportApp'
+        }
 
         $scope.showOne = function (currentModule)
         {

@@ -11,13 +11,17 @@ angular.module('sportTypes').controller('SportTypesController', ['$scope', '$htt
 
         $scope.create = function()
         {
-            $scope.isSubmited = true;
+
             var existing = isSportTypeExist(this.title);
             if(!existing)
             {
+                $scope.isSubmited = true;
+
+                var theTitle = this.title.replace(/ /g,'').toLowerCase();
+                var iconString = "/images/" + theTitle + ".svg";
                 var sportType = new SportTypes({
                     title: this.title,
-                    icon: "/images/soccer.svg"
+                    icon: iconString
                 });
                 sportType.$save(function(response)
                  {
