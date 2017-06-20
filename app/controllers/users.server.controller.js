@@ -208,13 +208,13 @@ exports.read = function(req, res)
     //setFavoriteTimesArr(req.user);  //temp
 
     ///////temp////
-    /*User.update({_id: req.user.id}, {role: 'Owner'}).exec(function(err) {
+    User.update({_id: req.user.id}, {role: 'Owner'}).exec(function(err) {
         if (err) {
             return res.status(400).send({message: getErrorMessage(err)});
         }
         else {
         }
-    });*/
+    });
     res.json(req.user);
 };
 exports.update = function(req, res)
