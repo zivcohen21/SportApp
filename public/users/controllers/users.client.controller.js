@@ -2,8 +2,8 @@
  * Created by ZIV on 17/11/2016.
  */
 angular.module('users').controller('UsersController',
-    ['$scope', '$route', '$routeParams', '$location', 'Authentication', 'Users', 'EnterAddress', 'GetMyGroups', 'GetMySportEvts', 'GetAllSportTypes',
-        function($scope, $route, $routeParams, $location, Authentication, Users, EnterAddress, GetMyGroups, GetMySportEvts, GetAllSportTypes)
+    ['$scope', '$route', '$routeParams', '$location', 'Authentication', 'Users', 'EnterAddress', 'GetMyGroups', 'GetMySportEvts', 'GetAllSportTypes', 'UpdateRoleUser',
+        function($scope, $route, $routeParams, $location, Authentication, Users, EnterAddress, GetMyGroups, GetMySportEvts, GetAllSportTypes, UpdateRoleUser)
         {
             $scope.authentication = Authentication;
             $scope.upcomingOrPast = 'Upcoming';
@@ -17,11 +17,11 @@ angular.module('users').controller('UsersController',
 
             $scope.find = function()
             {
+                $scope.menuSelection = 2;
                 $scope.users = Users.query();
             };
             $scope.findOne = function(index)
             {
-                $scope.adminSelection = index;
                 Users.get(
                 {
                     userId: $routeParams.userId
@@ -29,6 +29,13 @@ angular.module('users').controller('UsersController',
                     $scope.adminSelection = index;
                     // console.info("response: " + JSON.stringify(response));
                     $scope.user = response;
+                    if($scope.authentication.user._id == $scope.user._id)
+                    {
+                        $scope.menuSelection = 1;
+                    }
+                    $scope.checkboxModel = {
+                        userRole:  $scope.user.role
+                    };
                     GetAllSportTypes.query().$promise.then(function (response) {
                         $scope.sportTypeList = response;
                         for(var i = 0; i < $scope.sportTypeList.length; i++)
@@ -47,17 +54,36 @@ angular.module('users').controller('UsersController',
                     $scope.theCourt = response.court;*/
                 });
             };
+
             $scope.update = function()
             {
                 $scope.user.sportTypes = getMultiSelection($scope.sportsToAdd);
                 $scope.user.$update(function()
+                    {
+                        $location.path('users/' + $scope.user._id);
+                    },
+                    function(errorResponse)
+                    {
+                        $scope.error = errorResponse.data.message;
+                    });
+            };
+
+            $scope.updateRoleUser = function () {
+
+                $scope.user.role = $scope.checkboxModel.userRole;
+                var updateRoleUser = new UpdateRoleUser({
+                    "userId": $routeParams.userId,
+                    "userRole": $scope.user.role
+                });
+                updateRoleUser.$save(function()
                 {
-                    $location.path('users/' + $scope.user._id);
+                    $location.path('/users/' + $routeParams.userId);
                 },
                 function(errorResponse)
                 {
                     $scope.error = errorResponse.data.message;
                 });
+
             };
 
             $scope.delete = function(user)
@@ -140,7 +166,7 @@ angular.module('users').controller('UsersController',
                     GetMyGroups.query({
                         userId: $routeParams.userId
                     }).$promise.then(function (response) {
-                        $scope.myGroupsList = response;
+                        $scope.groups = response;
                     });
                 }
                 else {
@@ -192,6 +218,17 @@ angular.module('users').controller('UsersController',
             };
             $scope.goToPage = function (string, id) {
                 $location.path(string + id);
+            };
+
+            $scope.sectionSelection = function (index, thePath) {
+                $scope.menuSelection = index;
+                $scope.eventSelected = null;
+                $location.path(thePath);
+            };
+
+            $scope.selectUser = function (user) {
+                $scope.userSelected = user;
+                $location.path('users/' + user._id);
             };
 
 

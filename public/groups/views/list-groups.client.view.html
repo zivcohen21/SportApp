@@ -1,44 +1,37 @@
-<section data-ng-controller="GroupsController" data-ng-init="find()">
-    <div ng-include="'groups/views/group-main.client.view.html'"></div>
+<table class="participants-table-groupPage" ng-if="windWidth >= 800">
+    <tr>
+        <th></th>
+        <th></th>
+        <th>Name</th>
+        <th>Sport</th>
+        <th>Court</th>
+        <th>Participants</th>
+    </tr>
+    <tr ng-repeat="group in groups | filter: searchKeyword" ng-click="goToPage('groups/allGroups/', group._id)">
+        <td data-th="*" ng-if="group.creator.id == authentication.user.id"><img ng-src="images/administrator.png" width=25 height=25></td>
+        <td data-th="*" ng-if="group.creator.id != authentication.user.id"></td>
+        <td data-th="Picture" style="text-align: center;">{{group.image}}<i style="font-size:30px; text-align: center; width: 70%; margin: auto" class="fa fa-users" aria-hidden="true"></i></td>
+        <td data-th="Name">{{group.title}}</td>
+        <td data-th="Sport">{{group.theSportType.title}}</td>
+        <td data-th="Court">{{group.defaultCourt.title}}</td>
+        <td data-th="Participants">{{group.members.length}}</td>
+    </tr>
+</table>
 
-    <div class="groups-top">
-
-        <span class="col-md-3">
-            <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
-        </span>
-    </div>
-
-    <table class="participants-table-groupPage" ng-if="windWidth >= 800">
-        <tr>
-            <th>Picture</th>
-            <th>Name</th>
-            <th>Sport</th>
-            <th>Court</th>
-            <th>Participants</th>
-        </tr>
-        <tr ng-repeat="group in groups | filter: searchKeyword" ng-click="openGroup(group)">
-            <td data-th="Picture" style="text-align: center;">{{group.image}}<i style="font-size:40px; text-align: center; width: 70%; margin: auto" class="fa fa-users" aria-hidden="true"></i></td>
-            <td data-th="Name">{{group.title}}</td>
-            <td data-th="Sport">{{group.theSportType.title}}</td>
-            <td data-th="Court">{{group.defaultCourt.title}}</td>
-            <td data-th="Participants">{{group.members.length}}</td>
-        </tr>
-    </table>
-
-    <div class="small-table" ng-if="windWidth < 799">
-        <div class="group-header" ng-repeat="group in groups | filter: searchKeyword" ng-click="openGroup(group)">
-            <div class="left-side-group">
-                <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
-            </div>
-            <div class="center-side-group">
-                <span class= "name-part" data-ng-bind="group.title"></span>
-                <span class= "court-part" data-ng-bind="group.defaultCourt.title"></span>
-            </div>
-            <div class="right-side-group">
-                <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
-                <span class= "participants-part" data-ng-bind="group.members.length"></span>
-            </div>
+<div class="small-table-userPage" ng-if="windWidth < 799">
+    <div class="group-header" ng-repeat="group in groups | filter: searchKeyword" ng-click="goToPage('groups/allGroups/', group._id)">
+        <div class="left-side-group">
+            <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>
+            <!--<span data-ng-bind="group.image"></span>-->
+        </div>
+        <div class="center-side-group">
+            <span class= "name-part" data-ng-bind="group.title"></span>
+            <span class= "court-part" data-ng-bind="group.defaultCourt.title"></span>
+        </div>
+        <div class="right-side">
+            <i class="fa fa-members-icon numMembers-icon">&#xf0c0;</i>
+            <span class= "currentParticipants-part">{{group.members.length}}</span>
+            <img class="admin-icon" ng-if="group.creator.id == authentication.user.id" ng-src="images/administrator.png" width=25 height=25>
         </div>
     </div>
-</section>
+</div>

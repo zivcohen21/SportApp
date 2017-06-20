@@ -293,9 +293,7 @@ exports.getAllMembersOfGroups = function (req, res)
 {
     var query = url.parse(req.url, true).query;
     var allGroups = query.allGroups;
-    console.info("allGroups: " + allGroups);
     Group.find({_id: { $in: allGroups}}, '-_id members askedToJoin').exec(function(err, members) {
-
         if (err)
         {
             return res.status(400).send({ message: getErrorMessage(err) });

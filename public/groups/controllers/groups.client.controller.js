@@ -75,7 +75,6 @@ angular.module('groups').controller('GroupsController',
                     $scope.group = response;
                     $scope.theSportType = $scope.group.theSportType;
                     $scope.theCourt = $scope.group.defaultCourt;
-                    $scope.sportEvts = $scope.group.sportEvts;
                     checkIfInGroup($scope.group);
                     console.info("findOne " + $routeParams.groupId);
                 });
@@ -120,7 +119,7 @@ angular.module('groups').controller('GroupsController',
 
             $scope.myGroups = function () {
                 $scope.menuSelection = 1;
-                $scope.myGroupsList = GetMyGroups.query({
+                $scope.groups = GetMyGroups.query({
                     userId: $scope.authentication.user.id
                 });
             };
@@ -279,10 +278,12 @@ angular.module('groups').controller('GroupsController',
                 if ($scope.eventListOpen == null)
                 {
                     $scope.eventListOpen = group._id;
+                    console.info("$scope.eventListOpen: " + $scope.eventListOpen);
                     GetSportEvtsOfGroup.query({
                         groupId: group._id
                     }).$promise.then(function (response) {
                         $scope.sportEvts = response;
+                        console.info("response: " + response);
                     });
                 }
                 else {

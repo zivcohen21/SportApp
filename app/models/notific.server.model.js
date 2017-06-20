@@ -29,10 +29,12 @@ var NotificSchema = new Schema({
     },
     text: String,
     notificType: {
-        type: String, enum: ['inviteToEvent', 'eventSuggestion', 'addToGroup', 'removeFromGroup', 'removeFromEvent']
+        type: String, enum: ['inviteToEvent', 'eventSuggestion', 'addToGroup', 'removeFromGroup', 'removeFromEvent', 'statusUpdate']
     },
     isDeleted: {type: Boolean, default: false},
-    suggestionStatus: {type: String, enum: ['No Answer', 'Accept', 'Reject']}
+    suggestionStatus: {type: String, enum: ['No Answer', 'Accept', 'Reject']},
+    userChanged: {type: Schema.ObjectId, ref: 'User'},
+    statusChanged: {type: String, enum: ['No Answer', 'In', 'Out', 'Maybe', 'Propose Another Time']}
 });
 NotificSchema.plugin(deepPopulate, {
     populate: {
@@ -50,7 +52,7 @@ NotificSchema.plugin(deepPopulate, {
         },
         'theGroup.creator': {
             select: 'username'
-        },
+        }
     }
 });
 mongoose.model('Notific', NotificSchema);

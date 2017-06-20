@@ -195,13 +195,25 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                });
             };
             var getMembers = function (allGroups, callback) {
+
                 if(allGroups.length > 1)
                 {
                     GetAllMembersOfGroups.getAllMembers({
                         allGroups: allGroups
                     }).$promise.then(function (allMembers) {
-                        console.info("allMembers: " + JSON.stringify(allMembers[0].members));
-                        return callback(allMembers[0].members);
+                        var membersOfGroups = [];
+                       for(var i = 0; i < allMembers.length; i++)
+                       {
+                           for(var j = 0; j < allMembers[i].members.length; j++)
+                           {
+                               if(!isContain(membersOfGroups, allMembers[i].members[j]))
+                               {
+                                   membersOfGroups.push(allMembers[i].members[j])
+                               }
+                           }
+                       }
+                        console.info("membersOfGroups: " + membersOfGroups);
+                        return callback(membersOfGroups);
                     });
                 }
                 else if(allGroups.length == 1)
@@ -269,11 +281,10 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             };
 
             $scope.openEvent = function (sportEvt) {
-            console.info("eventSelected1: " + $scope.eventSelected);
-            $scope.eventSelected = sportEvt;
-            $location.path('sportEvts/' + sportEvt._id);
-            console.info("eventSelected2: " + $scope.eventSelected);
-
+                console.info("eventSelected1: " + $scope.eventSelected);
+                $scope.eventSelected = sportEvt;
+                $location.path('sportEvts/' + sportEvt._id);
+                console.info("eventSelected2: " + $scope.eventSelected);
             };
 
             $scope.checkIfShow = function (sportEvt) {
@@ -283,12 +294,11 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 {
                     $scope.eventsCounter++;
                 }
-                console.info($scope.eventsCounter);
                 return (isShow);
             };
 
             $scope.goToPage = function (string, id) {
-            $location.path(string + id);
+                $location.path(string + id);
             };
 
             var currentCounterAndFindMyNotific = function (sportEvt) {
@@ -322,7 +332,6 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                     $scope.maxPercent = ($scope.inCounter / sportEvt.maxNumOfMembers) * 100;
                 }
                 $scope.listLength = parseInt(i)+1;
-
             };
 
             $scope.openMyStatus = function (sportEvt) {

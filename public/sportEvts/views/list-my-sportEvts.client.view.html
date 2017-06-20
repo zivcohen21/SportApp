@@ -1,7 +1,6 @@
 <section data-ng-controller="SportEvtsController" data-ng-init="getMySportEvts()">
     <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
 
-    <!-- <div data-ng-init="getMySportEvts()" ng-show="eventSelected==null">-->
     <div class="sportEvts-top">
         <div class="mobile-app-toggle">
             <button class="upcomingOrOld-button" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
@@ -9,5 +8,5 @@
         </div>
         <input type="text" class="form-control" placeholder="Search" ng-model="searchKeyword"/>
     </div>
-    <div ng-include="'sportEvts/views/sportEvts-list.client.view.html'"></div>
+    <div ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
 </section>

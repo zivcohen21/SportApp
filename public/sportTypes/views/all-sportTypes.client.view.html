@@ -1,0 +1,13 @@
+<section data-ng-controller="SportTypesController" data-ng-init="find(1)">
+    <div ng-include="'sportTypes/views/sportType-main.client.view.html'"></div>
+
+    <div class="groups-top">
+
+        <span class="col-md-3">
+            <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
+        </span>
+    </div>
+
+    <div ng-include="'sportTypes/views/list-sportTypes.client.view.html'"></div>
+
+</section>

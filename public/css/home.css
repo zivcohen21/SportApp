@@ -310,7 +310,6 @@ footer img:focus , footer a:focus { outline: none; }
     border: 1px solid #999;
     border-radius: 2px;
     margin: 0;
-    text-align: center;
     text-decoration: none;
     font-size: 14px;
     line-height: 22px;
@@ -364,7 +363,6 @@ footer img:focus , footer a:focus { outline: none; }
     width: 90%;
     height: 36px;
     line-height: 36px;
-    font-size: 20px;
 }
 
 .btn-auth.large:before {

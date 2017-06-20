@@ -1,4 +1,6 @@
 <section data-ng-controller="ChatController">
+    <div ng-include="'groups/views/group-main.client.view.html'"></div>
+    <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
     <div data-ng-repeat="message in messages" data-ng-switch="message.type">
         <strong data-ng-switch-when='status'>
             <span data-ng-bind="message.created | date:'mediumTime'"></span>

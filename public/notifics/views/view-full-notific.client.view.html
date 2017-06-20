@@ -1,6 +1,6 @@
 <div class="info">
     <button class="event-btn links">
-        <a ng-if="notific.notificType == 'inviteToEvent' || notific.notificType == 'eventSuggestion' || notific.notificType == 'removeFromEvent'" data-ng-href="#!/sportEvts/{{notific.theEvent._id}}">Event Details</a>
+        <a ng-if="notific.notificType == 'inviteToEvent' || notific.notificType == 'eventSuggestion' || notific.notificType == 'removeFromEvent' || notific.notificType == 'statusUpdate'" data-ng-href="#!/sportEvts/{{notific.theEvent._id}}">Event Details</a>
         <a ng-if="notific.notificType == 'addToGroup' || notific.notificType == 'removeFromGroup'" data-ng-href="#!/groups/allGroups/{{notific.theGroup._id}}">Group Details</a>
     </button>
 </div>
@@ -21,10 +21,19 @@
     </il>
 </div>
 
+<div ng-show="notific.notificType == 'statusUpdate'" class="all-btns">
+
+    <span data-ng-bind="notific.theEvent.sportType.title"></span>
+    event on
+    <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,
+    <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>:
+    <span data-ng-bind="notific.userChanged.fullName" class="important-details"></span>
+    change status to- <span data-ng-bind="notific.statusChanged" class="important-details"></span>
+</div>
+
 <div ng-show="notific.notificType == 'eventSuggestion'" class="all-btns">
     <button class="block__btn noAnswer-btn" ng-click="setStatus(notific, 'No Answer')" ng-class="{'btn-selected': notific.suggestionStatus=='No Answer'}">No Answer</button>
     <br>
     <button class="block__btn in-btn" ng-click="setStatus(notific, 'Accept')" ng-class="{'btn-selected': notific.suggestionStatus=='Accept'}">Accept</button>
     <button class="block__btn out-btn" ng-click="setStatus(notific, 'Reject')" ng-class="{'btn-selected': notific.suggestionStatus=='Reject'}">Reject</button>
 </div>
-

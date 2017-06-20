@@ -13,5 +13,6 @@ module.exports = function(app)
         .put(users.requiresLogin, courts.update)
         .delete(users.requiresLogin, courts.hasAuthorization, courts.delete);
     app.route('/api/getRelevantCourts').get(courts.getRelevantCourts);
+    app.route('/api/courts/getGroupsEventsUsersInCourt/:courtId').get(courts.getGroupsEventsUsersInCourt);
     app.param('courtId', courts.courtByID);
 };

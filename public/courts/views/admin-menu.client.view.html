@@ -1,12 +1,10 @@
 <div class="admin-section_groups">
     <span ng-if="windWidth < 799" style="font-size:25px;" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content-groups">
-        <button data-ng-show="authentication.user._id == court.creator._id" class="admin-button" ng-click="adminSelect(1, 'courts/' + court._id)" ng-class="{'admin-selection-btn': adminSelection==1}">Court Page</button>
-        <button data-ng-show="authentication.user._id == court.creator._id" class="admin-button" ng-click="adminSelect(2, 'courts/' + court._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Court</button>
-        <button class="admin-button" ng-click="addComment()">Add a Comment</button>
-        <button class="admin-button" ng-click="addPictures()">Add Pictures</button>
-
+        <button data-ng-show="authentication.user._id == court.creator._id || authentication.user.role == 'Owner'" class="admin-button" ng-click="adminSelect(1, 'courts/' + court._id)" ng-class="{'admin-selection-btn': adminSelection==1}">Court Page</button>
+        <button data-ng-show="authentication.user._id == court.creator._id || authentication.user.role == 'Owner'" class="admin-button" ng-click="adminSelect(2, 'courts/' + court._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Court</button>
+        <!--<button class="admin-button" ng-click="addComment()">Add a Comment</button>-->
+        <!--<button class="admin-button" ng-click="addPictures()">Add Pictures</button>-->
     </div>
-
 </div>
 

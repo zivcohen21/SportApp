@@ -23,7 +23,7 @@ module.exports = function(app)
 /*    app.route('/api/removeUser/:userId').delete(users.requiresLogin, users.delete);*/
         /*.delete(users.requiresLogin, users.hasAuthorization, users.delete);*/
     app.route('/api/users/enterAddress').post(users.enterAddress);
-
+    app.route('/api/users/updateRoleUser').post(users.updateRoleUser);
     app.param('userId', users.userByID);
 
     app.get('/signout', users.signout);

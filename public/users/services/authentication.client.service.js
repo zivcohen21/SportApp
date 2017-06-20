@@ -18,6 +18,9 @@ angular.module('users').factory('Authentication',
     .factory('EnterAddress', ['$resource',
         function($resource) {
             return $resource('api/users/enterAddress'); }])
+    .factory('UpdateRoleUser', ['$resource',
+        function($resource) {
+            return $resource('api/users/updateRoleUser'); }])
     .factory('SaveUsersTimes', ['$resource',
         function($resource) {
             return $resource('api/users/saveUsersTimes'); }])

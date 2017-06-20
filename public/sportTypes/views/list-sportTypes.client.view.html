@@ -1,44 +1,21 @@
-<section data-ng-controller="SportTypesController" data-ng-init="find(1)">
-    <div ng-include="'sportTypes/views/sportType-main.client.view.html'"></div>
+<table class="participants-table-groupPage" style="width: 30%;" ng-if="windWidth > 800">
+    <tr>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
+        <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
+        <td data-th="Name">{{sportType.title}}</td>
+    </tr>
+</table>
 
-    <div class="groups-top">
-
-        <span class="col-md-3">
-            <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
-        </span>
-    </div>
-
-    <table class="participants-table-groupPage" style="width: 30%;" ng-if="windWidth > 800">
-        <tr>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
-            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
-            <td data-th="Name">{{sportType.title}}</td>
-        </tr>
-    </table>
-
-    <table class="participants-table-groupPage" style="width: 90%;" ng-if="windWidth < 799">
-        <tr>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
-            <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
-            <td data-th="Name">{{sportType.title}}</td>
-        </tr>
-    </table>
-
-     <!--<div class="small-table" ng-if="windWidth < 799">
-         <div class="group-header" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
-             <div class="left-side-group">
-                 &lt;!&ndash;<i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-users" aria-hidden="true"></i>&ndash;&gt;
-                 &lt;!&ndash; <span class= "picture-part" data-ng-bind="group.image"></span>&ndash;&gt;
-             </div>
-             <div class="center-side-group">
-                 <span class= "name-part" data-ng-bind="sportType.title"></span>
-             </div>
-         </div>
-     </div>-->
-</section>
+<table class="participants-table-groupPage" style="width: 90%;" ng-if="windWidth < 799">
+    <tr>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr class="row-sport" ng-repeat="sportType in sportTypes | filter: searchKeyword" ng-click="openSportPage(sportType)">
+        <td data-th="Icon"><img ng-src="{{sportType.icon}}" width=30 height=30></img></td>
+        <td data-th="Name">{{sportType.title}}</td>
+    </tr>
+</table>

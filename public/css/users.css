@@ -207,7 +207,7 @@ a {
 
     .userPage-main-part {
         position: relative;
-        width: 60%;
+        width: 70%;
         margin: auto;
         text-align: center;
     }
@@ -240,7 +240,6 @@ a {
         margin-left: auto;
         padding-bottom: 10px;
         text-align: center;
-        background-color: rgb(50, 54, 57);
     }
 
     .userPage-eventList {
@@ -465,6 +464,14 @@ a {
     }
 
     .update-form-users {
+         width: 66%;
+         margin-right: auto;
+         margin-left: auto;
+         top: 0;
+         bottom: 50px;
+     }
+
+    .updateRole-form-users {
         width: 66%;
         margin-right: auto;
         margin-left: auto;
@@ -706,6 +713,12 @@ a {
         padding-bottom: 35px;
         text-align: center;
     }
+    .buttons-userPage {
+        position: relative;
+        width: 50%;
+        margin: auto;
+        text-align: center;
+    }
 
 }/* ##########################################################################################################*/
 
@@ -873,7 +886,6 @@ a {
         position: absolute;
         height: 30px;
         width: 30px;
-        top: 15px;
         left: 87%;
         cursor: pointer;
         display: inline-block;
@@ -1290,25 +1302,19 @@ a {
         display: inline-block;
         position: relative;
         width: 18%;
-        height: 45px;
+        height: 70px;
         vertical-align: middle;
         text-align: center;
-        top: -8px;
-        margin: auto;
-        padding: 10px;
     }
 
     .center-side-user {
         display: inline-block;
         position: relative;
-        height: 45px;
-        /* border-right: 3px solid black; */
-        width: 90%;
+        height: 70px;
+        /*       border-right: 3px solid black;*/
+        width: 85%;
         text-align: center;
         vertical-align: middle;
-        top: -5px;
-        padding: 3px;
-        margin: auto;
     }
 
     .usersList-to-add {
@@ -1361,7 +1367,7 @@ a {
         border-radius: 10px;
     }
 
-    .fa-users {
+    .fa-user {
         position: relative;
         top: 25%;
         margin-left: auto;
@@ -1374,27 +1380,10 @@ a {
     .right-side-user {
         display: inline-block;
         position: relative;
-        width: 10%;
+        width: 15%;
         height: 70px;
         text-align: center;
         padding-top: 10px;
-    }
-
-    .name-part {
-        position: relative;
-        height: 50%;
-        width: 100%;
-        text-align: left;
-        float: left;
-        clear: left;
-    }
-    .court-part {
-        position: relative;
-        text-align: left;
-        height: 50%;
-        width: 100%;
-        float: left;
-        clear: left;
     }
 
     .participants-part {
@@ -1429,6 +1418,9 @@ a {
         top: 0;
     }
 
+    .updateRole-form-users {
+        top: 20px;
+    }
 
     label {
         font-size: 14px;

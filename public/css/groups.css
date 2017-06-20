@@ -805,7 +805,7 @@ a {
         font-size: 12px;
         font-weight: 500;
         width: 100%;
-        top: -20px;
+        top: 20px;
         margin: auto;
         text-align: center;
         border: 2px solid black;

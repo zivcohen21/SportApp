@@ -3,9 +3,9 @@
 
 
     <div class="group-title center_align">{{court.title}}</div>
-
+    <div ng-include="'courts/views/admin-menu.client.view.html'"></div>
     <div class="groupPage" ng-if="windWidth >= 800">
-        <div ng-include="'courts/views/admin-menu.client.view.html'"></div>
+
 
         <div class="groupPage-creator">
             Created On: <span data-ng-bind="court.created | date:'mediumDate'"></span>
@@ -22,7 +22,6 @@
     </div>
 
     <div class="groupPage" ng-if="windWidth < 799">
-        <div ng-include="'courts/views/admin-menu.client.view.html'"></div>
         <div class="groupPage-main-part">
             <div class="groupPage-details">
                 <div>Address: <span data-ng-bind="court.courtAddress"></span></div>
@@ -32,9 +31,50 @@
         </div>
     </div>
     <div class="buttons-userPage">
-        <button class="court-here-btn" ng-click="openGroupList(court)" ng-class="{'selection_events_groups': hereSelection==1}">Groups Here</button>
-        <button class="court-here-btn" ng-click="openEventList(court)" ng-class="{'selection_events_groups': hereSelection==2}">Events Here</button>
-        <button class="court-here-btn" ng-click="openEventList(court)" ng-class="{'selection_events_groups': hereSelection==3}">Users Here</button>
+        <button class="court-here-btn" ng-click="openHereList(1)" ng-class="{'selection_events_groups': hereSelection==1}">Groups Here</button>
+        <button class="court-here-btn" ng-click="openHereList(2)" ng-class="{'selection_events_groups': hereSelection==2}">Events Here</button>
+        <button class="court-here-btn" ng-click="openHereList(3)" ng-class="{'selection_events_groups': hereSelection==3}">Users Here</button>
     </div>
+
+
+
+    <div ng-if="hereSelection == 1 && groups.length > 0" class="userPage-group_list">
+        <div>
+            <span class="col-md-3">
+                <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+            </span>
+        </div>
+        <div ng-include="'groups/views/list-groups.client.view.html'"></div>
+    </div>
+    <div ng-if="hereSelection == 1 && (!groups.length || groups.length == 0)">
+        <h2>No Groups Here</h2>
+    </div>
+
+
+    <div ng-if="hereSelection == 2 && sportEvts.length > 0" class="userPage-eventList">
+        <div>
+            <span class="col-md-3">
+                <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+            </span>
+        </div>
+        <div ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
+    </div>
+    <div ng-if="hereSelection == 2 && (!sportEvts.length || sportEvts.length == 0)">
+        <h2>No Events Here</h2>
+    </div>
+
+
+    <div ng-if="hereSelection == 3 && users.length > 0" class="userPage-eventList">
+        <div>
+            <span class="col-md-3">
+                <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
+            </span>
+        </div>
+        <div ng-include="'users/views/list-users.client.view.html'"></div>
+    </div>
+    <div ng-if="hereSelection == 3 && (!users.length || users.length == 0)">
+        <h2>No Users Here</h2>
+    </div>
+
 
 </section>

@@ -1,9 +1,33 @@
-<section data-ng-controller="UsersController" data-ng-init="find()">
-    <h1>Users</h1>
-    <ul>
-        <li data-ng-repeat="user in users">
-            <a data-ng-href="#!/users/{{user.id}}" data-ng-bind="user.username">
-            </a> <br>
-        </li>
-    </ul>
-</section>
+<table class="participants-table-groupPage" ng-if="windWidth >= 800">
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>City</th>
+        <th>Age</th>
+    </tr>
+    <tr ng-repeat="user in users | filter: searchKeyword" ng-click="goToPage('users/', user._id)">
+        <td data-th="Picture" style="text-align: center;">{{user.picture}}<i style="font-size:30px; text-align: center; width: 70%; margin: auto" class="fa fa-user" aria-hidden="true"></i></td>
+        <td data-th="Name">{{user.fullName}}</td>
+        <td data-th="Username">{{user.username}}</td>
+        <td data-th="City">{{user.city}}</td>
+        <td data-th="Age">{{user.age}}</td>
+    </tr>
+</table>
+
+<div class="small-table-userPage" ng-if="windWidth < 799">
+    <div class="group-header" ng-repeat="user in users | filter: searchKeyword" ng-click="goToPage('users/', user._id)">
+        <div class="left-side-group">
+            <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-user" aria-hidden="true"></i>
+            <!--<span data-ng-bind="user.picture"></span>-->
+        </div>
+        <div class="center-side-user">
+            <span class= "name-part" data-ng-bind="user.fullName">-{{user.username}}</span>
+            <span class= "court-part" data-ng-bind="user.city"></span>
+        </div>
+        <div class="right-side-user">
+        <!--    <span class= "currentParticipants-part">{{user.yearOfBirth}}</span>-->
+            <span class= "currentParticipants-part">{{user.age}}</span>
+        </div>
+    </div>
+</div>

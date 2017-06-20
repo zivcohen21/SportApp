@@ -4,7 +4,6 @@
     <div class="dropdown-content-groups">
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(1, 'groups/allGroups/' + group._id)" ng-class="{'admin-selection-btn': adminSelection==1}">Group Page</button>
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(2, 'groups/allGroups/' + group._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Group</button>
-        <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Group</button>
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(4, 'groups/allGroups/' + group._id + '/addMembers');" ng-class="{'admin-selection-btn': adminSelection==4}">Add Participants</button>
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(5, 'groups/allGroups/' + group._id + '/joinRequests');" ng-class="{'admin-selection-btn': adminSelection==5}">Join Requests</button>
         <button data-ng-show="authentication.user._id == group.creator._id" class="admin-button" ng-click="adminSelect(6, 'groups/allGroups/' + group._id + '/removeMembers');" ng-class="{'admin-selection-btn': adminSelection==6}">Remove Participants</button>
@@ -12,6 +11,8 @@
         <button ng-if="!isInGroup && isInWaitingList" class="admin-button">Waiting For Answer</button>
         <button ng-if="isInGroup" class="admin-button" ng-click="adminSelect(7, 'sportEvts/create/' + group._id);">Create Group Event</button>
         <button ng-if="isInGroup" class="admin-button" ng-click="leaveGroup();">Leave Group</button>
+        <!--<button ng-if="isInGroup" class="admin-button" ng-click="adminSelect(9, 'groups/allGroups/' + group._id + '/chat');">Chat</button>-->
+        <button data-ng-show="authentication.user._id == group.creator._id || authentication.user.role == 'Owner'" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Group</button>
     </div>
 </div>
 

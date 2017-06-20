@@ -43,7 +43,7 @@
             <th>Full Name</th>
             <th>City</th>
         </tr>
-        <tr ng-repeat="user in users | filter: searchKeyword" ng-click="addList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
+        <tr ng-repeat="user in users | filter: searchKeyword" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
             <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
             <td data-th="Full Name">{{user.fullName}}</td>
             <td data-th="City">{{user.city}}</td>
@@ -51,7 +51,7 @@
     </table>
 
     <div class="small-table-users" ng-if="windWidth < 799">
-        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="addList(user)" ng-class="{'selected_user': usersToAdd.indexOf(user) != -1 }">
+        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="addList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
                 <!--<span data-ng-bind="group.image"></span>-->

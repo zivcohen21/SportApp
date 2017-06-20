@@ -160,7 +160,7 @@ exports.getMyOldNotifics = function(req, res)
 
 exports.getMyNotifics = function(req, res)
 {
-    Notific.find({$and: [{user: req.user.id}, {isDeleted: false}]}).sort('-created').deepPopulate('creator theEvent.court theEvent.creator theEvent.sportType theEvent.group theGroup.title theGroup.creator', 'firstName lastName fullName username dateEvtAsString startTimeAsString court group sportType creator').exec(function(err, notific)
+    Notific.find({$and: [{user: req.user.id}, {isDeleted: false}]}).sort('-created').deepPopulate('creator theEvent.court theEvent.creator theEvent.sportType theEvent.group theGroup.title theGroup.creator userChanged', 'firstName lastName fullName username dateEvtAsString startTimeAsString court group sportType creator').exec(function(err, notific)
     {
         if (err)
         {
@@ -488,8 +488,81 @@ exports.createAndSendGroupsNotificsForMember = function (req, res, group, type, 
                 text = group.creator.fullName + " removed you from the group: " + group.title;
                 subject = 'You were removed from a group';
                 sendEMail(user, subject, text);
-}
-}
+            }
+        }
+    });
+};
+
+exports.createAndSendChangeStatusNotifics = function (req, res, status, oldNotificId) {
+
+    Notific.findById(oldNotificId).deepPopulate('theEvent theEvent.sportType theEvent.creator theEvent.allParticipantsAndNotific user', 'dateEvtAsString title fullName').exec(function(err, oldNotific)
+    {
+        if (err)
+        {
+            return res.status(403).send({ message: getErrorMessage(err) });
+        }
+        else {
+            /*console.info("oldNotific: " + JSON.stringify(oldNotific));*/
+            var theEvent = oldNotific.theEvent;
+            var userChanged = oldNotific.user;
+            var notificId;
+
+            SportEvt.findById(theEvent.id).populate('creator sportType court', 'firstName lastName fullName title id').deepPopulate('allParticipantsAndNotific allParticipantsAndNotific.theUser allParticipantsAndNotific.notific groups askedToJoin groups.defaultCourt groups.theSportType', 'firstName lastName fullName title id members email status').exec(function (err, theEvent) {
+                if (err) {
+                    return res.status(403).send({message: getErrorMessage(err)});
+                }
+                else {
+                    var counterResult = getCounterStatus(theEvent);
+                    var allMembers = theEvent.allParticipantsAndNotific;
+                    for(var i = 0; i < allMembers.length; i++)
+                    {
+                        if(allMembers[i].theUser.id != userChanged.id && allMembers[i].notific.status != 'Out')
+                        {
+                            var notific = new Notific();
+                            notific.notificType = 'statusUpdate';
+                            notific.theEvent = theEvent;
+                            notific.user = allMembers[i].theUser;
+                            notific.isSeen = false;
+                            notific.userChanged = userChanged;
+                            notific.statusChanged = status;
+                            notificId = notific.id;
+                            notific.save(function(err)
+                            {
+                                if (err)
+                                {
+                                    return res.status(403).send({ message: getErrorMessage(err) });
+                                }
+                            });
+
+                            User.update({_id: allMembers[i].theUser._id}, {$push: {notific: notificId}}).exec(function(err)
+                            {
+                                if (err) {
+                                    return res.status(404).send({message: getErrorMessage(err)});
+                                }
+                            });
+                            User.findById(allMembers[i].theUser._id).exec(function(err, user) {
+                                if (err) {
+                                    return res.status(403).send({message: getErrorMessage(err)});
+                                }
+                                else {
+                                    var text = theEvent.sportType.title + " event on " + theEvent.dateEvtAsString + ", " + theEvent.startTimeAsString + ": " + userChanged.fullName + " change status to- " +  status + "\n"
+                                        +"Event Full Status: \n"
+                                        +"In: " + counterResult.inCounter + "\n"
+                                        +"Out: " + counterResult.outCounter + "\n"
+                                        +"Maybe: " + counterResult.maybeCounter + "\n"
+                                        +"Propose Another Time: " + counterResult.proposeAnotherTimeCounter + "\n"
+                                        +"No Answer: " + counterResult.noAnswerCounter + "\n"
+                                        + "The Event: " + process.env.MY_URL + "/#!/sportEvts/" + theEvent._id;
+                                    var subject = "Status update of " + theEvent.sportType.title + " event on " + theEvent.dateEvtAsString + ", " + theEvent.startTimeAsString;
+                                    sendEMail(user, subject, text);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
     });
 };
 
@@ -521,10 +594,13 @@ exports.saveStatus = function(req, res)
                 return res.status(400).send({message: getErrorMessage(err)});
             }
             else {
+                module.exports.createAndSendChangeStatusNotifics(req, res, req.body.status, notificId);
+
                 res.json(notificId)
             }
         });
     }
+
 
     else if(req.body.notificType == 'eventSuggestion')
     {
@@ -629,4 +705,21 @@ exports.updateField = function(req, res)
             }
         });
     res.json(req.notific);
+};
+
+var getCounterStatus = function (sportEvt) {
+
+    var allList = sportEvt.allParticipantsAndNotific;
+    var result = {noAnswerCounter: 0, inCounter: 0, outCounter: 0, maybeCounter: 0, proposeAnotherTimeCounter: 0};
+    console.info("allList: " + allList);
+    for (var i = 0; i < allList.length; i++)
+    {
+        if(allList[i].notific.status == 'No Answer') { result.noAnswerCounter+=1; }
+        else if(allList[i].notific.status == 'In') { result.inCounter+=1; }
+        else if(allList[i].notific.status == 'Out') { result.outCounter+=1; }
+        else if(allList[i].notific.status == 'Maybe') { result.maybeCounter+=1; }
+        else if(allList[i].notific.status == 'Propose Another Time') { result.proposeAnotherTimeCounter+=1;}
+
+    }
+    return result;
 };

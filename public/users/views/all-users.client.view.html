@@ -1,0 +1,9 @@
+<section data-ng-controller="UsersController" data-ng-init="find()">
+    <div ng-include="'users/views/main-users.client.view.html'"></div>
+    <div class="groups-top">
+    <span class="col-md-3">
+        <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
+    </span>
+    </div>
+    <div ng-include="'users/views/list-users.client.view.html'"></div>
+</section>

@@ -13,7 +13,8 @@ angular.module('menu').controller('MenuController', ['$scope', '$location', 'Aut
             $scope.currentModuleInApp = localStorage.getItem("currentModule");
         }
         else {
-            $scope.currentModuleInApp = 'SportApp'
+            $scope.currentModuleInApp = 'SportApp';
+            localStorage.setItem("currentModule", $scope.currentModuleInApp);
         }
 
         $scope.showOne = function (currentModule)

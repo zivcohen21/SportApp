@@ -1,4 +1,5 @@
 <section data-ng-controller="UsersController" data-ng-init="findOne(2)">
+    <div ng-include="'users/views/main-users.client.view.html'"></div>
     <div ng-include="'users/views/admin-menu.client.view.html'"></div>
 
     <form data-ng-submit="update()" class="pure-form pure-form-stacked update-form-users" ng-if="!isShowSports || windWidth >= 800">

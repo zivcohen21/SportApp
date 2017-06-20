@@ -77,11 +77,12 @@ exports.create = function(req, res)
 };
 exports.list = function(req, res)
 {
-
-    SportEvt.find().sort('-created').populate('allParticipantsAndNotific creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific groups groups.defaultCourt groups.theSportType', 'firstName lastName fullName title email city username defaultCourt theSportType').exec(function(err, sportEvts)
-    {
-        if (err) { return res.status(400).send({ message: getErrorMessage(err) }); }
-        else { res.json(sportEvts); }
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
+        SportEvt.find().sort('-created').populate('allParticipantsAndNotific creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific groups groups.defaultCourt groups.theSportType', 'firstName lastName fullName title email city username defaultCourt theSportType').exec(function(err, sportEvts)
+        {
+            if (err) { return res.status(400).send({ message: getErrorMessage(err) }); }
+            else { res.json(sportEvts); }
+        });
     });
 };
 exports.sportEvtByID = function(req, res, next, id) {
@@ -93,7 +94,9 @@ exports.sportEvtByID = function(req, res, next, id) {
     });
 };
 exports.read = function(req, res) {
-    res.json(req.sportEvt);
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
+        res.json(req.sportEvt);
+    });
 };
 exports.update = function(req, res)
 {
@@ -195,7 +198,7 @@ exports.getAllParticipants = function (req, res) {
 
 exports.getMySportEvts = function(req, res)
 {
-    //updateIsStarted(req, res, function (response) {
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
         console.info("here2");
         SportEvt.find({'allParticipantsAndNotific.theUser': {$in: [req.user.id]}}).sort('-created').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email')
             .exec(function(err, mySportEvts)
@@ -210,14 +213,14 @@ exports.getMySportEvts = function(req, res)
 
                 }
             });
-    //});
+    });
 
 };
 
 
 exports.getMyNextSportEvts = function(req, res)
 {
-    //updateIsStarted(req, res, function (response) {
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
         SportEvt.find({'allParticipantsAndNotific.theUser': {$in: [req.user.id]}}).sort('startTimeInMin').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email')
             .exec(function(err, myNextSportEvts)
             {
@@ -229,15 +232,14 @@ exports.getMyNextSportEvts = function(req, res)
                     res.json(myNextSportEvts);
                 }
             });
-    //});
+    });
 
 };
 
 exports.getMyNextFiveSportEvts = function(req, res)
 {
-
-    updateIsStarted(req, res, function (response) {
-        SportEvt.find({$and: [{'allParticipantsAndNotific.theUser': {$in: [req.user.id]}}, {isStarted: false }]}).sort('startTimeInMin').limit(5).populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email')
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
+        SportEvt.find({$and: [{'allParticipantsAndNotific.theUser': {$in: [req.user.id]}}, {isStarted: false}]}).sort('startTimeInMin').limit(5).populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email')
             .exec(function(err, myNextSportEvts)
             {
                 if (err)
@@ -253,7 +255,7 @@ exports.getMyNextFiveSportEvts = function(req, res)
 };
 
 
-var updateIsStarted = function (req, res, callback) {
+exports.updateIsStartedAndIsEnded = function (req, res, callback) {
 
     SportEvt.update({$and: [{isStarted: false}, {startTimeInMin: {$lt: getCurrTimeInMIn()}}]}, {isStarted: true}).exec(function(err)
     {
@@ -261,23 +263,82 @@ var updateIsStarted = function (req, res, callback) {
             return res.status(400).send({message: getErrorMessage(err)});
         }
         else {
-            return callback(1);
+            updateIsEnded(req, res, callback, function (callback) {
+                return callback(1);
+            });
+
         }
     });
 };
 
+var updateIsEnded = function (req, res, callback) {
+
+    var counter = 0;
+    SportEvt.find({isStarted: true, isEnded: false, duration: {$ne: null}}, 'startTimeInMin duration').sort('startTimeInMin')
+        .exec(function(err, startedSportEvt)
+        {
+            if (err)
+            {
+                return res.status(400).send({ message: getErrorMessage(err) });
+            }
+            else {
+                for(var i = 0; i < startedSportEvt.length; i++)
+                {
+                    if(isEnded(startedSportEvt[i].startTimeInMin, startedSportEvt[i].duration))
+                    {
+                        SportEvt.update({_id: startedSportEvt[i]._id}, {isEnded: true}).exec(function(err)
+                        {
+                            if (err) {
+                                return res.status(400).send({message: getErrorMessage(err)});
+                            }
+                            else {
+                                counter++;
+                                if(counter >= startedSportEvt.length)
+                                {
+                                    return callback(1);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        counter++;
+                    }
+                }
+                if(counter >= startedSportEvt.length)
+                {
+                    return callback(1);
+                }
+            }
+        });
+};
+
+var isEnded = function (startTimeInMin, duration) {
+
+    if(duration)
+    {
+        var curTime = getCurrTimeInMIn();
+        var endTimeInMin = (duration * 60) + startTimeInMin;
+        return curTime > endTimeInMin;
+    }
+    return false;
+
+
+};
 
 var getCurrTimeInMIn = function () {
 
     var currTime = new Date();
-    console.info("currTime.getTime()/60000: " + currTime.getTime()/60000);
-    return currTime.getTime()/60000;
+    var currTimeInMin = currTime.getTime()/60000;
+    console.info("currTimeInMin: " + currTimeInMin);
+    currTimeInMin = currTimeInMin - currTime.getTimezoneOffset();
+
+    return currTimeInMin;
 };
 
 exports.getSportEvtsOfGroup = function(req, res)
 {
     var groupId = req.group.id;
-    updateIsStarted(req, res, function (response) {
+    module.exports.updateIsStartedAndIsEnded(req, res, function (response) {
         SportEvt.find({groups: {$in: [groupId]}}).sort('-created').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title')
             .exec(function(err, sportEvtsOfGroup)
             {

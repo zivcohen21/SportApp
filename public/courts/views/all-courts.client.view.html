@@ -1,0 +1,10 @@
+<section data-ng-controller="CourtsController" data-ng-init="find()">
+    <div ng-include="'courts/views/court-main.client.view.html'"></div>
+    <div class="groups-top">
+        <span class="col-md-3">
+            <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
+        </span>
+    </div>
+
+    <div ng-include="'courts/views/list-courts.client.view.html'"></div>
+</section>

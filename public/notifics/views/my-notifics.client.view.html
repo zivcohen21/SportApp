@@ -34,6 +34,15 @@
                             <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>
                         </h3>
                     </div>
+                    <div ng-if="notific.notificType == 'statusUpdate'">
+                        <h3 class="notific-block__title">
+                            Status update of
+                            <span data-ng-bind="notific.theEvent.sportType.title"></span>
+                            event on
+                            <span data-ng-bind="notific.theEvent.dateEvtAsString" class="important-details"></span>,
+                            <span data-ng-bind="notific.theEvent.startTimeAsString" class="important-details"></span>
+                        </h3>
+                    </div>
                     <div ng-if="notific.notificType == 'eventSuggestion'">
                        <h3 class="notific-block__title">
                            Event Suggestion for:
@@ -83,7 +92,7 @@
                 <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
             </div>
 
-            <div ng-show="(notific.notificType == 'removeFromEvent' || notific.notificType == 'addToGroup' || notific.notificType == 'removeFromGroup') && isOpen == notific._id" class="notific-block__info">
+            <div ng-show="(notific.notificType == 'removeFromEvent' || notific.notificType == 'addToGroup' || notific.notificType == 'removeFromGroup' || notific.notificType == 'statusUpdate') && isOpen == notific._id" class="notific-block__info">
                 <div ng-include="'notifics/views/view-full-notific.client.view.html'"></div>
             </div>
 

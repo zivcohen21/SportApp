@@ -7,7 +7,7 @@ angular.module('groups').config(['$routeProvider',
         $routeProvider.
         when('/groups',{templateUrl: 'groups/views/group-main.client.view.html' }).
         when('/groups/myGroups',{templateUrl: 'groups/views/list-my-groups.client.view.html' }).
-        when('/groups/allGroups',{templateUrl: 'groups/views/list-groups.client.view.html' }).
+        when('/groups/allGroups',{templateUrl: 'groups/views/all-groups.client.view.html' }).
         when('/groups/create',{ templateUrl: 'groups/views/create-group.client.view.html' }).
         when('/groups/allGroups/:groupId',{templateUrl: 'groups/views/view-group.client.view.html' }).
         when('/groups/allGroups/:groupId/addMembers',{templateUrl: 'groups/views/add-user-to-group.client.view.html' }).

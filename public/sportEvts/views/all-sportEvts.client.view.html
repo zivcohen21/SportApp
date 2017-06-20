@@ -1,0 +1,13 @@
+<section data-ng-controller="SportEvtsController" data-ng-init="find()">
+    <div ng-include="'sportEvts/views/main-sportEvts.client.view.html'"></div>
+
+    <div class="sportEvts-top">
+        <div class="mobile-app-toggle">
+            <button class="upcomingOrOld-button" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+            <button class="upcomingOrOld-button" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+        </div>
+        <input type="text" class="form-control" placeholder="Search" ng-model="searchKeyword"/>
+
+    </div>
+    <div ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
+</section>

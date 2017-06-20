@@ -54,39 +54,21 @@
             </div>
             <button ng-if="isInGroup" class="eventList-button" ng-click="openEventList(group)">Events List</button>
             <div ng-if="isInGroup && eventListOpen!=null" class="groupPage-eventList">
-
-                <div class="sportEvts-top">
-                    <div class="mobile-app-toggle-groupPage">
-                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
-                        <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
+                <div class="events-top-usersPage">
+                    <div class="mobile-app-toggle-userPage">
+                        <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                        <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
                     </div>
                     <div>
-                        <span class="col-md-3">
-                            <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
-                        </span>
+                    <span class="col-md-3">
+                        <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+                    </span>
                     </div>
                 </div>
-                <table class="participants-table-groupPage">
-                    <tr>
-                        <th>Sport</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Court</th>
-                        <th>Participants</th>
-                    </tr>
-                    <tr ng-repeat="sportEvt in sportEvtOfGroup | filter: searchKeyword" ng-click="openEvent(sportEvt)">
-                        <td data-th="Sport" ng-if="checkIfShow(sportEvt)">{{sportEvt.sportType.title}}</td>
-                        <td data-th="Date" ng-if="checkIfShow(sportEvt)">{{sportEvt.dateEvtAsString}}</td>
-                        <td data-th="Time" ng-if="checkIfShow(sportEvt)">{{sportEvt.startTimeAsString}}</td>
-                        <td data-th="Court" ng-if="checkIfShow(sportEvt)">{{sportEvt.court.title}}</td>
-                        <td data-th="Participants" ng-if="checkIfShow(sportEvt)">{{sportEvt.allParticipantsAndNotific.length}}</td>
-                    </tr>
-                </table>
+                <div ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
             </div>
         </div>
     </div>
-
-
 
     <div class="groupPage" ng-if="windWidth < 799">
         <div ng-include="'groups/views/admin-menu.client.view.html'"></div>
@@ -104,10 +86,10 @@
                 <div>
                     <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
                 </div>
-                <table class="participants-table-groupPage">
+                <table class="participants-table">
                     <tr>
-                        <th>User</th>
-                        <th>City</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     <tr data-ng-repeat="member in group.members | filter: searchKeyword" ng-click="goToPage('users/', member.id)">
                         <td data-th="User">
@@ -129,37 +111,27 @@
                     </tr>
                 </table>
             </div>
-            <button class="eventList-button" ng-click="openEventList(group)">Events List</button>
-            <div ng-if="eventListOpen!=null" class="groupPage-eventList">
-
-                <div ng-if="windWidth >= 800">
-                    <div class="sportEvts-top">
-                        <div class="mobile-app-toggle-userPage">
-                            <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
-                            <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
-                        </div>
-                        <div>
-                            <span class="col-md-3">
-                                <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
-                            </span>
-                        </div>
-                    </div>
+        </div>
+        <div class="eventPage-moreInfo">
+            Created On: <span data-ng-bind="group.created | date:'mediumDate'"></span>
+            <br>
+            By: <span data-ng-bind="group.creator.fullName" class="links" ng-click="goToPage('users/', group.creator.id)"></span>
+        </div>
+        <button ng-if="isInGroup" class="eventList-button" ng-click="openEventList(group)">Events List</button>
+        <div ng-if="isInGroup && eventListOpen!=null" class="groupPage-eventList">
+            <div class="events-top-usersPage">
+                <div class="mobile-app-toggle-userPage">
+                    <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
+                    <button class="upcomingOrOld-button-userPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
                 </div>
-                <div ng-if="windWidth < 799">
-                    <div class="events-top-usersPage">
-                        <div class="mobile-app-toggle-groupPage">
-                            <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Upcoming')" ng-class="{'selected_new': upcomingOrPast=='Upcoming'}">UPCOMING</button>
-                            <button class="upcomingOrOld-button-groupPage" ng-click="oldNewEvents('Past')" ng-class="{'selected_old': upcomingOrPast=='Past'}">PAST</button>
-                        </div>
-                        <div>
-                        <span class="col-md-3">
-                            <input type="text" class="participants_form-control-groups" placeholder="Search" ng-model="searchKeyword"/>
-                        </span>
-                        </div>
-                    </div>
+                <div>
+                    <span class="col-md-3">
+                        <input type="text" class="participants_form-control-users" placeholder="Search" ng-model="searchKeyword"/>
+                    </span>
                 </div>
-                <div class="sportEvts-userPage" ng-include="'sportEvts/views/sportEvts-list.client.view.html'"></div>
             </div>
+            <div ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
         </div>
     </div>
+
 </section>

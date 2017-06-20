@@ -44,6 +44,9 @@ SportEvtSchema.plugin(deepPopulate, {
         },
         'groups.theSportType': {
             select: 'title'
+        },
+        'groups.members': {
+            select: 'username'
         }
 
     }

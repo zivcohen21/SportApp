@@ -206,6 +206,15 @@ exports.userByID = function(req, res, next, id)
 exports.read = function(req, res)
 {
     //setFavoriteTimesArr(req.user);  //temp
+
+    ///////temp////
+    /*User.update({_id: req.user.id}, {role: 'Owner'}).exec(function(err) {
+        if (err) {
+            return res.status(400).send({message: getErrorMessage(err)});
+        }
+        else {
+        }
+    });*/
     res.json(req.user);
 };
 exports.update = function(req, res)
@@ -239,32 +248,6 @@ exports.update = function(req, res)
         }
     });
 
-
-    /* user.firstName = req.body.firstName;
-    user.lastName = req.body.lastName;
-    user.yearOfBirth = req.body.yearOfBirth;
-    user.email = req.body.email;
-    user.username = req.body.username;
-    user.country = req.body.country;
-    user.city = req.body.city;
-    user.street = req.body.street;
-    user.number = req.body.number;
-    user.isSearched = req.body.isSearched;
-    user.radiusOfSearch = req.body.radiusOfSearch;
-    user.sportTypes = req.body.sportTypes;
-    user.favoriteTimes = req.body.favoriteTimes;
-    console.info("user.favoriteTimes: " + JSON.stringify(user.favoriteTimes));
-    user.save(function(err)
-    {
-        if (err)
-        {
-            return res.status(400).send({ message: getErrorMessage(err) });
-        }
-        else {
-            console.info("user.favoriteTimes: " + JSON.stringify(user.favoriteTimes));
-            res.json(user);
-        }
-    });*/
 };
 
 exports.delete = function (req, res, next) {
@@ -361,6 +344,21 @@ var enterLatLngToUser = function (req, res, user) {
      
 };
 
+exports.updateRoleUser = function(req, res)
+{
+    User.update({_id: req.body.userId}, {
+        role: req.body.userRole,
+    }).exec(function(err)
+    {
+        if (err) {
+            return res.status(400).send({message: getErrorMessage(err)});
+        }
+        else {
+            res.json(req.user);
+        }
+    });
+
+};
 
 var setFavoriteTimesArr = function (user) {
 

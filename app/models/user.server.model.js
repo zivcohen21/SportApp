@@ -66,7 +66,7 @@ UserSchema.virtual('fullName').get(function()
     });
 UserSchema.virtual('userAddress').get(function()
 {
-    return this.country + ' ' + this.city + ' ' + this.street + ' ' + this.number;
+    return this.number + ' ' + this.street + ' ' + this.city + ' ' + this.country;
 });
 UserSchema.set('toJSON', { getters: true, virtuals: true });
 UserSchema.pre('save', function(next)
@@ -77,6 +77,11 @@ UserSchema.pre('save', function(next)
         this.password = this.hashPassword(this.password);
     }
     next();
+});
+UserSchema.virtual('age').get(function()
+{
+    var currYear = new Date().getUTCFullYear();
+    return (currYear - this.yearOfBirth);
 });
 UserSchema.pre('remove', function(next) {
     // Remove all the assignment docs that reference the removed person.

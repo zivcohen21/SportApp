@@ -3,9 +3,11 @@
  */
 var mongoose = require('mongoose'),
     Court = mongoose.model('Court'),
+    SportEvt = mongoose.model('SportEvt'),
     User = mongoose.model('User'),
     url = require('url'),
     general = require('../../app/controllers/general.server.controller'),
+    sportEvts = require('../../app/controllers/sportEvts.server.controller'),
     googleMaps = require('../../app/controllers/googleMaps.server.controller');
 
 var getErrorMessage = function(err)
@@ -246,6 +248,25 @@ exports.getRelevantCourts = function(req, res)
             });
         }
 
+    });
+
+};
+
+exports.getGroupsEventsUsersInCourt = function (req, res) {
+    sportEvts.updateIsStartedAndIsEnded(req, res, function (response) {
+        console.info("req.body.courtId: "+ req.court.id);
+        SportEvt.find({court: req.court.id, isStarted: true, isEnded: false, duration: {$ne: null}}).deepPopulate('creator court sportType groups.theSportType groups.defaultCourt allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email image theSportType')
+            .exec(function(err, sportEvtInCourt)
+            {
+                if (err)
+                {
+                    return res.status(400).send({ message: getErrorMessage(err) });
+                }
+                else {
+                    console.info("sportEvtInCourt: " + sportEvtInCourt);
+                    res.json(sportEvtInCourt);
+                }
+            });
     });
 
 };

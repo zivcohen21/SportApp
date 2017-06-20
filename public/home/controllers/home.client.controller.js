@@ -19,6 +19,9 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
         $scope.allDays = [];
         $scope.windWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
+        $scope.currentModuleInApp = 'SportApp';
+        localStorage.setItem("currentModule", $scope.currentModuleInApp);
+
         $scope.getHomePage = function () {
             $scope.getMyNextSportEvts();
 
@@ -67,7 +70,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 getRelevantEvents(function (relevantEvents) {
                     $scope.isSearched = 1;
                     console.info("$scope.isSearched: " + $scope.isSearched);
-                    $scope.relevantEvents = relevantEvents;
+                    $scope.sportEvts = relevantEvents;
                 });
             }
             else if(searchType == "Users")
@@ -75,7 +78,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 console.info("Users");
                 getRelevantUsers(function (relevantUsers) {
                     $scope.isSearched = 2;
-                    $scope.relevantUsers = relevantUsers;
+                    $scope.users = relevantUsers;
                 });
             }
             else if(searchType == "Courts")
@@ -83,7 +86,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 console.info("Courts");
                 getRelevantCourts(function (relevantCourts) {
                     $scope.isSearched = 3;
-                    $scope.relevantCourts = relevantCourts;
+                    $scope.courts = relevantCourts;
                 });
             }
             else if(searchType == "Groups")
@@ -91,7 +94,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 console.info("Groups");
                 getRelevantGroups(function (relevantGroups) {
                     $scope.isSearched = 4;
-                    $scope.relevantGroups = relevantGroups;
+                    $scope.groups = relevantGroups;
                 });
             }
         };
@@ -119,7 +122,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 GetRelevantEvents.searchEvents(
                     eventsDetails
                 ).$promise.then(function (relevantEvents) {
-                    console.info("relevantEvents: " + JSON.stringify(relevantEvents));
+                    console.info("relevantEvents: " + relevantEvents.length);
                     return callback(relevantEvents);
                 });
             }
@@ -552,6 +555,11 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 {
                     $scope.error = errorResponse.data.message;
                 });
+        };
+
+        $scope.checkIfShow = function (sportEvt) {
+
+            return true;
         };
 
 

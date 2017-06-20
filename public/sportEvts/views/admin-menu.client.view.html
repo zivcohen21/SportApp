@@ -13,7 +13,7 @@
         <button ng-if="isInWaitingList" class="admin-button">Waiting For Answer</button>
         <button ng-if="isInEvent" class="admin-button" ng-click="leaveEvent();">Leave Event</button>
 
-        <button data-ng-show="authentication.user.id == sportEvt.creator._id" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Event</button>
+        <button data-ng-show="authentication.user.id == sportEvt.creator._id || authentication.user.role == 'Owner'" class="admin-button" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete Event</button>
 
     </div>
 </div>
