@@ -127,7 +127,7 @@ exports.delete = function(req, res)
 };
 exports.hasAuthorization = function(req, res, next)
 {
-    if (req.group.creator.id !== req.user.id)   //if the user is the group admin
+    if (req.group.creator.id !== req.user.id && req.user.role != 'Owner')   //if the user is the group admin
     {
         return res.status(403).send({ message: 'User is not authorized' });
     }

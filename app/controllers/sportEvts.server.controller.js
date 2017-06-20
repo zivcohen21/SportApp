@@ -157,7 +157,7 @@ exports.delete = function(req, res)
 };
 exports.hasAuthorization = function(req, res, next)
 {
-    if (req.sportEvt.creator.id !== req.user.id)
+    if (req.sportEvt.creator.id !== req.user.id && req.user.role != 'Owner')
     {
         return res.status(403).send({ message: 'User is not authorized' });
     } next();

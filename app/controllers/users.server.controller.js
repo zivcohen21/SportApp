@@ -208,7 +208,7 @@ exports.read = function(req, res)
     //setFavoriteTimesArr(req.user);  //temp
 
     ///////temp////
-	/*User.update({_id: req.user.id}, {role: 'User'}).exec(function(err) {
+    /*User.update({_id: req.user.id}, {role: 'User'}).exec(function(err) {
         if (err) {
             return res.status(400).send({message: getErrorMessage(err)});
         }
