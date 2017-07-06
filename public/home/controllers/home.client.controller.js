@@ -3,9 +3,10 @@
  */
 angular.module('home').controller('HomeController', ['$http','$scope', '$location', 'Authentication','GetMyNextSportEvts',
     'GetAllSportTypes', 'GetRelevantEvents', 'MatchingUsersAndEvents', 'GetMyNextFiveSportEvts', 'GetRelevantUsers',
-    'GetRelevantGroups', 'GetRelevantCourts','SaveTimesHome',
+    'GetRelevantGroups', 'GetRelevantCourts','SaveTimesHome', 'GetMySuggestions',
     function($http, $scope, $location, Authentication, GetMyNextSportEvts, GetAllSportTypes, GetRelevantEvents,
-             MatchingUsersAndEvents, GetMyNextFiveSportEvts, GetRelevantUsers, GetRelevantGroups, GetRelevantCourts,SaveTimesHome)
+             MatchingUsersAndEvents, GetMyNextFiveSportEvts, GetRelevantUsers, GetRelevantGroups, GetRelevantCourts,
+             SaveTimesHome, GetMySuggestions)
     {
 
         $scope.authentication = Authentication;
@@ -23,12 +24,6 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
         localStorage.setItem("currentModule", $scope.currentModuleInApp);
 
         $scope.getHomePage = function () {
-            $scope.getMyNextSportEvts();
-
-        };
-
-        $scope.getMyNextSportEvts = function () {
-
             console.info($scope.authentication.user.newUser);
             if(!$scope.authentication.user.newUser)
             {
@@ -47,19 +42,31 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                  $scope.nextSportEvts = response;
                  divideMySportEvts(response, tomorrowDate)
                  });*/
-                GetMyNextFiveSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
-                    console.info("nextSportEvts: " + response);
-                    $scope.myNextFiveEvents = response;
-                    $scope.myNextSportEvts = $scope.myNextFiveEvents;
-                });
+                getMySuggestions();
+                getMyNextSportEvts();
                 userTimes();
             }
             else{
                 $scope.authentication.user.newUser = false;
                 $location.path('users/' + $scope.authentication.user.id + '/edit');
             }
+        };
 
+        var getMySuggestions = function () {
 
+            GetMySuggestions.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
+                console.info("mySuggestions: " + response);
+                $scope.mySuggestions = response;
+            });
+        };
+
+        var getMyNextSportEvts = function () {
+
+            GetMyNextFiveSportEvts.query({ userId: $scope.authentication.user.id }).$promise.then(function (response) {
+                console.info("nextSportEvts: " + response);
+                $scope.myNextFiveEvents = response;
+                $scope.myNextSportEvts = $scope.myNextFiveEvents;
+            });
         };
 
         $scope.searchAll = function (searchType) {
@@ -275,8 +282,8 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
             else if (index == 4 || index == 6) {
                 modelOfAllForms();
             }*/
-            else if(index == 5) {
-                suggestions();
+            else if(index == 5 && ($scope.authentication.user.role == 'Admin' || $scope.authentication.user.role == 'Owner')) {
+                getAllSuggestions();
             }
             $scope.theHomeSelection = index;
         };
@@ -481,13 +488,12 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
         };
 
-        var suggestions = function () {
+        var getAllSuggestions = function () {
 
             MatchingUsersAndEvents.query().$promise.then(function (response) {
                 $scope.allSuggestions = response;
                 console.info("allSuggestions:" + JSON.stringify($scope.allSuggestions));
             });
-
         };
 
         $scope.setFavoriteTimes = function () {

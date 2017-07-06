@@ -1,0 +1,66 @@
+
+    <div class="add-users-groups-top">
+        <div class="manage-users-title center_align" ng-if="windWidth >= 800">Users</div>
+        <button type="button" class="center-button-users admin-button" ng-click="showUsers()" ng-if="windWidth < 700">Users</button>
+        <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeywordUsers" ng-if="isShowUsers || windWidth >= 800"/>
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth >= 800">
+            <il data-ng-repeat="user in usersToDo">
+                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                <i ng-click="addUsersList(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
+                  border-left: 1px solid transparent;
+                  border-right: 1px solid black;
+                  border-bottom: 1px solid black;
+                  border-top: 1px solid black;"
+                   class="fa fa-times" aria-hidden="true "></i>
+            </il>
+        </div>
+
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth < 700">
+            <il data-ng-repeat="user in usersToDo">
+                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                <i ng-click="addUsersList(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
+                 color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
+                 border-bottom-right-radius: 10px;
+                 border-top-right-radius: 10px;
+                 border-left: 1px solid transparent;
+                 border-right: 1px solid black;
+                 border-bottom: 1px solid black;
+                 border-top: 1px solid black;"
+                   class="fa fa-times" aria-hidden="true "></i>
+            </il>
+        </div>
+    </div>
+    <table class="participants-table-groupPage" ng-if="windWidth >= 800">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>City</th>
+            <th>Age</th>
+        </tr>
+        <tr ng-repeat="user in users | filter: searchKeywordUsers" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
+            <td data-th="Picture" style="text-align: center;">{{user.picture}}<i style="font-size:30px; text-align: center; width: 70%; margin: auto" class="fa fa-user" aria-hidden="true"></i></td>
+            <td data-th="Name">{{user.fullName}}</td>
+            <td data-th="Username">{{user.username}}</td>
+            <td data-th="City">{{user.city}}</td>
+            <td data-th="Age">{{user.age}}</td>
+        </tr>
+    </table>
+
+    <div class="small-table-users" ng-if="isShowUsers && windWidth < 799">
+        <div class="user-header" ng-repeat="user in users | filter: searchKeywordUsers" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
+            <div class="left-side-group">
+                <i style="font-size:25px; text-align: center; width: 50%; height: 50%; margin: auto; vertical-align: middle; " class="fa fa-user" aria-hidden="true"></i>
+                <!--<span data-ng-bind="user.picture"></span>-->
+            </div>
+            <div class="center-side-user">
+                <span class= "name-part" data-ng-bind="user.fullName">-{{user.username}}</span>
+                <span class= "court-part" data-ng-bind="user.city"></span>
+            </div>
+            <div class="right-side-user">
+                <!--    <span class= "currentParticipants-part">{{user.yearOfBirth}}</span>-->
+                <span class= "currentParticipants-part">{{user.age}}</span>
+            </div>
+        </div>
+    </div>

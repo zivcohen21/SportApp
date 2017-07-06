@@ -615,3 +615,27 @@ exports.saveTimesHome = function(req, res)
         }
     });
 };
+exports.getMySuggestions = function (req, res)
+{
+    User.find({_id: req.user.id}, 'myEventSuggestions').exec(function(err, users)
+    {
+        if (err)
+        {
+            return res.status(400).send({ message: getErrorMessage(err) });
+        }
+        else {
+            console.info("users: " + users);
+            var myEventSuggestions = users[0].myEventSuggestions;
+            console.info("myEventSuggestions: " + myEventSuggestions);
+
+            SportEvt.find({_id: {$in: myEventSuggestions}}).sort('-created').populate('allParticipantsAndNotific creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific groups groups.defaultCourt groups.theSportType', 'firstName lastName fullName title email city username defaultCourt theSportType').exec(function(err, sportEvts)
+            {
+                if (err) { return res.status(400).send({ message: getErrorMessage(err) }); }
+                else {
+                    res.json(sportEvts);
+                }
+            });
+
+        }
+    });
+};

@@ -254,6 +254,22 @@ exports.getMyNextFiveSportEvts = function(req, res)
 
 };
 
+exports.getSportEvtsCreatedByMe = function(req, res)
+{
+    SportEvt.find({creator: req.user.id}).sort('-created').populate('creator court sportType allParticipantsAndNotific.theUser allParticipantsAndNotific.notific', 'firstName lastName fullName title email')
+        .limit(10).exec(function(err, sportEvtsCreatedByMe)
+        {
+            if (err)
+            {
+                return res.status(400).send({ message: getErrorMessage(err) });
+            }
+            else {
+                res.json(sportEvtsCreatedByMe);
+
+            }
+        });
+};
+
 
 exports.updateIsStartedAndIsEnded = function (req, res, callback) {
 

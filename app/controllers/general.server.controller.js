@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
     Notific = mongoose.model('Notific'),
     Court = mongoose.model('Court');
 
-var serviceTime = '* * 3 * * *';
+var serviceTime = '0 0 3 * * *';
 
 
 exports.contains = function ( a, needle ) {
@@ -259,201 +259,221 @@ var getArrTimeOfEventsAndUsers = function (callback) {
 
 };
 
-//var j = schedule.scheduleJob(serviceTime, function(){
+var j = schedule.scheduleJob(serviceTime, function() {
+    console.info("schedule!!!");
+    module.exports.getSuggestions(function (response) {
+        console.info("service response: " + response);
+    });
 
-    exports.matchingUsersAndEvents = function (req, res) {
+});
+
+exports.matchingUsersAndEvents = function (req, res) {
+    module.exports.getSuggestions(function (response) {
+        console.info("response: " + response);
+        res.json(response);
+    });
+};
 
 
-        getArrTimeOfEventsAndUsers(function (matchingArr) {
+exports.getSuggestions = function (callback) {
 
-            var allSuggestions = [];
-            var arrToReturn = [];
-            var param;
-            var numOfItemsWithRadius = 0;
 
-            //var optionsCounter = 0;
-            //console.info("matchingArr: " + matchingArr);
-            for (var timesIndex = 0; timesIndex < matchingArr.length; timesIndex++)
+    getArrTimeOfEventsAndUsers(function (matchingArr) {
+
+        var allSuggestions = [];
+        var arrToReturn = [];
+        var param;
+        var numOfItemsWithRadius = 0;
+
+        //var optionsCounter = 0;
+        //console.info("matchingArr: " + matchingArr);
+        for (var timesIndex = 0; timesIndex < matchingArr.length; timesIndex++)
+        {
+            for (var eventIndex = 0; eventIndex < matchingArr[timesIndex].relevantEvents.length; eventIndex++)
             {
-                for (var eventIndex = 0; eventIndex < matchingArr[timesIndex].relevantEvents.length; eventIndex++)
+                for (var userIndex = 0; userIndex < matchingArr[timesIndex].relevantUsers.length; userIndex++)
                 {
-                    for (var userIndex = 0; userIndex < matchingArr[timesIndex].relevantUsers.length; userIndex++)
+                   console.info("matchingArr: " + matchingArr[timesIndex].timeAsString + " relevantUsers: " + JSON.stringify(matchingArr[timesIndex].relevantUsers[userIndex].user.username) + " relevantEvents: " + JSON.stringify(matchingArr[timesIndex].relevantEvents[eventIndex]._id));
+                    var eventItem = matchingArr[timesIndex].relevantEvents[eventIndex];
+                    var userItem = matchingArr[timesIndex].relevantUsers[userIndex];
+                    //console.info("userItem1: " + userItem.user._id + " eventItem1: " + eventItem._id);
+                    var isUserInEvent = userInEvent(userItem, eventItem);
+                    if (!isUserInEvent)
                     {
-                       //console.info("matchingArr: " + matchingArr[timesIndex].timeAsString + " relevantUsers: " + JSON.stringify(matchingArr[timesIndex].relevantUsers[userIndex].user.username) + " relevantEvents: " + JSON.stringify(matchingArr[timesIndex].relevantEvents[eventIndex]._id));
-                        var eventItem = matchingArr[timesIndex].relevantEvents[eventIndex];
-                        var userItem = matchingArr[timesIndex].relevantUsers[userIndex];
-                        //console.info("userItem1: " + userItem.user._id + " eventItem1: " + eventItem._id);
-                        var isUserInEvent = userInEvent(userItem, eventItem);
-                        if (!isUserInEvent)
+                        var funcArr = [];
+                        var paramArr = [];
+                        //console.info("userItem2: " + userItem.user._id + " eventItem2: " + eventItem._id);
+                        if(userItem.user.country && eventItem.court.country)
                         {
-                            var funcArr = [];
-                            var paramArr = [];
-                            //console.info("userItem2: " + userItem.user._id + " eventItem2: " + eventItem._id);
-                            if(userItem.user.country && eventItem.court.country)
-                            {
-                                funcArr.push(matchByCountry);
-                                param = {
-                                    userCountry: userItem.user.country,
-                                    eventCountry: eventItem.court.country
-                                };
-                                paramArr.push(param);
-                            }
-                            if(userItem.user.sportTypes && eventItem.sportType)
-                            {
-                                funcArr.push(matchBySportType);
-                                param = {
-                                    userSportTypes: userItem.user.sportTypes,
-                                    eventSportType: eventItem.sportType
-                                };
-                                paramArr.push(param);
-                            }
-                            if(userItem.user.city && eventItem.court.city)
-                            {
-                                funcArr.push(matchByCity);
-                                param = {
-                                    userCity: userItem.user.city,
-                                    eventCity: eventItem.court.city
-                                };
-                                paramArr.push(param);
-                            }
-                            if(userItem.user.yearOfBirth)
-                            {
+                            funcArr.push(matchByCountry);
+                            param = {
+                                userCountry: userItem.user.country,
+                                eventCountry: eventItem.court.country
+                            };
+                            paramArr.push(param);
+                        }
+                        if(userItem.user.sportTypes && eventItem.sportType)
+                        {
+                            funcArr.push(matchBySportType);
+                            param = {
+                                userSportTypes: userItem.user.sportTypes,
+                                eventSportType: eventItem.sportType
+                            };
+                            paramArr.push(param);
+                        }
+                        /*if(userItem.user.city && eventItem.court.city)
+                        {
+                            funcArr.push(matchByCity);
+                            param = {
+                                userCity: userItem.user.city,
+                                eventCity: eventItem.court.city
+                            };
+                            paramArr.push(param);
+                        }
+      */                  if(userItem.user.yearOfBirth)
+                        {
 
-                                var userAge = new Date().getFullYear() - userItem.user.yearOfBirth;
-                                if(eventItem.minAge)
+                            var userAge = new Date().getFullYear() - userItem.user.yearOfBirth;
+                            if(eventItem.minAge)
+                            {
+                                funcArr.push(matchByMinAge);
+
+                                param = {
+                                    userAge: userAge,
+                                    eventMinAge: eventItem.minAge
+                                };
+                                paramArr.push(param);
+                            }
+                            if(eventItem.maxAge)
+                            {
+                                funcArr.push(matchByMaxAge);
+
+                                param = {
+                                    userAge: userAge,
+                                    eventMaxAge: eventItem.maxAge
+                                };
+                                paramArr.push(param);
+                            }
+                        }
+                        if(userItem.user.gender)
+                        {
+                            if((!eventItem.forFemale && eventItem.forMale) || (eventItem.forFemale && !eventItem.forMale))
+                            {
+                                funcArr.push(matchByGender);
+                                if(eventItem.forFemale)
                                 {
-                                    funcArr.push(matchByMinAge);
-
                                     param = {
-                                        userAge: userAge,
-                                        eventMinAge: eventItem.minAge
+                                        userGender: userItem.user.gender,
+                                        eventGender: 'female'
                                     };
                                     paramArr.push(param);
                                 }
-                                if(eventItem.maxAge)
+                                else if(eventItem.forMale)
                                 {
-                                    funcArr.push(matchByMaxAge);
-
                                     param = {
-                                        userAge: userAge,
-                                        eventMaxAge: eventItem.maxAge
+                                        userGender: userItem.user.gender,
+                                        eventGender: 'male'
                                     };
                                     paramArr.push(param);
                                 }
                             }
-                            if(userItem.user.gender)
-                            {
-                                if((!eventItem.forFemale && eventItem.forMale) || (eventItem.forFemale && !eventItem.forMale))
-                                {
-                                    funcArr.push(matchByGender);
-                                    if(eventItem.forFemale)
-                                    {
-                                        param = {
-                                            userGender: userItem.user.gender,
-                                            eventGender: 'female'
-                                        };
-                                        paramArr.push(param);
-                                    }
-                                    else if(eventItem.forMale)
-                                    {
-                                        param = {
-                                            userGender: userItem.user.gender,
-                                            eventGender: 'male'
-                                        };
-                                        paramArr.push(param);
-                                    }
-                                }
-                            }
+                        }
 
-                            var isMatch = true;
-                            for (var funcIndex = 0; funcIndex < funcArr.length; funcIndex++) {
-                                if (!funcArr[funcIndex](paramArr[funcIndex])) {
-                                    //console.info("userItem2: " + userItem.user._id + " eventItem2: " + eventItem._id + " funcIndex: " + funcIndex);
-                                    isMatch = false;
-                                    break;
-                                }
+                        var isMatch = true;
+                        for (var funcIndex = 0; funcIndex < funcArr.length; funcIndex++) {
+                            if (!funcArr[funcIndex](paramArr[funcIndex])) {
+                                console.info("userItem2: " + userItem.user._id + " eventItem2: " + eventItem._id + " funcIndex: " + funcIndex);
+                                isMatch = false;
+                                break;
                             }
-                            if (isMatch) {
-                                if(userItem.user.radiusOfSearch && userItem.user.radiusOfSearch > 0)
-                                {
-                                    numOfItemsWithRadius++
-                                }
-                                //notifics.createEventSuggestionNotific(eventItem, userItem.user);
-                                allSuggestions.push({
-                                    "user": userItem.user,
-                                    "event": eventItem
-                                });
-                                console.info("userItem3: " + userItem.user._id + " eventItem3: " + eventItem._id);
+                        }
+                        if (isMatch) {
+                            if(userItem.user.radiusOfSearch && userItem.user.radiusOfSearch > 0)
+                            {
+                                numOfItemsWithRadius++
                             }
+                            //notifics.createEventSuggestionNotific(eventItem, userItem.user);
+                            allSuggestions.push({
+                                "user": userItem.user,
+                                "event": eventItem
+                            });
+                            console.info("userItem3: " + userItem.user._id + " eventItem3: " + eventItem._id);
                         }
                     }
                 }
             }
-            var finishCheckRadius = false;
-            var eventCheckedCounter = 0;
-            //console.info("numOfItemsWithRadius_main: " + numOfItemsWithRadius);
-            if(numOfItemsWithRadius == 0)
+        }
+        var finishCheckRadius = false;
+        var eventCheckedCounter = 0;
+        //console.info("numOfItemsWithRadius_main: " + numOfItemsWithRadius);
+        if(numOfItemsWithRadius == 0)
+        {
+            finishCheckRadius = true;
+            arrToReturn = allSuggestions;
+        }
+        console.info("allSuggestions: " + allSuggestions);
+        console.info("allSuggestions.length: " + allSuggestions.length);
+        for(var suggIndex = 0; suggIndex < allSuggestions.length; suggIndex++)
+        {
+            var user = allSuggestions[suggIndex].user;
+            if(user.radiusOfSearch && user.radiusOfSearch > 0)
             {
-                finishCheckRadius = true;
-                arrToReturn = allSuggestions;
+                var userLocation = user.gpsLocation;
+                var courtLocation = allSuggestions[suggIndex].event.court.gpsLocation;
+
+                googleMaps.getDistanceBetweenTwoAddresses(user.radiusOfSearch,1,userLocation, courtLocation, function (radiusOfSearch,b,distance) {
+                    distance = distance /1000;
+
+                    //console.info("numOfItemsWithRadius1: " + numOfItemsWithRadius);
+                    if (distance <= radiusOfSearch) {
+                        //console.info("distance1: " + distance);
+                        //console.info("radius1: " + radiusOfSearch);
+                        arrToReturn.push(allSuggestions[eventCheckedCounter]);
+                        notifics.createEventSuggestionNotific(allSuggestions[eventCheckedCounter].event, allSuggestions[eventCheckedCounter].user);
+                    }
+                    else {
+                        //console.info("eventCheckedCounter2: " + eventCheckedCounter);
+                    }
+                    eventCheckedCounter++;
+                    //console.info("eventCheckedCounter: " + eventCheckedCounter);
+                    if (eventCheckedCounter >= numOfItemsWithRadius) {
+                        //console.info("finishCheckRadius = true;");
+                        finishCheckRadius = true;
+                        //console.info("arrToReturn: " + arrToReturn);
+                        //res.json(arrToReturn);
+                        return callback(arrToReturn);
+                    }
+                });
             }
-            console.info("allSuggestions: " + allSuggestions);
-            console.info("allSuggestions.length: " + allSuggestions.length);
-            for(var suggIndex = 0; suggIndex < allSuggestions.length; suggIndex++)
+            else {
+                arrToReturn.push(allSuggestions[suggIndex]);
+                notifics.createEventSuggestionNotific(allSuggestions[suggIndex].event, allSuggestions[suggIndex].user);
+            }
+        }
+        if(finishCheckRadius)
+        {
+            console.info("arrToReturn: 1");
+            for(suggIndex = 0; suggIndex < allSuggestions.length; suggIndex++)
             {
-                var user = allSuggestions[suggIndex].user;
-                if(user.radiusOfSearch && user.radiusOfSearch > 0)
-                {
-                    var userLocation = user.gpsLocation;
-                    var courtLocation = allSuggestions[suggIndex].event.court.gpsLocation;
-
-                    googleMaps.getDistanceBetweenTwoAddresses(user.radiusOfSearch,1,userLocation, courtLocation, function (radiusOfSearch,b,distance) {
-                        distance = distance /1000;
-
-                        //console.info("numOfItemsWithRadius1: " + numOfItemsWithRadius);
-                        if (distance <= radiusOfSearch) {
-                            //console.info("distance1: " + distance);
-                            //console.info("radius1: " + radiusOfSearch);
-                            arrToReturn.push(allSuggestions[eventCheckedCounter]);
-                            notifics.createEventSuggestionNotific(allSuggestions[eventCheckedCounter].event, allSuggestions[eventCheckedCounter].user);
-                        }
-                        else {
-                            //console.info("eventCheckedCounter2: " + eventCheckedCounter);
-                        }
-                        eventCheckedCounter++;
-                        //console.info("eventCheckedCounter: " + eventCheckedCounter);
-                        if (eventCheckedCounter >= numOfItemsWithRadius) {
-                            //console.info("finishCheckRadius = true;");
-                            finishCheckRadius = true;
-                            //console.info("arrToReturn: " + arrToReturn);
-                            res.json(arrToReturn);
-                        }
-                    });
-                }
-                else {
-                    arrToReturn.push(allSuggestions[suggIndex]);
-                    notifics.createEventSuggestionNotific(allSuggestions[suggIndex].event, allSuggestions[suggIndex].user);
-                }
+                notifics.createEventSuggestionNotific(allSuggestions[suggIndex].event, allSuggestions[suggIndex].user);
             }
-            if(finishCheckRadius)
-            {
-                //console.info("arrToReturn: " + arrToReturn);
-                for(suggIndex = 0; suggIndex < allSuggestions.length; suggIndex++)
-                {
-                    notifics.createEventSuggestionNotific(allSuggestions[suggIndex].event, allSuggestions[suggIndex].user);
-                }
-                res.json(arrToReturn);
-            }
-            else if(!allSuggestions || !allSuggestions.length || allSuggestions.length < 1)
-            {
-                //console.info("res.json(arrToReturn);2");
-                res.json(arrToReturn);
-            }
+            //res.json(arrToReturn);
+            return callback(arrToReturn);
+        }
+        else if(!allSuggestions || !allSuggestions.length || allSuggestions.length < 1)
+        {
+            console.info("arrToReturn: 2");
+            //res.json(arrToReturn);
+            return callback(arrToReturn);
+        }
+        else {
+            console.info("arrToReturn: 3");
+        }
 
-        });
-    };
+    });
+};
 
-//});
+
 var userInEvent = function (userItem, eventItem) {
 
     for (var memberIndex = 0; memberIndex < eventItem.allParticipantsAndNotific.length; memberIndex++) {

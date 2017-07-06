@@ -24,6 +24,7 @@ module.exports = function(app)
         /*.delete(users.requiresLogin, users.hasAuthorization, users.delete);*/
     app.route('/api/users/enterAddress').post(users.enterAddress);
     app.route('/api/users/updateRoleUser').post(users.updateRoleUser);
+    app.route('/api/users/getMySuggestions/:userId').get(users.getMySuggestions);
     app.param('userId', users.userByID);
 
     app.get('/signout', users.signout);

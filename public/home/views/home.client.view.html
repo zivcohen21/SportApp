@@ -1,18 +1,60 @@
-<section ng-controller="HomeController" data-ng-init="getMyNextSportEvts()">
+<section ng-controller="HomeController" data-ng-init="getHomePage()">
     <ul class="home-menu">
 <!--        <li class="na-li-home" ng-click="homeSelection(6)" ng-class="{'selection_groups_menu': theHomeSelection==6}">NEXT EVENTS</li>
                <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==2}">TODAY'S EVENTS</li>
                <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==3}">TOMORROW'S EVENTS</li>
                <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==4}">SEARCH EVENT</li>
                <li class="na-li-home" ng-click="homeSelection()" ng-class="{'selection_groups_menu': theHomeSelection==6}">SEARCH USER</li>-->
-        <li class="na-li-home" ng-if="authentication.user.role == 'admin' || authentication.user.role == 'Owner'" ng-click="homeSelection(5)" ng-class="{'selection_groups_menu': theHomeSelection==5}">SUGGESTIONS</li>
+        <li class="na-li-home" ng-if="authentication.user.role == 'Admin' || authentication.user.role == 'Owner'" ng-click="homeSelection(5)" ng-class="{'selection_groups_menu': theHomeSelection==5}">SUGGESTIONS</li>
     </ul>
 
-    <div class="nextEvents" ng-if="theHomeSelection == 5 && allSuggestions.length > 0">
+    <div class="nextEvents" ng-if="theHomeSelection != 5">
         <div class="times-title">
             Suggestions:
+            <div class="times-title" ng-if="mySuggestions.length <= 0">
+                <h2>No Matches</h2>
+            </div>
+            <table class="participants-table-groupPage" ng-if="sportEvts.length > 0">
+                <tr>
+                    <th>Sport</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Court</th>
+                    <th>Participants</th>
+                </tr>
+                <tr ng-repeat="sportEvt in mySuggestions" ng-click="openEvent(sportEvt)">
+                    <td data-th="Sport">{{sportEvt.sportType.title}}</td>
+                    <td data-th="Date">{{sportEvt.dateEvtAsString}}</td>
+                    <td data-th="Time">{{sportEvt.startTimeAsString}}</td>
+                    <td data-th="Court">{{sportEvt.court.title}}</td>
+                    <td data-th="Participants">{{sportEvt.allParticipantsAndNotific.length}}</td>
+                </tr>
+            </table>
+            <div class="small-table-times" ng-if="windWidth < 799">
+                <div class="sportEvt-header" ng-repeat="sportEvt in mySuggestions" ng-click="openEvent(sportEvt)">
+                    <div class="left-side-event">
+                        <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
+                        <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>
+                    </div>
+                    <div class="center-side-event">
+                        <span class= "dateEvtAsString-part" data-ng-bind="sportEvt.dateEvtAsString"></span>
+                        <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
+                    </div>
+                    <div class="right-side">
+                        <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
+                        <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
+                        <img class="admin-icon" ng-if="sportEvt.creator.id == authentication.user.id" ng-src="images/administrator.png" width=25 height=25>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="sportEvt-header" ng-repeat="suggestion in allSuggestions">
+    </div>
+
+    <div class="nextEvents" ng-if="theHomeSelection == 5">
+        <div class="times-title">
+            All Suggestions:
+        </div>
+        <div class="sportEvt-header" ng-repeat="suggestion in allSuggestions" ng-if="allSuggestions.length > 0">
             <span data-ng-bind="suggestion.user.username"></span>
             <span data-ng-bind="suggestion.event.dateEvtAsString"></span>
             <span data-ng-bind="suggestion.event.startTimeAsString"></span>
@@ -20,14 +62,10 @@
             <span data-ng-bind="suggestion.event.court.title"></span>
             <span data-ng-bind="suggestion.event._id"></span>
         </div>
-    </div>
-    <div class="nextEvents" ng-if="allSuggestions.length <= 0 && theHomeSelection == 5">
-        <div class="times-title">
-            Suggestions:
+        <div ng-if="allSuggestions.length <= 0">
+            <h2>No Matches</h2>
         </div>
-        <h2>No Matches</h2>
     </div>
-
 
     <div class="nextEvents">
         <div class="times-title">
@@ -60,7 +98,7 @@
                     <span class= "startTimeAsString-part" data-ng-bind="sportEvt.startTimeAsString"></span>
                 </div>
                 <div class="right-side">
-                    <i class="fa fa-members-icon numMembers-icon">&#xf0c0;</i>
+                    <i style="font-size:13px" class="fa members-icon">&#xf0c0;</i>
                     <span class= "currentParticipants-part">{{sportEvt.allParticipantsAndNotific.length}}</span>
                     <img class="admin-icon" ng-if="sportEvt.creator.id == authentication.user.id" ng-src="images/administrator.png" width=25 height=25>
                 </div>
@@ -184,19 +222,19 @@
             </fieldset>
         </form>
 
-        <div class="relevant-list" ng-if="theHomeSelection == 1 && isSearched == 1 && sportEvts && sportEvts.length > 0" ng-include="'sportEvts/views/list-sportEvts.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 1 && isSearched == 1 && sportEvts && sportEvts.length > 0" ng-include="'home/views/list-sportEvts.client.view.html'"></div>
         <div ng-if="theHomeSelection == 1 && isSearched == 1 && (!sportEvts || sportEvts.length == 0)">
             <h2>No Events</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 2 && isSearched == 2 && users && users.length > 0" ng-include="'users/views/list-users.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 2 && isSearched == 2 && users && users.length > 0" ng-include="'home/views/list-users.client.view.html'"></div>
         <div ng-if="theHomeSelection == 2 && isSearched == 2 && (!users || users.length == 0)">
             <h2>No Users</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 3 && isSearched == 3 && courts && courts.length > 0" ng-include="'courts/views/list-courts.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 3 && isSearched == 3 && courts && courts.length > 0" ng-include="'home/views/list-courts.client.view.html'"></div>
         <div ng-if="theHomeSelection == 3 && isSearched == 3 && (!courts || courts.length == 0)">
             <h2>No Courts</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 4 && isSearched == 4 && groups && groups.length > 0" ng-include="'groups/views/list-groups.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 4 && isSearched == 4 && groups && groups.length > 0" ng-include="'home/views/list-groups.client.view.html'"></div>
         <div ng-if="theHomeSelection == 4 && isSearched == 4 && (!groups || groups.length == 0)">
             <h2>No Groups</h2>
         </div>

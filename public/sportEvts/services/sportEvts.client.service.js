@@ -29,6 +29,9 @@ angular.module('sportEvts')
     .factory('GetMySportEvts', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/getMySportEvts/:userId', { userId: '@_id'}); }])
+    .factory('GetSportEvtsCreatedByMe', ['$resource',
+        function($resource) {
+            return $resource('api/sportEvts/getSportEvtsCreatedByMe/:userId', { userId: '@_id'}); }])
     .factory('GetAllMembersOfGroups', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/getAllMembersOfGroups',

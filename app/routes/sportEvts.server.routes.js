@@ -30,6 +30,7 @@ module.exports = function(app)
     app.route('/api/sportEvts/getOneSportEvtForUpdate/:sportEvtId').get(sportEvts.getOneSportEvtForUpdate);
     app.route('/api/notifics').get(notifics.list).post(users.requiresLogin, notifics.create);
     app.route('/api/sportEvts/getMySportEvts/:userId').get(sportEvts.getMySportEvts);
+    app.route('/api/sportEvts/getSportEvtsCreatedByMe/:userId').get(sportEvts.getSportEvtsCreatedByMe);
     app.route('/api/sportEvts/getMyNextSportEvts/:userId').get(sportEvts.getMyNextSportEvts);
     app.route('/api/sportEvts/getMyNextFiveSportEvts/:userId').get(sportEvts.getMyNextFiveSportEvts);
     app.param('sportEvtId', sportEvts.sportEvtByID);

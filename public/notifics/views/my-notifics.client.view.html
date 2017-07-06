@@ -69,6 +69,9 @@
                              <span data-ng-bind="notific.theGroup.title"></span>
                         </h3>
                     </div>
+                    <div class="create-time">
+                        <span data-ng-bind="notific.created | date:'mediumDate'"></span>
+                    </div>
                 </div>
                 <span class="delete-btn" data-ng-click="delete(notific._id)">
                     <i aria-hidden="true" class="fa fa-trash w3-large w3-text-black w3-hover-opacity" ></i>

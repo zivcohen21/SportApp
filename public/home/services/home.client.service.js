@@ -8,6 +8,9 @@ angular.module('home')
     .factory('GetMyNextFiveSportEvts', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/getMyNextFiveSportEvts/:userId', { userId: '@_id'}); }])
+    .factory('GetMySuggestions', ['$resource',
+        function($resource) {
+            return $resource('api/users/getMySuggestions/:userId', { userId: '@_id'}); }])
     .factory('GetRelevantEvents', ['$resource',
         function($resource) {
             return $resource('api/sportEvts/getRelevantEvents',

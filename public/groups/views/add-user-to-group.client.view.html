@@ -5,14 +5,15 @@
     <div class="top-add-remove-group">
         <div class="manage-users-title center_align">Add Participants</div>
     </div>
+    <div ng-include="'users/views/users-list-to-do.client.view.html'"></div>
 
-    <div style="position: relative; top: -32px" class="groups-top">
-      <!--  <div class="manage-users-title center_align">Add Participants</div>-->
+    <!--<div style="position: relative; top: -32px" class="groups-top">
+      &lt;!&ndash;  <div class="manage-users-title center_align">Add Participants</div>&ndash;&gt;
         <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
-        <div class="usersList-to-add" ng-if="usersToAdd.length && usersToAdd.length > 0 && windWidth >= 800">
-            <il data-ng-repeat="user in usersToAdd">
-                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addList(user)"></button>
-                <i ng-click="addList(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth >= 800">
+            <il data-ng-repeat="user in usersToDo">
+                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                <i ng-click="addUsersList(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
                  color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
                   border-left: 1px solid transparent;
                   border-right: 1px solid black;
@@ -22,10 +23,10 @@
             </il>
         </div>
 
-        <div class="usersList-to-add" ng-if="usersToAdd.length && usersToAdd.length > 0 && windWidth < 700">
-            <il data-ng-repeat="user in usersToAdd">
-                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addList(user)"></button>
-                <i ng-click="addList(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth < 700">
+            <il data-ng-repeat="user in usersToDo">
+                <button type="button" ng-bind="user.username" class="user-to-add" ng-click="addUsersList(user)"></button>
+                <i ng-click="addUsersList(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
                  color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
                  border-bottom-right-radius: 10px;
                  border-top-right-radius: 10px;
@@ -51,17 +52,17 @@
     </table>
 
     <div class="small-table-users" ng-if="windWidth < 799">
-        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="addList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
+        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="addUsersList(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
+                &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
             </div>
             <div class="center-side-user">
                 <span class= "name-part" data-ng-bind="user.fullName"></span>
                 <span class= "court-part" data-ng-bind="user.city"></span>
             </div>
         </div>
-    </div>
+    </div>-->
 
 
 

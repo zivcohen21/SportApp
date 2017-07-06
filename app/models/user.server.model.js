@@ -41,6 +41,7 @@ var UserSchema = new Schema({
     myGroups: [{type: Schema.ObjectId, ref: 'Group'}],
     myGroupsAdmin: [{type: Schema.ObjectId, ref: 'Group'}],
     mySportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
+    myEventSuggestions: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     myAcceptedSportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     myRejectedSportEvts: [{type: Schema.ObjectId, ref: 'SportEvt'}],
     rejectEventsResults: JSON,

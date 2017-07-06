@@ -408,6 +408,11 @@ exports.createEventSuggestionNotific = function (sportEvt, user) {
         if (err) {}
     });
 
+    User.update({_id: user._id}, {$push: {myEventSuggestions: sportEvt}}).exec(function(err)
+    {
+        if (err) {}
+    });
+
     var text = "Event Suggestion for " + sportEvt.sportType.title + " event on " + sportEvt.dateEvtAsString + ", " + sportEvt.startTimeAsString + "\n"
         + "The Event: " + process.env.MY_URL + "/#!/sportEvts/" + sportEvt._id;
     var subject = 'Event Suggestion';
@@ -638,6 +643,11 @@ exports.saveStatus = function(req, res)
                                 }
                             });
                             User.update({_id: req.user.id}, {$push: {myAcceptedSportEvts: notific.theEvent._id}}).exec(function (err) {
+                                if (err) {
+                                    return res.status(409).send({message: getErrorMessage(err)});
+                                }
+                            });
+                            User.update({_id: req.user.id}, {$pull: {myEventSuggestions: notific.theEvent._id}}).exec(function (err) {
                                 if (err) {
                                     return res.status(409).send({message: getErrorMessage(err)});
                                 }

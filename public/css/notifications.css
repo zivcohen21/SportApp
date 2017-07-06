@@ -229,6 +229,15 @@ body {
         top: 80px;
     }
 
+    .create-time {
+        position: absolute;
+        font-size: 0.7em;
+        font-weight: 600;
+        left: 70%;
+        color: black;
+        top: 80px;
+    }
+
     /* .noAnswer-border_main {
             border: 5px ridge #2e2e2e;
         }
@@ -501,10 +510,19 @@ body {
 */
     .my-status {
         position: absolute;
-        font-size: 0.6em;
+        font-size: 0.7em;
         font-weight: 700;
         color: black;
         left:5%;
+        top: 35px;
+    }
+
+    .create-time {
+        position: absolute;
+        font-size: 0.6em;
+        font-weight: 700;
+        left: 70%;
+        color: black;
         top: 35px;
     }
 

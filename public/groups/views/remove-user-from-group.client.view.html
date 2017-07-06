@@ -6,11 +6,13 @@
         <div class="manage-users-title center_align">Remove Participants</div>
     </div>
 
+    <div ng-include="'users/views/users-list-to-do.client.view.html'"></div>
+<!--
     <div class="groups-top">
-       <!-- <div class="manage-users-title center_align">Remove Participants</div>-->
+       &lt;!&ndash; <div class="manage-users-title center_align">Remove Participants</div>&ndash;&gt;
         <input type="text" class="form-control-group" placeholder="Search" ng-model="searchKeyword"/>
-        <div class="usersList-to-add" ng-if="usersToRemove.length && usersToRemove.length > 0 && windWidth >= 800">
-            <il data-ng-repeat="user in usersToRemove">
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth >= 800">
+            <il data-ng-repeat="user in usersToDo">
                 <button type="button" ng-bind="user.username" class="user-to-add" ng-click="manageRemove(user)"></button>
                 <i ng-click="manageRemove(user)" style="font: normal normal normal 15px/2 FontAwesome; margin: -3px 0 -3px -15px; cursor: pointer;
                  color: white; background-color: rgb(50, 54, 57); line-height: 25px; vertical-align: middle; padding: 5px;
@@ -22,8 +24,8 @@
             </il>
         </div>
 
-        <div class="usersList-to-add" ng-if="usersToRemove.length && usersToRemove.length > 0 && windWidth < 700">
-            <il data-ng-repeat="user in usersToRemove">
+        <div class="usersList-to-add" ng-if="usersToDo.length && usersToDo.length > 0 && windWidth < 700">
+            <il data-ng-repeat="user in usersToDo">
                 <button type="button" ng-bind="user.username" class="user-to-add" ng-click="manageRemove(user)"></button>
                 <i ng-click="manageRemove(user)" style="font: normal normal normal 10px/2 FontAwesome; margin: 5px 0 5px -15px; cursor: pointer;
                  color: white; background-color: rgb(50, 54, 57); line-height: 15px; vertical-align: middle; padding: 5px;
@@ -43,7 +45,7 @@
             <th>Full Name</th>
             <th>City</th>
         </tr>
-        <tr ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
+        <tr ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
             <td data-th="Picture" style="text-align: center;">{{user.image}}<i style="font-size:30px; width: 30%; margin: auto" class="fa fa-user-circle" aria-hidden="true"></i></td>
             <td data-th="Full Name">{{user.fullName}}</td>
             <td data-th="City">{{user.city}}</td>
@@ -51,17 +53,17 @@
     </table>
 
     <div class="small-table-users" ng-if="windWidth < 799">
-        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToRemove.indexOf(user) != -1 }">
+        <div class="user-header" ng-repeat="user in users | filter: searchKeyword" ng-click="manageRemove(user)" ng-class="{'selected_user': usersToDo.indexOf(user) != -1 }">
             <div class="left-side-user">
                 <i style="font-size:30px;"  class="fa fa-user-circle" aria-hidden="true"></i>
-                <!--<span data-ng-bind="group.image"></span>-->
+                &lt;!&ndash;<span data-ng-bind="group.image"></span>&ndash;&gt;
             </div>
             <div class="center-side-user">
                 <span class= "name-part" data-ng-bind="user.fullName"></span>
                 <span class= "court-part" data-ng-bind="user.username"></span>
             </div>
         </div>
-    </div>
+    </div>-->
 
 
     <div class="center-button">

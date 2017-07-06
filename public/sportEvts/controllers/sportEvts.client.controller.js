@@ -1,10 +1,10 @@
 angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$routeParams', '$route', '$location', 'Authentication',
     'SportEvts', 'GetAllCourts', 'GetGroupsCanBeAdded', 'GetMembers', 'GetAllUsers', 'GetAllSportTypes', 'GetMySportEvts',
     'SaveStatus', 'SaveTimes', 'GetAllMembersOfGroups', 'AllUsersNotInEvent', 'AllGroupsNotInEvent', 'AddUsersToEvent',
-    'RemoveUsersFromEvent', 'JoinToEvent', 'AddUserRequestsToEvent',
+    'RemoveUsersFromEvent', 'JoinToEvent', 'AddUserRequestsToEvent', 'GetSportEvtsCreatedByMe',
         function($scope, $routeParams, $route, $location, Authentication, SportEvts, GetAllCourts, GetGroupsCanBeAdded, GetMembers,
                  GetAllUsers, GetAllSportTypes, GetMySportEvts, SaveStatus, SaveTimes, GetAllMembersOfGroups, AllUsersNotInEvent,
-                 AllGroupsNotInEvent, AddUsersToEvent, RemoveUsersFromEvent, JoinToEvent, AddUserRequestsToEvent)
+                 AllGroupsNotInEvent, AddUsersToEvent, RemoveUsersFromEvent, JoinToEvent, AddUserRequestsToEvent, GetSportEvtsCreatedByMe)
         {
             $scope.authentication = Authentication;
             $scope.upcomingOrPast = 'Upcoming';
@@ -37,6 +37,35 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.openForGroups = true;
             $scope.isSubmited = false;
             $scope.eventsCounter = 0;
+            $scope.openPastEventsList = false;
+
+            $scope.startTimeAsString = {
+                value: null
+            };
+            $scope.duration = {
+                value: null
+            };
+            $scope.minNumOfMembers = {
+                value: null
+            };
+            $scope.maxNumOfMembers = {
+                value: null
+            };
+            $scope.optNumOfMembers = {
+                value: null
+            };
+            $scope.minAge = {
+                value: null
+            };
+            $scope.maxAge = {
+                value: null
+            };
+            $scope.openForIndividuals = {
+                value: null
+            };
+            $scope.openForGroups = {
+                value: null
+            };
 
             $scope.create = function()
             {
@@ -167,9 +196,15 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
             $scope.getCourtsMyGroupsUsersSportTypes = function (index) {
                 $scope.menuSelection = index;
                 $scope.courtList = GetAllCourts.query();
-
                 $scope.users = getAllUsers();
                 $scope.sportTypeList = getAllSportTypes();
+                $scope.sportEvtsCreatedByMe = getSportEvtsCreatedByMe();
+                $scope.todayDate = new Date();
+                $scope.todayDate = $scope.todayDate.toISOString().split('T')[0];
+                $scope.dateEvtAsString = {
+                    value: $scope.todayDate
+                };
+
                 getGroupsCanBeAdded(function (response) {
                     $scope.groups = response;
                     if($routeParams.groupId)
@@ -243,6 +278,9 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
 
             var getAllUsers = function () {
                 return GetAllUsers.query();
+            };
+            var getSportEvtsCreatedByMe = function () {
+                return GetSportEvtsCreatedByMe.query({ userId: $scope.authentication.user.id });
             };
             var getAllSportTypes = function () {
                 return GetAllSportTypes.query();
@@ -650,6 +688,58 @@ angular.module('sportEvts').controller('SportEvtsController', ['$scope', '$route
                 var removeGroup = [];
                 removeUser.push($scope.authentication.user.id);
                 removeUsersAndGroupsFromEvent(removeUser, removeGroup)
+            };
+
+            $scope.choosePastEvent = function () {
+
+                $scope.openPastEventsList = !$scope.openPastEventsList;
+            };
+
+            $scope.chooseEvent = function (sportEvt) {
+
+                $scope.eventSelected = sportEvt;
+                $scope.prevSportType = sportEvt.sportType;
+                $scope.prevCourt = sportEvt.court;
+                $scope.dateEvtAsString.value = sportEvt.dateEvtAsString;
+                $scope.startTimeAsString.value = sportEvt.startTimeAsString;
+                $scope.duration.value = sportEvt.duration;
+                $scope.minNumOfMembers.value = sportEvt.minNumOfMembers;
+                $scope.maxNumOfMembers.value = sportEvt.maxNumOfMembers;
+                $scope.optNumOfMembers.value = sportEvt.optNumOfMembers;
+                $scope.minAge.value = sportEvt.minAge;
+                $scope.maxAge.value = sportEvt.maxAge;
+                $scope.checkboxModel.femaleEvent = sportEvt.forFemale;
+                $scope.checkboxModel.maleEvent = sportEvt.forMale;
+                $scope.openForIndividuals.value = sportEvt.openForIndividuals;
+                $scope.openForGroups.value = sportEvt.openForGroups;
+
+                $scope.usersToDo.splice(0, $scope.usersToDo.length);
+                $scope.groupsToDo.splice(0, $scope.groupsToDo.length);
+
+                for(var i = 0; i < sportEvt.allParticipantsAndNotific.length; i++)
+                {
+                    for(var j = 0; j < $scope.users.length; j++)
+                    {
+                        if(sportEvt.allParticipantsAndNotific[i].theUser._id == $scope.users[j]._id)
+                        {
+                            //console.info("$scope.users[j]: " + JSON.stringify($scope.users[j]));
+                            $scope.usersToDo.push($scope.users[j]);
+                        }
+                    }
+
+                }
+                for(i = 0; i < sportEvt.groups.length; i++)
+                {
+                    for(j = 0; j < $scope.groups.length; j++)
+                    {
+                        if(sportEvt.groups[i] == $scope.groups[j]._id)
+                        {
+                            $scope.groupsToDo.push($scope.groups[j]);
+                        }
+                    }
+
+                }
+                $scope.openPastEventsList = false;
             };
 
 } ]);
