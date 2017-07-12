@@ -60,7 +60,7 @@ exports.getLatLng = function (address, callback) {
     });
 };
 
-exports.getDistanceBetweenTwoAddresses = function (userItem, eventItem, gpsLoc1, gpsLoc2, callback) {
+exports.getDistanceBetweenTwoAddresses = function (index, userItem, eventItem, gpsLoc1, gpsLoc2, callback) {
 
     var origins = [gpsLoc1.lat + "," + gpsLoc1.lng];
     var destinations = [gpsLoc2.lat + "," + gpsLoc2.lng];
@@ -88,7 +88,7 @@ exports.getDistanceBetweenTwoAddresses = function (userItem, eventItem, gpsLoc1,
                     }
                 }
             }
-            return callback(userItem, eventItem, distance);
+            return callback(index, userItem, eventItem, distance);
         }
     });
 

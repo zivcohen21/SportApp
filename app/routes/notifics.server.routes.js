@@ -3,8 +3,7 @@
  */
 var users = require('../../app/controllers/users.server.controller'),
     notifics = require('../../app/controllers/notifics.server.controller'),
-    sportEvts = require('../../app/controllers/sportEvts.server.controller'),
-    schedule = require('../../app/controllers/schedule.server.controller');
+    sportEvts = require('../../app/controllers/sportEvts.server.controller');
 module.exports = function(app)
 {
     app.route('/api/notifics')

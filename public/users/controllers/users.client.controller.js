@@ -57,6 +57,15 @@ angular.module('users').controller('UsersController',
 
             $scope.update = function()
             {
+                if(!$scope.user.isSearched)
+                {
+                    $scope.user.radiusOfSearch = 0;
+                }
+
+                else if(!$scope.user.radiusOfSearch)
+                {
+                    $scope.user.radiusOfSearch = 0;
+                }
                 $scope.user.sportTypes = getMultiSelection($scope.sportsToAdd);
                 $scope.user.$update(function()
                     {

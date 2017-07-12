@@ -478,8 +478,8 @@ exports.getRelevantGroups = function(req, res)
                         var numOfElements = finalArr.length;
                         for(i = 0; i < numOfElements; i++)
                         {
-                            var otherUserLocation = finalArr[i].gpsLocation;
-                            googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, otherUserLocation, function (a,b,distance) {
+                            var otherUserLocation = finalArr[i].defaultCourt.gpsLocation;
+                            googleMaps.getDistanceBetweenTwoAddresses(i, 1,1,theUserLocation, otherUserLocation, function (index,a,b,distance) {
                                 distance = distance /1000;
 
                                 console.info("userCheckedCounter: " + userCheckedCounter);
@@ -488,7 +488,7 @@ exports.getRelevantGroups = function(req, res)
                                     console.info("distance1: " + distance);
                                     console.info("radius1: " + radius);
                                     console.info("userCheckedCounter1: " + userCheckedCounter);
-                                    arrToReturn.push(finalArr[userCheckedCounter]);
+                                    arrToReturn.push(finalArr[index]);
                                 }
                                 else {
                                     console.info("userCheckedCounter2: " + userCheckedCounter);

@@ -286,7 +286,7 @@ exports.getSuggestions = function (callback) {
         var numOfItemsWithRadius = 0;
 
         //var optionsCounter = 0;
-        //console.info("matchingArr: " + matchingArr);
+        console.info("matchingArr: " + JSON.stringify(matchingArr));
         for (var timesIndex = 0; timesIndex < matchingArr.length; timesIndex++)
         {
             for (var eventIndex = 0; eventIndex < matchingArr[timesIndex].relevantEvents.length; eventIndex++)
@@ -405,7 +405,7 @@ exports.getSuggestions = function (callback) {
         }
         var finishCheckRadius = false;
         var eventCheckedCounter = 0;
-        //console.info("numOfItemsWithRadius_main: " + numOfItemsWithRadius);
+        console.info("numOfItemsWithRadius_main: " + numOfItemsWithRadius);
         if(numOfItemsWithRadius == 0)
         {
             finishCheckRadius = true;
@@ -420,24 +420,26 @@ exports.getSuggestions = function (callback) {
             {
                 var userLocation = user.gpsLocation;
                 var courtLocation = allSuggestions[suggIndex].event.court.gpsLocation;
-
-                googleMaps.getDistanceBetweenTwoAddresses(user.radiusOfSearch,1,userLocation, courtLocation, function (radiusOfSearch,b,distance) {
+                console.info("userLocation: " + userLocation);
+                googleMaps.getDistanceBetweenTwoAddresses(suggIndex, user.radiusOfSearch, 1,userLocation, courtLocation, function (sIndex, radiusOfSearch, b,distance) {
                     distance = distance /1000;
 
-                    //console.info("numOfItemsWithRadius1: " + numOfItemsWithRadius);
+                    console.info("numOfItemsWithRadius1: " + numOfItemsWithRadius);
+                    console.info("distance1: " + distance);
+                    console.info("radius1: " + radiusOfSearch);
                     if (distance <= radiusOfSearch) {
-                        //console.info("distance1: " + distance);
-                        //console.info("radius1: " + radiusOfSearch);
-                        arrToReturn.push(allSuggestions[eventCheckedCounter]);
-                        notifics.createEventSuggestionNotific(allSuggestions[eventCheckedCounter].event, allSuggestions[eventCheckedCounter].user);
+
+                        arrToReturn.push(allSuggestions[sIndex]);
+                        console.info("allSuggestions[eventCheckedCounter].user: " + allSuggestions[sIndex].user);
+                        notifics.createEventSuggestionNotific(allSuggestions[sIndex].event, allSuggestions[sIndex].user);
                     }
                     else {
                         //console.info("eventCheckedCounter2: " + eventCheckedCounter);
                     }
                     eventCheckedCounter++;
-                    //console.info("eventCheckedCounter: " + eventCheckedCounter);
+                    console.info("eventCheckedCounter: " + eventCheckedCounter);
                     if (eventCheckedCounter >= numOfItemsWithRadius) {
-                        //console.info("finishCheckRadius = true;");
+                        console.info("finishCheckRadius = true;");
                         finishCheckRadius = true;
                         //console.info("arrToReturn: " + arrToReturn);
                         //res.json(arrToReturn);

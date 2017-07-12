@@ -71,7 +71,7 @@
                     <input type="checkbox" data-ng-model="user.isSearched" id="openForSearch" placeholder="openForSearch" value="{{user.isSearched}}">
                 </div>
 
-                <div class="pure-u-1-2 pure-u-md-1-4">
+                <div class="pure-u-1-2 pure-u-md-1-4" ng-if="user.isSearched">
                     <label for="radiusOfSearch">Radius Of Search</label>
                     <input type="number" data-ng-model="user.radiusOfSearch" id="radiusOfSearch" class="pure-u-13-24" value="{{user.radiusOfSearch}}" min="0">
                 </div>

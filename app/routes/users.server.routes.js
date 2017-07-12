@@ -12,6 +12,12 @@ module.exports = function(app)
         failureRedirect: '/',
         failureFlash: true
     }));
+    app.route('/signinAsGuest').get(users.renderSignin).post(passport.authenticate('local',
+    {
+        successRedirect: '/',
+        failureRedirect: '/',
+        failureFlash: true
+    }));
     app.route('/api/getRelevantUsers').get(users.getRelevantUsers);
     app.route('/api/saveTimesHome').post(users.saveTimesHome);
     app.route('/api/users')

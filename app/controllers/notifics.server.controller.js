@@ -9,6 +9,8 @@ var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     SportEvt = mongoose.model('SportEvt'),
     general = require('../../app/controllers/general.server.controller');
+    var google = require('googleapis');
+    var googleAuth = require('google-auth-library');
 
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
@@ -233,7 +235,7 @@ exports.createAndSendEventsNotifics = function (req, res, sportEvt) {
                         var text = sportEvt.creator.fullName + " invited you to a " + sportEvt.sportType.title + " event on " + sportEvt.dateEvtAsString + ", " + sportEvt.startTimeAsString + "\n"
                             + "The Event: " + process.env.MY_URL + "/#!/sportEvts/" + sportEvt._id;
                         var subject = 'Invitation To an Event';
-                        sendEMail(user,subject, text);
+                        sendEMail(user, subject, text);
                     }
                 });
 

@@ -5,6 +5,7 @@
     "node": "6.9.2"
   },
   "dependencies": {
+    "angular-desktop-notification": "~1.0.5",
     "body-parser": "~1.8.0",
     "bootstrap": "3.3.7",
     "compression": "~1.0.11",
@@ -44,7 +45,6 @@
     "passport-google-oauth": "~0.1.5",
     "passport-local": "~1.0.0",
     "passport-twitter": "~1.0.2",
-    "socket.io": "~1.1.0",
-    "angular-desktop-notification": "~1.0.5"
+    "socket.io": "~1.1.0"
   }
 }

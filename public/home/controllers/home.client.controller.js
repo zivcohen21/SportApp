@@ -24,8 +24,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
         localStorage.setItem("currentModule", $scope.currentModuleInApp);
 
         $scope.getHomePage = function () {
-            console.info($scope.authentication.user.newUser);
-            if(!$scope.authentication.user.newUser)
+            if(!$scope.authentication.user.newUser )
             {
                 $scope.theHomeSelection = 0;
                 $scope.nextSportEvt = [];
@@ -46,7 +45,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
                 getMyNextSportEvts();
                 userTimes();
             }
-            else{
+            else {
                 $scope.authentication.user.newUser = false;
                 $location.path('users/' + $scope.authentication.user.id + '/edit');
             }
@@ -492,7 +491,7 @@ angular.module('home').controller('HomeController', ['$http','$scope', '$locatio
 
             MatchingUsersAndEvents.query().$promise.then(function (response) {
                 $scope.allSuggestions = response;
-                console.info("allSuggestions:" + JSON.stringify($scope.allSuggestions));
+                console.info("allSuggestions:" + $scope.allSuggestions.length);
             });
         };
 

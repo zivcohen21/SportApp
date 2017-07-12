@@ -12,7 +12,6 @@ module.exports = function()
     require('../app/models/sportEvt.server.model');
     require('../app/models/sportType.server.model');
     require('../app/models/notific.server.model');
-    require('../app/models/schedule.server.model');
 
     return db;
 };

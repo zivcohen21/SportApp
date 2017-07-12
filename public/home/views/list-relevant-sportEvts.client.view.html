@@ -6,7 +6,7 @@
         <th>Court</th>
         <th>Participants</th>
     </tr>
-    <tr ng-repeat="sportEvt in relevantEvents | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+    <tr ng-repeat="sportEvt in sportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
         <td data-th="Sport">{{sportEvt.sportType.title}}</td>
         <td data-th="Date">{{sportEvt.dateEvtAsString}}</td>
         <td data-th="Time">{{sportEvt.startTimeAsString}}</td>
@@ -15,7 +15,7 @@
     </tr>
 </table>
 <div class="small-table" ng-if="windWidth < 799">
-    <div class="sportEvt-header" ng-repeat="sportEvt in relevantEvents | filter: searchKeyword" ng-click="openEvent(sportEvt)">
+    <div class="sportEvt-header" ng-repeat="sportEvt in sportEvts | filter: searchKeyword" ng-click="openEvent(sportEvt)">
         <div class="left-side-event">
             <span class= "sportType-part" data-ng-bind="sportEvt.sportType.title"></span>
             <span class= "court-part" data-ng-bind="sportEvt.court.title"></span>

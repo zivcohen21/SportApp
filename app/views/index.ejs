@@ -96,15 +96,29 @@
                 </button>
             </form>
 
+            <form class="signup-form">
+                <script>
+                    function guest() {
+                        document.getElementById("username").value = "guest";
+                        document.getElementById("password").value = "guestguest";
+                        var btnSubmitTags = document.getElementById("btn-signin");
+                        btnSubmitTags.click();
+                    }
+                </script>
+                <button type="submit" class="button buttonBlue" onclick="guest();">Login without signing up
+                    <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+                </button>
+            </form>
+
             <form class="signup-form" action="/signin" method="post">
                 <h2>Login</h2>
                 <div class="signup-group">
-                    <input class="signup-input" type="text" name="username" placeholder="Username"><span class="highlight"></span><span class="bar"></span>
+                    <input class="signup-input" type="text" name="username" id="username" placeholder="Username"><span class="highlight"></span><span class="bar"></span>
                 </div>
                 <div class="signup-group">
-                    <input class="signup-input" type="password" name="password" placeholder="Password"><span class="highlight"></span><span class="bar"></span>
+                    <input class="signup-input" type="password" name="password" id="password" placeholder="Password"><span class="highlight"></span><span class="bar"></span>
                 </div>
-                <button type="submit" class="button buttonBlue">Sign in
+                <button type="submit" class="button buttonBlue" id="btn-signin">Sign in
                     <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
                 </button>
                 <br><br><br>

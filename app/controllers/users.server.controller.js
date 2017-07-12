@@ -38,12 +38,13 @@ var getErrorMessage = function(err)
 };
 exports.renderSignin = function(req, res, next)
 {
+    console.info("got here renderSignin");
     if (!req.user)
     {
         res.render('signin',
             {
                 title: 'Sign-in Form',
-                messages: req.flash('error') || req.flash('info')
+                messages: req.flash('error') || req.flash('info'),
             });
     }
     else
@@ -94,7 +95,7 @@ exports.signout = function(req, res)
     req.logout();
     res.redirect('/');
 };
-exports.saveOAuthUserProfile = function(req, profile, done)
+exports.saveOAuthUserProfile = function(req, res, profile, done)
 {
     User.findOne
     ({
@@ -331,7 +332,7 @@ var enterLatLngToUser = function (req, res, user) {
         address = user.city + " " + user.country;
     }
     googleMaps.getLatLng(address, function(gpsLocationInfo, totalOffset) {
-/*        console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));*/
+        console.info("gpsLocationInfo: " + JSON.stringify(gpsLocationInfo));
         var localTimeZoneOffsetInMIn = totalOffset / 60;
         User.update({_id: user.id}, {gpsLocation: gpsLocationInfo, localTimeZoneOffsetInMIn: localTimeZoneOffsetInMIn}).exec(function(err)
         {
@@ -347,7 +348,7 @@ var enterLatLngToUser = function (req, res, user) {
 exports.updateRoleUser = function(req, res)
 {
     User.update({_id: req.body.userId}, {
-        role: req.body.userRole,
+        role: req.body.userRole
     }).exec(function(err)
     {
         if (err) {
@@ -526,7 +527,7 @@ exports.getRelevantUsers = function(req, res)
                             for(i = 0; i < numOfElements; i++)
                             {
                                 var otherUserLocation = finalArr[i].gpsLocation;
-                                googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, otherUserLocation, function (a,b,distance) {
+                                googleMaps.getDistanceBetweenTwoAddresses(i, 1,1,theUserLocation, otherUserLocation, function (index, a,b,distance) {
                                     distance = distance /1000;
 
                                     console.info("userCheckedCounter: " + userCheckedCounter);
@@ -535,7 +536,7 @@ exports.getRelevantUsers = function(req, res)
                                         console.info("distance1: " + distance);
                                         console.info("radius1: " + radius);
                                         console.info("userCheckedCounter1: " + userCheckedCounter);
-                                        arrToReturn.push(finalArr[userCheckedCounter]);
+                                        arrToReturn.push(finalArr[index]);
                                     }
                                     else {
                                         console.info("userCheckedCounter2: " + userCheckedCounter);

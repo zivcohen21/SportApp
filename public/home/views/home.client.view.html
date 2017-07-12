@@ -14,7 +14,7 @@
             <div class="times-title" ng-if="mySuggestions.length <= 0">
                 <h2>No Matches</h2>
             </div>
-            <table class="participants-table-groupPage" ng-if="sportEvts.length > 0">
+            <table class="participants-table-groupPage" ng-if="mySuggestions.length > 0">
                 <tr>
                     <th>Sport</th>
                     <th>Date</th>
@@ -222,19 +222,19 @@
             </fieldset>
         </form>
 
-        <div class="relevant-list" ng-if="theHomeSelection == 1 && isSearched == 1 && sportEvts && sportEvts.length > 0" ng-include="'home/views/list-sportEvts.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 1 && isSearched == 1 && sportEvts && sportEvts.length > 0" ng-include="'home/views/list-relevant-sportEvts.client.view.html'"></div>
         <div ng-if="theHomeSelection == 1 && isSearched == 1 && (!sportEvts || sportEvts.length == 0)">
             <h2>No Events</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 2 && isSearched == 2 && users && users.length > 0" ng-include="'home/views/list-users.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 2 && isSearched == 2 && users && users.length > 0" ng-include="'home/views/list-relevant-users.client.view.html'"></div>
         <div ng-if="theHomeSelection == 2 && isSearched == 2 && (!users || users.length == 0)">
             <h2>No Users</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 3 && isSearched == 3 && courts && courts.length > 0" ng-include="'home/views/list-courts.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 3 && isSearched == 3 && courts && courts.length > 0" ng-include="'home/views/list-relevant-courts.client.view.html'"></div>
         <div ng-if="theHomeSelection == 3 && isSearched == 3 && (!courts || courts.length == 0)">
             <h2>No Courts</h2>
         </div>
-        <div class="relevant-list" ng-if="theHomeSelection == 4 && isSearched == 4 && groups && groups.length > 0" ng-include="'home/views/list-groups.client.view.html'"></div>
+        <div class="relevant-list" ng-if="theHomeSelection == 4 && isSearched == 4 && groups && groups.length > 0" ng-include="'home/views/list-relevant-groups.client.view.html'"></div>
         <div ng-if="theHomeSelection == 4 && isSearched == 4 && (!groups || groups.length == 0)">
             <h2>No Groups</h2>
         </div>

@@ -8,5 +8,6 @@ exports.render = function(req, res)
     {
         title: 'SportApp',
         user: JSON.stringify(req.user)
+
     });
 };

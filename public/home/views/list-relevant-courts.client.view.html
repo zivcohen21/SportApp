@@ -4,7 +4,7 @@
         <th>Address</th>
         <th>Sports</th>
     </tr>
-    <tr ng-repeat="court in relevantCourts | filter: searchKeyword" ng-click="openUser(court)">
+    <tr ng-repeat="court in courts | filter: searchKeyword" ng-click="openUser(court)">
         <td data-th="Name">{{court.title}}</td>
         <td data-th="Address">{{court.courtAddress}}</td>
         <td data-th="Sport">{{court.subCourts.sportType}}</td>
@@ -12,7 +12,7 @@
 </table>
 
 <div class="small-table-users" ng-if="windWidth < 799">
-    <div class="court-header" ng-repeat="court in relevantCourts | filter: searchKeyword" ng-click="openCourt(court)">
+    <div class="court-header" ng-repeat="court in courts | filter: searchKeyword" ng-click="openCourt(court)">
         <span data-ng-bind="court.title"></span>
         <span data-ng-bind="court.courtAddress"></span>
         <span data-ng-bind="court.subCourts.sportType"></span>

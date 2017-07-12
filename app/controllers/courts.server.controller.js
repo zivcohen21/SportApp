@@ -211,7 +211,7 @@ exports.getRelevantCourts = function(req, res)
                         for(i = 0; i < numOfElements; i++)
                         {
                             var courtLocation = finalArr[i].gpsLocation;
-                            googleMaps.getDistanceBetweenTwoAddresses(1,1,theUserLocation, courtLocation, function (a,b,distance) {
+                            googleMaps.getDistanceBetweenTwoAddresses(i, 1,1,theUserLocation, courtLocation, function (index, a,b,distance) {
                                 distance = distance /1000;
 
                                 console.info("courtCheckedCounter: " + courtCheckedCounter);
@@ -220,7 +220,7 @@ exports.getRelevantCourts = function(req, res)
                                     console.info("distance1: " + distance);
                                     console.info("radius1: " + radius);
                                     console.info("courtCheckedCounter1: " + courtCheckedCounter);
-                                    arrToReturn.push(finalArr[courtCheckedCounter]);
+                                    arrToReturn.push(finalArr[index]);
                                 }
                                 else {
                                     console.info("courtCheckedCounter2: " + courtCheckedCounter);
