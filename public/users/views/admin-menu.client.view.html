@@ -2,8 +2,8 @@
     <span ng-if="windWidth < 799" style="font-size:25px;" class="fa fa-ellipsis-v" aria-hidden="true" ></span>
     <div class="dropdown-content">
         <button class="admin-button" ng-if="authentication.user._id == user._id || authentication.user.role == 'Owner'" ng-click="adminSelect(1, 'users/' + user._id)" ng-class="{'admin-selection-btn': adminSelection==1}">Profile Page</button>
-        <button class="admin-button" ng-if="authentication.user._id == user._id" ng-click="adminSelect(2, 'users/' + user._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Profile</button>
-        <button class="admin-button" ng-if="authentication.user._id == user._id" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete User</button>
+        <button class="admin-button" ng-if="authentication.user._id == user._id && user.username !== 'guest'" ng-click="adminSelect(2, 'users/' + user._id + '/edit')" ng-class="{'admin-selection-btn': adminSelection==2}">Edit Profile</button>
+        <button class="admin-button" ng-if="authentication.user._id == user._id && user.username !== 'guest'" ng-click="adminSelect(3, '/'); delete()" ng-class="{'admin-selection-btn': adminSelection==3}">Delete User</button>
         <button ng-if="authentication.user.role == 'Owner' && user.role != 'Owner'" class="admin-button" ng-click="adminSelect(4, '/users/' + user._id + '/changeRole');" ng-class="{'admin-selection-btn': adminSelection==4}">Change Role</button>
     </div>
 </div>
