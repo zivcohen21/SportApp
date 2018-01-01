@@ -95,7 +95,7 @@ exports.signout = function(req, res)
     req.logout();
     res.redirect('/');
 };
-exports.saveOAuthUserProfile = function(req, res, profile, done)
+exports.saveOAuthUserProfile = function(req, profile, done)
 {
     User.findOne
     ({
